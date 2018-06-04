@@ -46,11 +46,11 @@ class Admin extends React.Component{
 
     componentDidMount(){
         this.ref = base.syncState('Stickers/calculator',{
-            connumber: this,
+            context: this,
             state: 'calculator',
         });
         this.ref = base.syncState('Stickers/admin',{
-            connumber: this,
+            context: this,
             state: 'admin',
             then () {
                 this.setState({

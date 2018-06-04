@@ -9,6 +9,7 @@ class Section1 extends React.Component{
         },
         calcProp:{
             "basis" : "",
+            "print_type" : "",
             "cut_form" : "",
             "design" : "",
             "form" : "",
@@ -47,7 +48,15 @@ class Section1 extends React.Component{
 
      updatecalcProp =  (key, value) =>{
         const calcProp = {...this.state.calcProp};
+
          calcProp[key] = value;
+         if(calcProp.height>378 || calcProp.width>278 ||  value == 'Рулонная'){
+             calcProp.print_type = 'Рулонная';
+         }
+         if(calcProp.print_type == 'Рулонная'){
+             calcProp.basis = 'Пластиковая';
+         }
+
         this.setState({calcProp});
     }
 
@@ -108,6 +117,30 @@ class Section1 extends React.Component{
                         <form id="sendorder">
 
                             <div id="part-1">
+                                <div className="form-field">
+                                    <div className="row">
+                                <div className="col-lg-7 col-sm-6">
+                                    <div className="h3 primary-label">Тип печати:</div>
+                                    <div className="frm_container frm_opt_container">
+                                        <div className="frm_item frm_radio">
+                                            <label htmlFor="field_profile-117">
+                                                <input type="radio" name="print_type" id="field_profile-117" value="Листовая"  checked={this.state.calcProp.print_type === 'Листовая'} onClick={this.handleChange}/>
+                                                <i></i>
+                                                Листовая
+                                            </label>
+                                        </div>
+                                        <div className="frm_item frm_radio">
+                                            <label htmlFor="field_profile-118">
+                                                <input type="radio" name="print_type" id="field_profile-118" value="Рулонная" checked={this.state.calcProp.print_type === 'Рулонная'}  onChange={this.handleChange}/>
+                                                <i></i>
+                                                Рулонная
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                    </div>
+                                </div>
+                                {!(this.state.calcProp.print_type === 'Рулонная') &&
                                 <div className="form-field shape-row">
                                     <div className="h3 primary-label">Форма наклейки:</div>
                                     <div className="frm_container frm_opt_container">
@@ -149,6 +182,7 @@ class Section1 extends React.Component{
                                         </div>
                                     </div>
                                 </div>
+                                }
 
                                 <div className="form-field">
                                     <div className="row">
@@ -182,7 +216,7 @@ class Section1 extends React.Component{
                                         </div>
                                     </div>
                                 </div>
-
+                                {!(this.state.calcProp.print_type === 'Рулонная') &&
                                 <div className="form-field">
                                     <div className="row">
                                         <div className="col-lg-7 col-sm-6">
@@ -190,16 +224,18 @@ class Section1 extends React.Component{
                                             <div className="frm_container frm_opt_container">
                                                 <div className="frm_item frm_radio">
                                                     <label htmlFor="field_profile-17">
-                                                        <input type="radio" name="type" id="field_profile-17" value="Цветная" onClick={this.handleChange}/>
-                                                            <i></i>
-                                                            Цветная
+                                                        <input type="radio" name="type" id="field_profile-17"
+                                                               value="Цветная" onClick={this.handleChange}/>
+                                                        <i></i>
+                                                        Цветная
                                                     </label>
                                                 </div>
                                                 <div className="frm_item frm_radio">
                                                     <label htmlFor="field_profile-18">
-                                                        <input type="radio" name="type" id="field_profile-18" value="Черно-белая" onClick={this.handleChange}/>
-                                                            <i></i>
-                                                            Черно-белая
+                                                        <input type="radio" name="type" id="field_profile-18"
+                                                               value="Черно-белая" onClick={this.handleChange}/>
+                                                        <i></i>
+                                                        Черно-белая
                                                     </label>
                                                 </div>
                                             </div>
@@ -210,23 +246,29 @@ class Section1 extends React.Component{
                                             <div className="frm_container frm_opt_container">
                                                 <div className="frm_item frm_radio">
                                                     <label htmlFor="field_profile-19">
-                                                        <input type="radio" name="basis" id="field_profile-19" value="Бумажная" onClick={this.handleChange}/>
-                                                            <i></i>
-                                                            Бумажная <br/>(самоклейка)
+                                                        <input type="radio" name="basis" id="field_profile-19"
+                                                               value="Бумажная"
+                                                               checked={!(this.state.calcProp.print_type === 'Рулонная') && (this.state.calcProp.basis === 'Бумажная')     }
+                                                               onClick={this.handleChange}/>
+                                                        <i></i>
+                                                        Бумажная <br/>(самоклейка)
                                                     </label>
                                                 </div>
                                                 <div className="frm_item frm_radio">
                                                     <label htmlFor="field_profile-110">
-                                                        <input type="radio" name="basis" id="field_profile-110" value="Пластиковая" onClick={this.handleChange}/>
-                                                            <i></i>
-                                                            Пластиковая <br/>(Oracal)
+                                                        <input type="radio" name="basis" id="field_profile-110"
+                                                               value="Пластиковая"
+                                                               checked={(this.state.calcProp.print_type === 'Рулонная') || (this.state.calcProp.basis === 'Пластиковая')}
+                                                               onChange={this.handleChange}/>
+                                                        <i></i>
+                                                        Пластиковая <br/>(Oracal)
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
+                                }
                                 <div className="form-field dop-obrobotka-row">
                                     <div className="h3 primary-label">Дополнительная обработка:</div>
                                     <div className="frm_container">

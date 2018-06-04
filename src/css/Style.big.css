@@ -3703,11 +3703,12 @@ tbody.collapse.in {
     position: relative;
 }
 #fileformlabel .delete{
-    padding: 0 25px;
+    padding: 0px 14px;
     font-size: 18px;
     cursor: pointer;
     color: #ad0900;
-    float: right;
+    bottom: 8px;
+    position: relative;
 }
 .icon-checkmark:before {
     content: "\e90d"
@@ -8554,22 +8555,22 @@ html body .form-row.popup-on form #part-2 .form-field [class*=col-]:first-child 
     margin-bottom: 6px
 }
 
-html body .form-row.popup-on form #part-2 .form-field .fileform {
+.fileform {
     display: inline-block;
-    margin: 24px 0;
+    margin: 24px 0 -16px;
     cursor: pointer;
     overflow: hidden;
     position: relative;
     text-align: left
 }
 
-html body .form-row.popup-on form #part-2 .form-field .fileform .selectbutton {
+ .fileform .selectbutton {
     display: block;
     background-color: #ebebeb;
     border-color: #ebebeb
 }
 
-html body .form-row.popup-on form #part-2 .form-field .fileform .selectbutton .linked-file {
+.linked-file {
     -webkit-transform: rotate(45deg) translateY(-17%);
     -ms-transform: rotate(45deg) translateY(-17%);
     -o-transform: rotate(45deg) translateY(-17%);
@@ -8579,7 +8580,7 @@ html body .form-row.popup-on form #part-2 .form-field .fileform .selectbutton .l
     margin-right: 9px
 }
 
-html body .form-row.popup-on form #part-2 .form-field .fileform input[type=file]#upload {
+.fileform input[type=file]#upload {
     position: absolute;
     top: 0;
     left: 0;
@@ -8591,10 +8592,10 @@ html body .form-row.popup-on form #part-2 .form-field .fileform input[type=file]
     cursor: pointer
 }
 
-html body .form-row.popup-on form #part-2 .form-field .fileform #fileformlabel {
-    position: absolute;
+ #fileformlabel {
+     overflow: hidden;
+     position: relative;
     left: 0;
-    padding-left: 28px;
     bottom: 0;
     z-index: 19;
     color: #d2d2d2;
@@ -8604,10 +8605,28 @@ html body .form-row.popup-on form #part-2 .form-field .fileform #fileformlabel {
     font-weight: 500
 }
 
-html body .form-row.popup-on form #part-2 .form-field .fileform #fileformlabel [class*=icon-] {
-    position: absolute;
+#fileformlabel .fname{
+    overflow: hidden;
+    position: relative;
     left: 0;
-    bottom: 6px;
+    padding-left: 15px;
+    bottom: 0;
+    z-index: 19;
+    color: #d2d2d2;
+    text-transform: none;
+    font-family: 'Fira Sans', Arial, sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    width: 200px;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+ #fileformlabel [class*=icon-] {
+    position: relative;
+    left: 0;
+     bottom: 6px;
     width: 24px;
     font-size: .8em;
     height: 24px;
@@ -8616,17 +8635,19 @@ html body .form-row.popup-on form #part-2 .form-field .fileform #fileformlabel [
     border: 2px solid #79ac57
 }
 
-html body .form-row.popup-on form #part-2 .form-field .fileform #fileformlabel .icon-checkmark {
-    color: #79ac57
+#fileformlabel .icon-checkmark {
+    color: #79ac57;
+    font-size: 15px;
+    text-align: center;
 }
 
-html body .form-row.popup-on form #part-2 .form-field .fileform:hover .selectbutton {
+ .fileform:hover .selectbutton {
     cursor: pointer;
     background-color: #d2d2d2;
     border-color: #d2d2d2
 }
 
-html body .form-row.popup-on form #part-2 .form-field .fileform+input[type=text] {
+ .fileform+input[type=text] {
     font: 1em/1.3 'Fira Sans', Arial, sans-serif;
     font-style: italic;
     text-align: left

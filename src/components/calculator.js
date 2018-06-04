@@ -1,5 +1,5 @@
 import jQuery from 'jquery';
-require('blueimp-file-upload');
+
 
 window.jQuery = jQuery;
 const $ = window.jQuery;
@@ -14,6 +14,7 @@ const calc = function (state) {
         _cutpriceRect = state.calculator._cutpriceRect,                //Цена за порезку прямоугольных наклеек
         _cutpriceSimplecircuit = state.calculator._cutpriceSimplecircuit,                //Цена за порезку наклеек простой формы
         _cutpriceHardcircuit = state.calculator._cutpriceHardcircuit,                //Цена за порезку наклеек сложной формы
+        _cutpriceRulon = state.calculator._cutpriceRulon,
         _stampingprice = state.calculator._stampingprice,                // Цена за тиснение
         _varnishprice = state.calculator._varnishprice,                // Цена покрытия уф-лаком
         _laminationprice = state.calculator._laminationprice,                // Цена ламинации за лист
@@ -25,6 +26,8 @@ const calc = function (state) {
         calcProp = state.calcProp,
         rectlistparams = state.calculator.rectlistparams,
         circuitlistparams = state.calculator.circuitlistparams,
+        rulonWith = state.calculator.rulonWith,
+        rulonPrintPrice = state.calculator.rulonPrintPrice,
         colorfularr = state.calculator.colorfularr, //Price for print in colors
         monochromearr = state.calculator.monochromearr; // Price for print in monochrome
 
@@ -51,11 +54,9 @@ const calc = function (state) {
     function calculateTotal() {
         var totalprice, totalpricehrn, totalpriceprofit, totalpricehrncom, totalpriceonesticker, pricewithlamination;
         totalprice = calculatePrint() + calculateCut() + calculateBasis() + _delivery + _postprint;
-
         totalprice = totalprice+calculateLamination();
         totalprice = printUrgency(totalprice);
         totalpricehrn = totalprice * _exchangeRate;
-
         totalpriceprofit = addProfit(totalpricehrn, _profit);
 
         totalpricehrncom = totalpriceprofit + ((totalpriceprofit / 100) * 3);
@@ -118,8 +119,15 @@ const calc = function (state) {
     //Функция расчета стоимости ламинации
     function calculateLamination(){
         if(calcProp.lamination){
-            $('#laminationprice').html('Стоимость ламинации:'+calcProp.numberoflist * _laminationprice);
-            return calcProp.numberoflist * 0.25;
+            var laminationPrice = 0;
+
+            if(calcProp.print_type === 'Листовая') {
+                $('#laminationprice').html('Стоимость ламинации:' + calcProp.numberoflist * _laminationprice);
+                laminationPrice = calcProp.numberoflist * 0.25;
+            }else{
+                laminationPrice = calculateBasis();
+            }
+            return laminationPrice;
         }
         else return 0;
     }
@@ -129,31 +137,35 @@ const calc = function (state) {
         if (!calcProp.width || !calcProp.height) {
             return;
         }
-        else if (calcProp.width < 45 || calcProp.height < 45){
-            switch (calcProp.form) {
-                case 'Прямоугольная':
-                    calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
-                    break;
-                case 'Простая форма':
-                    calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
-                    break;
-                case 'Сложная форма':
-                    calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
-                    break;
+        if(calcProp.print_type === 'Листовая') {
+            if (calcProp.width < 45 || calcProp.height < 45) {
+                switch (calcProp.form) {
+                    case 'Прямоугольная':
+                        calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
+                        break;
+                    case 'Простая форма':
+                        calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
+                        break;
+                    case 'Сложная форма':
+                        calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
+                        break;
+                }
             }
-        }
-        else {
-            switch (calcProp.form) {
-                case 'Прямоугольная':
-                    calcProp.stickersonlist = calculateFigures(rectlistparams, calcProp);
-                    break;
-                case 'Простая форма':
-                    calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
-                    break;
-                case 'Сложная форма':
-                    calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
-                    break;
+            else {
+                switch (calcProp.form) {
+                    case 'Прямоугольная':
+                        calcProp.stickersonlist = calculateFigures(rectlistparams, calcProp);
+                        break;
+                    case 'Простая форма':
+                        calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
+                        break;
+                    case 'Сложная форма':
+                        calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
+                        break;
+                }
             }
+        }else if(calcProp.print_type === 'Рулонная'){
+            calcProp.rulonAmount = calculateFigures(rulonWith, calcProp)/1000;
         }
     }
 
@@ -162,118 +174,143 @@ const calc = function (state) {
         var printtotal = 0,
             numberoflist = 0,
             printpricelist = 0;
-        calcProp.numberoflist = Math.ceil(parseInt(calcProp.quantity) / calcProp.stickersonlist);
+        if(calcProp.print_type === 'Листовая') {
+            calcProp.numberoflist = Math.ceil(parseInt(calcProp.quantity) / calcProp.stickersonlist);
 
 
-        //добавим ещё дополнительные листы на брак
-        for (var i = 0; i < _defectiveSheets.length; i++) {
-            var obj = _defectiveSheets[i];
-            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                calcProp.numberoflist += obj.add;
-                $('#deffective').html('Брак составил: '+obj.add+' листов');
-                break;
-            }
-        }
-
-
-
-        if (calcProp.type == 'Цветная') {
-            for (var i = 0; i < colorfularr.length; i++) {
-                var obj = colorfularr[i];
+            //добавим ещё дополнительные листы на брак
+            for (var i = 0; i < _defectiveSheets.length; i++) {
+                var obj = _defectiveSheets[i];
                 if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                    printpricelist = obj.price;
+                    calcProp.numberoflist += obj.add;
+                    $('#deffective').html('Брак составил: ' + obj.add + ' листов');
                     break;
                 }
             }
 
-        }
-        else if (calcProp.type == 'Черно-белая') {
-            for (var i = 0; i < monochromearr.length; i++) {
-                var obj = monochromearr[i];
-                if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                    printpricelist = obj.price;
-                    break;
-                }
-            }
 
+            if (calcProp.type == 'Цветная') {
+                for (var i = 0; i < colorfularr.length; i++) {
+                    var obj = colorfularr[i];
+                    if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                        printpricelist = obj.price;
+                        break;
+                    }
+                }
+
+            }
+            else if (calcProp.type == 'Черно-белая') {
+                for (var i = 0; i < monochromearr.length; i++) {
+                    var obj = monochromearr[i];
+                    if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                        printpricelist = obj.price;
+                        break;
+                    }
+                }
+
+            }
+            printtotal = calcProp.numberoflist * printpricelist;
+        }else if (calcProp.print_type === 'Рулонная'){
+            printtotal =  calcProp.rulonAmount * rulonPrintPrice;
         }
-        printtotal = calcProp.numberoflist * printpricelist;
+
         return printtotal;
     }
 
     // Функция расчета стоимости порезки
     function calculateCut() {
-        if(calcProp.width < 45 || calcProp.height < 45){
-            switch (calcProp.form) {
-                case 'Прямоугольная':
-                    for (var i = 0; i < _cutpriceSimplecircuit.length; i++) {
-                        var obj = _cutpriceSimplecircuit[i];
-                        if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                            return calcProp.numberoflist * obj.price;
-                            break;
+        if(calcProp.print_type === 'Листовая') {
+            if (calcProp.width < 45 || calcProp.height < 45) {
+                switch (calcProp.form) {
+                    case 'Прямоугольная':
+                        for (var i = 0; i < _cutpriceSimplecircuit.length; i++) {
+                            var obj = _cutpriceSimplecircuit[i];
+                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                                return calcProp.numberoflist * obj.price;
+                                break;
+                            }
                         }
-                    }
-                    break;
-                case 'Простая форма':
-                    for (var i = 0; i < _cutpriceSimplecircuit.length; i++) {
-                        var obj = _cutpriceSimplecircuit[i];
-                        if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                            return calcProp.numberoflist * obj.price;
-                            break;
+                        break;
+                    case 'Простая форма':
+                        for (var i = 0; i < _cutpriceSimplecircuit.length; i++) {
+                            var obj = _cutpriceSimplecircuit[i];
+                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                                return calcProp.numberoflist * obj.price;
+                                break;
+                            }
                         }
-                    }
-                    break;
-                case 'Сложная форма':
-                    for (var i = 0; i < _cutpriceHardcircuit.length; i++) {
-                        var obj = _cutpriceHardcircuit[i];
-                        if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                            return calcProp.numberoflist * obj.price;
-                            break;
+                        break;
+                    case 'Сложная форма':
+                        for (var i = 0; i < _cutpriceHardcircuit.length; i++) {
+                            var obj = _cutpriceHardcircuit[i];
+                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                                return calcProp.numberoflist * obj.price;
+                                break;
+                            }
                         }
-                    }
-                    break;
+                        break;
+                }
+            } else {
+                switch (calcProp.form) {
+                    case 'Прямоугольная':
+                        for (var i = 0; i < _cutpriceRect.length; i++) {
+                            var obj = _cutpriceRect[i];
+                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                                return calcProp.numberoflist * obj.price;
+                                break;
+                            }
+                        }
+                        break;
+                    case 'Простая форма':
+                        for (var i = 0; i < _cutpriceSimplecircuit.length; i++) {
+                            var obj = _cutpriceSimplecircuit[i];
+                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                                return calcProp.numberoflist * obj.price;
+                                break;
+                            }
+                        }
+                        break;
+                    case 'Сложная форма':
+                        for (var i = 0; i < _cutpriceHardcircuit.length; i++) {
+                            var obj = _cutpriceHardcircuit[i];
+                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                                return calcProp.numberoflist * obj.price;
+                                break;
+                            }
+                        }
+                        break;
+                }
             }
-        } else {
-            switch (calcProp.form) {
-                case 'Прямоугольная':
-                    for (var i = 0; i < _cutpriceRect.length; i++) {
-                        var obj = _cutpriceRect[i];
-                        if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                            return calcProp.numberoflist * obj.price;
-                            break;
-                        }
-                    }
+        }else if (calcProp.print_type === 'Рулонная'){
+            for (var i = 0; i < _cutpriceRulon.length; i++) {
+                var obj = _cutpriceRulon[i];
+                if (calcProp.quantity >= obj.min && calcProp.quantity <= obj.max) {
+                    return calcProp.quantity * obj.price;
                     break;
-                case 'Простая форма':
-                    for (var i = 0; i < _cutpriceSimplecircuit.length; i++) {
-                        var obj = _cutpriceSimplecircuit[i];
-                        if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                            return calcProp.numberoflist * obj.price;
-                            break;
-                        }
-                    }
-                    break;
-                case 'Сложная форма':
-                    for (var i = 0; i < _cutpriceHardcircuit.length; i++) {
-                        var obj = _cutpriceHardcircuit[i];
-                        if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                            return calcProp.numberoflist * obj.price;
-                            break;
-                        }
-                    }
-                    break;
+                }
             }
         }
     }
 
     // Функция расчета цены основы
     function calculateBasis() {
+      var priceBasis =0;
         switch (calcProp.basis) {
             case 'Бумажная':
-                return calcProp.numberoflist * _paperlist;
+                if (calcProp.print_type === 'Листовая') {
+                    priceBasis = calcProp.numberoflist * _paperlist;
+                }else{
+                    priceBasis = calcProp.rulonAmount * rulonPrintPrice
+                }
+                return priceBasis;
                 break;
             case 'Пластиковая':
-                return calcProp.numberoflist * _plasticlist;
+                if (calcProp.print_type === 'Листовая') {
+                    priceBasis = calcProp.numberoflist * _plasticlist;
+                }else{
+                    priceBasis = calcProp.rulonAmount * rulonPrintPrice
+                }
+                return priceBasis;
                 break;
         }
     }
@@ -310,77 +347,73 @@ const calc = function (state) {
         var total1 = 0,
             total2 = 0,
             FigureB = {};
+        if(calcProp.print_type === 'Листовая') {
+            FigureB.width = parseInt(list.width) + 2;
+            FigureB.height = parseInt(list.height) + 2;
 
-        FigureB.width = parseInt(list.width) + 2;
-        FigureB.height = parseInt(list.height) + 2;
 
+            (function () {
+                var figures_per_row = Math.floor(FigureA.width / FigureB.width),
+                    figures_per_col = Math.floor(FigureA.height / FigureB.height),
+                    invers_figures_per_row = 0,
+                    invers_figures_per_col = 0;
 
-        (function () {
-            var figures_per_row = Math.floor(FigureA.width / FigureB.width),
-                figures_per_col = Math.floor(FigureA.height / FigureB.height),
-                invers_figures_per_row = 0,
-                invers_figures_per_col = 0;
+                if (FigureA.width - (figures_per_row * FigureB.width) >= FigureB.height) {
+                    invers_figures_per_row = Math.floor((FigureA.width - (figures_per_row * FigureB.width)) / FigureB.height);
+                    invers_figures_per_col = Math.floor(FigureA.height / FigureB.width);
+                }
 
-            if (FigureA.width - (figures_per_row * FigureB.width) >= FigureB.height) {
-                invers_figures_per_row = Math.floor((FigureA.width - (figures_per_row * FigureB.width)) / FigureB.height);
-                invers_figures_per_col = Math.floor(FigureA.height / FigureB.width);
+                total1 = (figures_per_row * figures_per_col) + (invers_figures_per_row * invers_figures_per_col);
+            }());
+
+            (function () {
+                var figures_per_row = Math.floor(FigureA.width / FigureB.height),
+                    figures_per_col = Math.floor(FigureA.height / FigureB.width),
+                    invers_figures_per_row = 0,
+                    invers_figures_per_col = 0;
+
+                if (FigureA.width - (figures_per_row * FigureB.height) >= FigureB.width) {
+                    invers_figures_per_row = Math.floor((FigureA.width - (figures_per_row * FigureB.height)) / FigureB.width);
+                    invers_figures_per_col = Math.floor(FigureA.height / FigureB.height);
+                }
+
+                total2 = (figures_per_row * figures_per_col) + (invers_figures_per_row * invers_figures_per_col);
+            }());
+
+            return Math.max(total1, total2);
+        }else if(calcProp.print_type === 'Рулонная'){
+            var amount = 0;
+            var amount1 =0;
+            if(FigureA>list.width){
+                total1 = Math.floor(FigureA/list.width)
+            }
+            if(FigureA>list.height){
+                total2 = Math.floor(FigureA/list.height)
+            }
+            if(total1>total2){
+             amount = (Math.ceil(calcProp.quantity/total1) * list.height * FigureA)/1000;
+                amount1 =  (Math.ceil(calcProp.quantity/total2) * list.width * FigureA)/1000;
+            }
+            else if (total1===total2){
+                amount = (Math.ceil(calcProp.quantity/total2) *  Math.min(list.width, list.height) * FigureA)/1000;
+                amount1 =  (Math.ceil(calcProp.quantity/total1) * Math.min(list.width, list.width) * FigureA)/1000;
+            }
+            else{
+                amount = (Math.ceil(calcProp.quantity/total2) * list.width * FigureA)/1000;
+                amount1 =  (Math.ceil(calcProp.quantity/total1) * list.height * FigureA)/1000;
             }
 
-            total1 = (figures_per_row * figures_per_col) + (invers_figures_per_row * invers_figures_per_col);
-        }());
 
-        (function () {
-            var figures_per_row = Math.floor(FigureA.width / FigureB.height),
-                figures_per_col = Math.floor(FigureA.height / FigureB.width),
-                invers_figures_per_row = 0,
-                invers_figures_per_col = 0;
-
-            if (FigureA.width - (figures_per_row * FigureB.height) >= FigureB.width) {
-                invers_figures_per_row = Math.floor((FigureA.width - (figures_per_row * FigureB.height)) / FigureB.width);
-                invers_figures_per_col = Math.floor(FigureA.height / FigureB.height);
-            }
-
-            total2 = (figures_per_row * figures_per_col) + (invers_figures_per_row * invers_figures_per_col);
-        }());
-
-        return Math.max(total1, total2);
+            return Math.min(amount, amount1);
+        }
     }
 
 
     //Управление попапом калькулятора
 
     // the location of server-side upload handler:
-    $('#upload').fileupload({
-        url: 'server/php/',
-        dataType: 'json',
-        done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                $('#fileformlabel').append('<div class="parent"><i class="icon-checkmark"></i>'+file.name+'<i class="fa fa-trash delete js-delete" data-name = "'+ file.name +'" data-delete-url = "'+ file.deleteUrl +'" data-url = "'+ file.url +'"></i><br /></div>');
-                $('#user_files').html($('#user_files').html() + file.url+ '\n');
-                // $('<p/><i class="icon-checkmark"></i>').text(file.name).appendTo('#fileformlabel');
-            })
-        },
-        error: function(info){
-            console.log('info');
-        }
 
-    });
-    $('body').on('click','.js-delete',function () {
-        const file = $(this);
-        $.ajax({
-            url: file.data('delete-url'),
-            type: 'DELETE',
-            success: (data)=> {
-                const result = JSON.parse(data);
-                if(result[file.data('name')]){
-                    file.closest('.parent').remove();
 
-                    const uFiles = $('#user_files').html();
-                    $('#user_files').html(uFiles.replace(file.data('url')+ '\n', ''));
-                }
-            }
-        });
-    })
     //Шаги формы
     function switchStep(step){
         $('#part-1, #part-2, #part-3').css('display','none');
@@ -416,7 +449,6 @@ const calc = function (state) {
         var $form_delivery = $('#form_delivery'),
             $form_contacts = $('#form_contacts');
         if(calcProp.user_delivery == 'Новая Почта'){
-            console.log('111');
             $form_delivery.hide();
             $form_contacts.show();
         }

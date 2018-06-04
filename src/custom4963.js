@@ -1,7 +1,9 @@
 import jQuery from 'jquery';
+import 'blueimp-file-upload';
 require('webpack-jquery-ui/widgets');
 require('magnific-popup');
 require('jquery-validation');
+
 
 const $ = jQuery;
 
@@ -450,8 +452,46 @@ var isDevelopment =true;
         document.location = $(this).data('href');
     });
 
+    const $body = $('body');
+
+    $body.on('click','#upload', function () {
+        $(this).fileupload({
+            url: 'server/php/',
+            dataType: 'json',
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    $('#fileformlabel').append('<div class="parent"><i class="icon-checkmark"></i><div class="fname">'+file.name+'</div><i class="fa fa-trash delete js-delete" data-name = "'+ file.name +'" data-delete-url = "'+ file.deleteUrl +'" data-url = "'+ file.url +'"></i></div>');
+                    $('#user_files').html($('#user_files').html() + file.url+ '\n');
+                    // $('<p/><i class="icon-checkmark"></i>').text(file.name).appendTo('#fileformlabel');
+                })
+            },
+            error: function(info){
+                console.log('info');
+            }
+
+        })
+    });
+
+    $body.on('click','.js-delete',function () {
+        const file = $(this);
+        $.ajax({
+            url: file.data('delete-url'),
+            type: 'DELETE',
+            success: (data)=> {
+                const result = JSON.parse(data);
+                if(result[file.data('name')]){
+                    file.closest('.parent').remove();
+
+                    const uFiles = $('#user_files').html();
+                    $('#user_files').html(uFiles.replace(file.data('url')+ '\n', ''));
+                }
+            }
+        });
+    });
 
 });
+
+
 //
 // window.fbAsyncInit = function() {
 //     FB.init({
