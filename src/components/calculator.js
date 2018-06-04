@@ -125,7 +125,7 @@ const calc = function (state) {
                 $('#laminationprice').html('Стоимость ламинации:' + calcProp.numberoflist * _laminationprice);
                 laminationPrice = calcProp.numberoflist * 0.25;
             }else{
-                laminationPrice = calculateBasis();
+                laminationPrice = calculateBasis(true);
             }
             return laminationPrice;
         }
@@ -211,7 +211,9 @@ const calc = function (state) {
             }
             printtotal = calcProp.numberoflist * printpricelist;
         }else if (calcProp.print_type === 'Рулонная'){
-            printtotal =  calcProp.rulonAmount * rulonPrintPrice;
+            if(calcProp.type) {
+                printtotal = calcProp.rulonAmount * rulonPrintPrice;
+            }
         }
 
         return printtotal;
@@ -293,7 +295,7 @@ const calc = function (state) {
     }
 
     // Функция расчета цены основы
-    function calculateBasis() {
+    function calculateBasis(lamination = false) {
       var priceBasis =0;
         switch (calcProp.basis) {
             case 'Бумажная':
@@ -308,7 +310,11 @@ const calc = function (state) {
                 if (calcProp.print_type === 'Листовая') {
                     priceBasis = calcProp.numberoflist * _plasticlist;
                 }else{
-                    priceBasis = calcProp.rulonAmount * rulonPrintPrice
+                    var square =  calcProp.rulonAmount;
+                    if(lamination){
+                        square+=1;
+                    }
+                    priceBasis = square * rulonPrintPrice
                 }
                 return priceBasis;
                 break;

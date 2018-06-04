@@ -216,7 +216,7 @@ class Section1 extends React.Component{
                                         </div>
                                     </div>
                                 </div>
-                                {!(this.state.calcProp.print_type === 'Рулонная') &&
+
                                 <div className="form-field">
                                     <div className="row">
                                         <div className="col-lg-7 col-sm-6">
@@ -240,7 +240,7 @@ class Section1 extends React.Component{
                                                 </div>
                                             </div>
                                         </div>
-
+                                        {!(this.state.calcProp.print_type === 'Рулонная') &&
                                         <div className="col-lg-5 col-sm-6">
                                             <div className="h3 primary-label">Основа:</div>
                                             <div className="frm_container frm_opt_container">
@@ -266,9 +266,10 @@ class Section1 extends React.Component{
                                                 </div>
                                             </div>
                                         </div>
+                                        }
                                     </div>
                                 </div>
-                                }
+
                                 <div className="form-field dop-obrobotka-row">
                                     <div className="h3 primary-label">Дополнительная обработка:</div>
                                     <div className="frm_container">
