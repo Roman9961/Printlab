@@ -9,8 +9,7 @@ import Footer from './Footer';
 import PageContent from './PageContent';
 import FormContent from './FormContent';
 import {initPopup} from '../initPopup';
-import "../css/Style.big.css";
-require('../custom4963');
+
 
 
 

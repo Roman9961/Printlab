@@ -50,10 +50,10 @@ class Section1 extends React.Component{
         const calcProp = {...this.state.calcProp};
 
          calcProp[key] = value;
-         if(calcProp.height>378 || calcProp.width>278 ||  value == 'Рулонная'){
+         if(calcProp.height>378 || calcProp.width>278 ||  value === 'Рулонная'){
              calcProp.print_type = 'Рулонная';
          }
-         if(calcProp.print_type == 'Рулонная'){
+         if(calcProp.print_type === 'Рулонная'){
              calcProp.basis = 'Пластиковая';
          }
 
@@ -192,13 +192,13 @@ class Section1 extends React.Component{
                                                 <p className="error-msg"></p>
                                                 <div className="frm_item">
                                                     <span className="description top">Высота, мм</span>
-                                                    <input  type="number" name="height" id="field_profile-14" value={this.state.calcProp.height} min="3" max="438" onChange={this.handleChange} placeholder="302"/>
+                                                    <input  type="number" name="height" id="field_profile-14" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} placeholder="302"/>
                                                         <i className="icon-check"></i>
                                                 </div>
                                                 <div className="frm_item h3 gray">х</div>
                                                 <div className="frm_item">
                                                     <span className="description top">Ширина, мм</span>
-                                                    <input type="number" name="width" id="field_profile-15" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max="308"  placeholder="200"/>
+                                                    <input type="number" name="width" id="field_profile-15" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
                                                         <i className="icon-check"></i>
                                                 </div>
                                             </div>
@@ -355,6 +355,7 @@ class Section1 extends React.Component{
                                                 <p>Если ваш макет соответствует</p>
                                                 <p><a href="images/trebovaniya-k-maketam-nakleyki-na.pdf" target="_blank" download="Abaka требования к макетам">требования к макету</a></p>
                                                 <p>то загрузите его:</p>
+
                                                 <div className="fileform">
                                                     <div className="selectbutton btn btn-primary">
                                                         <span>Загрузить макет</span>
@@ -577,17 +578,18 @@ class Section1 extends React.Component{
                         <div id="form_contacts" style={{display : 'none'}} className="form-field">
                             <div className="h3 primary-label">Адрес доставки:</div>
                             <div className="frm_container">
-                                <textarea name="user_contacts" rows="3" placeholder="Укажите имя получателя, его телефон, город и номер отделения Новой почты"></textarea>
+                                <input type="textarea" name="user_contacts" rows="3" placeholder="Укажите имя получателя, его телефон, город и номер отделения Новой почты" />
                             </div>
                         </div>
                         <div className="form-field">
                             <div className="h3 primary-label">Комментарий:</div>
                             <div className="frm_container">
-                                <textarea name="user_comment" rows="3" placeholder="Введите ваш комментарий"></textarea>
+                                <input type="textarea" name="user_comment" rows="3" placeholder="Введите ваш комментарий" />
                             </div>
                         </div>
+                        <div id="user_files">
 
-                        <textarea id="user_files" name="user_files" rows="3" placeholder="" className="none"></textarea>
+                        </div>
 
                         <div className="text-right">
                             <input type="submit" className="btn btn-primary" value="Подтвердить заказ"/>

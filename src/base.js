@@ -2,12 +2,12 @@ import Rebase from 're-base';
 import firebase from 'firebase';
 
 const firebaseApp = firebase.initializeApp({
-    apiKey: "AIzaSyBnTwtHMD7Ml7E2YTf8_OsBMTRuAj8wuEw",
-    authDomain: "catchoftheday-62fd3.firebaseapp.com",
-    databaseURL: "https://catchoftheday-62fd3.firebaseio.com",
-    projectId: "catchoftheday-62fd3",
-    storageBucket: "catchoftheday-62fd3.appspot.com",
-    messagingSenderId: "619632723204"
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
+    projectId: process.env.FIREBASE_PROGECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
 });
 
 const base = Rebase.createClass(firebaseApp.database());

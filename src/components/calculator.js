@@ -58,7 +58,6 @@ const calc = function (state) {
         totalprice = printUrgency(totalprice);
         totalpricehrn = totalprice * _exchangeRate;
         totalpriceprofit = addProfit(totalpricehrn, _profit);
-
         totalpricehrncom = totalpriceprofit + ((totalpriceprofit / 100) * 3);
         if(calcProp.user_delivery_district){
             totalpricehrncom = totalpricehrncom + calculateDelivery();
@@ -77,7 +76,7 @@ const calc = function (state) {
                 console.log('Окончательная цена за наклейку:' + totalpriceonesticker.toFixed(2));
 
             }
-            if(isNaN(totalpricehrncom) || totalpricehrncom == Number.POSITIVE_INFINITY || totalpricehrncom == Number.NEGATIVE_INFINITY) totalpricehrncom = 0;
+            if(isNaN(totalpricehrncom) || totalpricehrncom === Number.POSITIVE_INFINITY || totalpricehrncom === Number.NEGATIVE_INFINITY) totalpricehrncom = 0;
             $('#final-price span').text(totalpricehrncom.toFixed(2));
 
         }
@@ -88,7 +87,7 @@ const calc = function (state) {
     //Функция добавления стоимости за срочность заказа
 
     function printUrgency(price){
-        if( parseInt(calcProp.print_time) == 2){
+        if( parseInt(calcProp.print_time) === 2){
             return price + (price*0.2);
         } else{
             return price;
@@ -179,8 +178,8 @@ const calc = function (state) {
 
 
             //добавим ещё дополнительные листы на брак
-            for (var i = 0; i < _defectiveSheets.length; i++) {
-                var obj = _defectiveSheets[i];
+            for (let i = 0; i < _defectiveSheets.length; i++) {
+                let obj = _defectiveSheets[i];
                 if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                     calcProp.numberoflist += obj.add;
                     $('#deffective').html('Брак составил: ' + obj.add + ' листов');
@@ -189,9 +188,9 @@ const calc = function (state) {
             }
 
 
-            if (calcProp.type == 'Цветная') {
-                for (var i = 0; i < colorfularr.length; i++) {
-                    var obj = colorfularr[i];
+            if (calcProp.type === 'Цветная') {
+                for (let i = 0; i < colorfularr.length; i++) {
+                    let obj = colorfularr[i];
                     if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                         printpricelist = obj.price;
                         break;
@@ -199,9 +198,9 @@ const calc = function (state) {
                 }
 
             }
-            else if (calcProp.type == 'Черно-белая') {
-                for (var i = 0; i < monochromearr.length; i++) {
-                    var obj = monochromearr[i];
+            else if (calcProp.type === 'Черно-белая') {
+                for (let i = 0; i < monochromearr.length; i++) {
+                    let obj = monochromearr[i];
                     if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                         printpricelist = obj.price;
                         break;
@@ -225,8 +224,8 @@ const calc = function (state) {
             if (calcProp.width < 45 || calcProp.height < 45) {
                 switch (calcProp.form) {
                     case 'Прямоугольная':
-                        for (var i = 0; i < _cutpriceSimplecircuit.length; i++) {
-                            var obj = _cutpriceSimplecircuit[i];
+                        for (let i = 0; i < _cutpriceSimplecircuit.length; i++) {
+                            let obj = _cutpriceSimplecircuit[i];
                             if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
@@ -234,8 +233,8 @@ const calc = function (state) {
                         }
                         break;
                     case 'Простая форма':
-                        for (var i = 0; i < _cutpriceSimplecircuit.length; i++) {
-                            var obj = _cutpriceSimplecircuit[i];
+                        for (let i = 0; i < _cutpriceSimplecircuit.length; i++) {
+                            let obj = _cutpriceSimplecircuit[i];
                             if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
@@ -243,8 +242,8 @@ const calc = function (state) {
                         }
                         break;
                     case 'Сложная форма':
-                        for (var i = 0; i < _cutpriceHardcircuit.length; i++) {
-                            var obj = _cutpriceHardcircuit[i];
+                        for (let i = 0; i < _cutpriceHardcircuit.length; i++) {
+                            let obj = _cutpriceHardcircuit[i];
                             if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
@@ -255,8 +254,8 @@ const calc = function (state) {
             } else {
                 switch (calcProp.form) {
                     case 'Прямоугольная':
-                        for (var i = 0; i < _cutpriceRect.length; i++) {
-                            var obj = _cutpriceRect[i];
+                        for (let i = 0; i < _cutpriceRect.length; i++) {
+                            let obj = _cutpriceRect[i];
                             if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
@@ -264,8 +263,8 @@ const calc = function (state) {
                         }
                         break;
                     case 'Простая форма':
-                        for (var i = 0; i < _cutpriceSimplecircuit.length; i++) {
-                            var obj = _cutpriceSimplecircuit[i];
+                        for (let i = 0; i < _cutpriceSimplecircuit.length; i++) {
+                            let obj = _cutpriceSimplecircuit[i];
                             if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
@@ -273,8 +272,8 @@ const calc = function (state) {
                         }
                         break;
                     case 'Сложная форма':
-                        for (var i = 0; i < _cutpriceHardcircuit.length; i++) {
-                            var obj = _cutpriceHardcircuit[i];
+                        for (let i = 0; i < _cutpriceHardcircuit.length; i++) {
+                            let obj = _cutpriceHardcircuit[i];
                             if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
@@ -284,8 +283,8 @@ const calc = function (state) {
                 }
             }
         }else if (calcProp.print_type === 'Рулонная'){
-            for (var i = 0; i < _cutpriceRulon.length; i++) {
-                var obj = _cutpriceRulon[i];
+            for (let i = 0; i < _cutpriceRulon.length; i++) {
+                let obj = _cutpriceRulon[i];
                 if (calcProp.quantity >= obj.min && calcProp.quantity <= obj.max) {
                     return calcProp.quantity * obj.price;
                     break;
@@ -337,12 +336,6 @@ const calc = function (state) {
         }
     }
 
-
-
-
-
-
-
     /**
      * Count an amount of how many stickers can be placed on one paper
      * @param FigureA - object conatining width and height of paper
@@ -350,7 +343,7 @@ const calc = function (state) {
      * @returns {number} - max number of stickers placed on a paper
      */
     function calculateFigures(FigureA, list) {
-        var total1 = 0,
+        let total1 = 0,
             total2 = 0,
             FigureB = {};
         if(calcProp.print_type === 'Листовая') {
@@ -454,14 +447,14 @@ const calc = function (state) {
 
         var $form_delivery = $('#form_delivery'),
             $form_contacts = $('#form_contacts');
-        if(calcProp.user_delivery == 'Новая Почта'){
+        if(calcProp.user_delivery === 'Новая Почта'){
             $form_delivery.hide();
             $form_contacts.show();
         }
-        else if(calcProp.user_delivery == 'Доставка по Одессе'){
+        else if(calcProp.user_delivery === 'Доставка по Одессе'){
             $form_delivery.show();
             $form_contacts.show();
-        } else if (calcProp.user_delivery == 'Самовывоз'){
+        } else if (calcProp.user_delivery === 'Самовывоз'){
             $form_delivery.hide();
             $form_contacts.hide();
         }
@@ -484,11 +477,11 @@ const calc = function (state) {
     //notification if something goes wrong
     function notifyme(Calc) {
         var $calc = Calc;
-        if($calc.form == 'Прямоугольная' && ($calc.width >308 || $calc.height > 438)){
+        if($calc.form === 'Прямоугольная' && ($calc.width >308 || $calc.height > 438)){
             console.log(Calc);
             $.notify("Размер наклеек прямоугольной формы не может превышать 438х308мм", "warn",{position:"top left"});
         }
-        if(($calc.form == 'Простая форма' || $calc.form == 'Сложная форма') && ($calc.width > 278 || $calc.height > 378)){
+        if(($calc.form === 'Простая форма' || $calc.form === 'Сложная форма') && ($calc.width > 278 || $calc.height > 378)){
             $.notify("Размер наклеек простой и сложной формы не может превышать 378х278мм. Попрбуйте прямоугольные наклейки", "warn", {position:"top left"});
         }
     }

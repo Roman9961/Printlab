@@ -11,6 +11,7 @@
 
 @import url(https://fonts.googleapis.com/css?family=Fira+Sans:400,300,700,400italic,500&amp;subset=latin,cyrillic);
 @import url('../../node_modules/font-awesome/css/font-awesome.min.css');
+@import url('../../node_modules/bootstrap/dist/css/bootstrap.min.css');
 hr,
 img,
 legend {
@@ -3609,16 +3610,16 @@ tbody.collapse.in {
 
 @font-face {
     font-family: Measure;
-    src: url(./fonts/measure-webfont.eot);
-    src: url(./fonts/measure-webfont.eot?#iefix) format('embedded-opentype'), url(./fonts/measure-webfont.woff2) format('woff2'), url(./fonts/measure-webfont.woff) format('woff'), url(./fonts/measure-webfont.ttf) format('truetype'), url(./fonts/measure-webfont.svg#measureregular) format('svg');
+    src: url(../../public/fonts/measure-webfont.eot);
+    src: url(../../public/fonts/measure-webfont.eot?#iefix) format('embedded-opentype'), url(../../public/fonts/measure-webfont.woff2) format('woff2'), url(../../public/fonts/measure-webfont.woff) format('woff'), url(../../public/fonts/measure-webfont.ttf) format('truetype'), url(../../public/fonts/measure-webfont.svg#measureregular) format('svg');
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: icomoon;
-    src: url(./fonts/icomoon.eot?ya6mup);
-    src: url(./fonts/icomoon.eot?ya6mup#iefix) format('embedded-opentype'), url(./fonts/icomoon.ttf?ya6mup) format('truetype'), url(./fonts/icomoon.woff?ya6mup) format('woff'), url(./fonts/icomoon.svg?ya6mup#icomoon) format('svg');
+    src: url(../../public/fonts/icomoon.eot?ya6mup);
+    src: url(../../public/fonts/icomoon.eot?ya6mup#iefix) format('embedded-opentype'), url(../../public/fonts/icomoon.ttf?ya6mup) format('truetype'), url(../../public/fonts/icomoon.woff?ya6mup) format('woff'), url(../../public/fonts/icomoon.svg?ya6mup#icomoon) format('svg');
     font-weight: 400;
     font-style: normal
 }
@@ -7307,7 +7308,7 @@ html body #accordion .ui-accordion-header:hover {
     background-image: -o-linear-gradient(left, #f5f5f5 0, #fff 100%);
     background-image: linear-gradient(to right, #f5f5f5 0, #fff 100%);
     background-repeat: repeat-x;
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffffffff', GradientType=1);
+    /*filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffffffff', GradientType=1);*/
     cursor: pointer
 }
 
@@ -7348,7 +7349,7 @@ html body #accordion .ui-accordion-content.ui-accordion-content-active {
     background-image: -o-linear-gradient(left, #f5f5f5 0, #fff 100%);
     background-image: linear-gradient(to right, #f5f5f5 0, #fff 100%);
     background-repeat: repeat-x;
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffffffff', GradientType=1)
+    /*filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffffffff', GradientType=1)*/
 }
 
 @media (max-width:767px) {

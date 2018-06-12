@@ -5,6 +5,7 @@ require('magnific-popup');
 require('jquery-validation');
 
 
+
 const $ = jQuery;
 
 $(document).ready(function(){
@@ -461,7 +462,7 @@ var isDevelopment =true;
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
                     $('#fileformlabel').append('<div class="parent"><i class="icon-checkmark"></i><div class="fname">'+file.name+'</div><i class="fa fa-trash delete js-delete" data-name = "'+ file.name +'" data-delete-url = "'+ file.deleteUrl +'" data-url = "'+ file.url +'"></i></div>');
-                    $('#user_files').html($('#user_files').html() + file.url+ '\n');
+                    $('#user_files').append('<input type="hidden" name="user_files[]" value="'+file.name+'" />');
                     // $('<p/><i class="icon-checkmark"></i>').text(file.name).appendTo('#fileformlabel');
                 })
             },
