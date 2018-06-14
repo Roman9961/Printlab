@@ -1,0 +1,15 @@
+.side-img{
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  z-index: -1;
+}
+.side-img--right{
+  right: 0;
+}
+.side-img--left{
+  left:0;
+}
+.side-img img{
+  height:690px;
+}

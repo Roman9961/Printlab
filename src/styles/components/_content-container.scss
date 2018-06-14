@@ -3,3 +3,23 @@
   padding: 0 $m-size;
   max-width: 80rem;
 }
+
+.wrapper-container{
+  padding: 24px 0;
+
+}
+
+.container {
+  width: 100%;
+  @media (min-width:992px) {
+      width: 960px
+  }
+  @media (min-width:1200px) {
+      width: 1140px
+  }
+}
+.container__express-calculator{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}

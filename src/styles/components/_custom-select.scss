@@ -1,0 +1,76 @@
+/*the container must be positioned relative:*/
+.custom-select {
+  position: relative;
+  font-family: Arial;
+  width:140px;
+}
+.custom-select select {
+  display: none; /*hide original SELECT element:*/
+}
+.select-selected{
+  -webkit-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+  &:after {
+    position: absolute;
+    content: url("./../css/images/custom-select-arrow.svg");
+    transform: rotate(180deg);
+    transform-origin: center center;
+    top: 10px;
+    right: 10px;
+    width: 12px;
+    height: 30px;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+  }
+  &.select-arrow-active:after {
+    transform: rotate(0deg);
+  }
+  &.select-arrow-active{
+    border-radius: 10px 10px 0 0;
+    background-color: rgba(171,198,216,0.3);
+    border: 1px solid #abc6d8;
+    border-bottom: none;
+    &+.select-items{
+      border-radius: 0 0 10px 10px;
+      border: 1px solid #abc6d8;
+      & div:last-child{
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+/*style the items (options), including the selected item:*/
+.select-items div,.select-selected {
+  color: $dark-grey;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent #ABC6D8 transparent;
+  cursor: pointer;
+}
+/*style items (options):*/
+.select-items {
+  position: absolute;
+  background-color: white;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  -webkit-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+/*hide the items when the select box is closed:*/
+.select-hide {
+  visibility: hidden;
+  top: -100%;
+  z-index: -200;
+  -webkit-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(171,198,216,0.3);
+}

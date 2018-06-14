@@ -31,7 +31,6 @@ const calc = function (state) {
         colorfularr = state.calculator.colorfularr, //Price for print in colors
         monochromearr = state.calculator.monochromearr; // Price for print in monochrome
 
-
     var formCalc = $('#sendorder'); //Form object
 
 
@@ -77,7 +76,7 @@ const calc = function (state) {
 
             }
             if(isNaN(totalpricehrncom) || totalpricehrncom === Number.POSITIVE_INFINITY || totalpricehrncom === Number.NEGATIVE_INFINITY) totalpricehrncom = 0;
-            $('#final-price span').text(totalpricehrncom.toFixed(2));
+            $(`#${state.calcProp.selector} span`).first().text(totalpricehrncom.toFixed(2));
 
         }
 
@@ -137,7 +136,7 @@ const calc = function (state) {
             return;
         }
         if(calcProp.print_type === 'Листовая') {
-            if (calcProp.width < 45 || calcProp.height < 45) {
+            if (calcProp.width < 30 || calcProp.height < 30) {
                 switch (calcProp.form) {
                     case 'Прямоугольная':
                         calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
@@ -221,7 +220,7 @@ const calc = function (state) {
     // Функция расчета стоимости порезки
     function calculateCut() {
         if(calcProp.print_type === 'Листовая') {
-            if (calcProp.width < 45 || calcProp.height < 45) {
+            if (calcProp.width < 30 || calcProp.height < 30) {
                 switch (calcProp.form) {
                     case 'Прямоугольная':
                         for (let i = 0; i < _cutpriceSimplecircuit.length; i++) {
@@ -309,7 +308,7 @@ const calc = function (state) {
                 if (calcProp.print_type === 'Листовая') {
                     priceBasis = calcProp.numberoflist * _plasticlist;
                 }else{
-                    var square =  calcProp.rulonAmount;
+                    var square =  calcProp.rulonAmount + 0.15;
                     if(lamination){
                         square+=1;
                     }
@@ -347,8 +346,8 @@ const calc = function (state) {
             total2 = 0,
             FigureB = {};
         if(calcProp.print_type === 'Листовая') {
-            FigureB.width = parseInt(list.width) + 2;
-            FigureB.height = parseInt(list.height) + 2;
+            FigureB.width = parseInt(list.width) + list.margin/2;
+            FigureB.height = parseInt(list.height) + list.margin/2;
 
 
             (function () {
@@ -384,10 +383,10 @@ const calc = function (state) {
             var amount = 0;
             var amount1 =0;
             if(FigureA>list.width){
-                total1 = Math.floor(FigureA/list.width)
+                total1 = Math.floor(FigureA/(list.width+list.margin/2))
             }
             if(FigureA>list.height){
-                total2 = Math.floor(FigureA/list.height)
+                total2 = Math.floor(FigureA/(list.height+list.margin/2))
             }
             if(total1>total2){
              amount = (Math.ceil(calcProp.quantity/total1) * list.height * FigureA)/1000;
@@ -398,10 +397,9 @@ const calc = function (state) {
                 amount1 =  (Math.ceil(calcProp.quantity/total1) * Math.min(list.width, list.width) * FigureA)/1000;
             }
             else{
-                amount = (Math.ceil(calcProp.quantity/total2) * list.width * FigureA)/1000;
-                amount1 =  (Math.ceil(calcProp.quantity/total1) * list.height * FigureA)/1000;
+                amount = (Math.ceil(calcProp.quantity/total2) * (list.width+list.margin/2) * (FigureA+list.margin/2))/1000;
+                amount1 =  (Math.ceil(calcProp.quantity/total1) * (list.height+list.margin/2) * (FigureA+list.margin/2))/1000;
             }
-
 
             return Math.min(amount, amount1);
         }

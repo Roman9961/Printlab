@@ -1,0 +1,33 @@
+.mfp-content{
+  background-color: white;
+  padding:$l-size;
+}
+.mfp-container{
+  background-color: transparent;
+}
+@media (min-width:768px) and (max-width:991px) {
+  html body .mfp-container .mfp-content {
+    width: 50%
+  }
+}
+
+@media (min-width:992px) and (max-width:1199px) {
+  html body .mfp-container .mfp-content {
+    width: 50%
+  }
+}
+
+@media (min-width:1200px) {
+  html body section.row-example .wrapper-example-stick-item .example-stick-item .example-stick-item-txt {
+    min-height: 230px
+  }
+  html body .mfp-container .mfp-content {
+    width: 40vw
+  }
+}
+
+@media (min-width:1600px) {
+  html body .mfp-container .mfp-content {
+    width: 30vw
+  }
+}

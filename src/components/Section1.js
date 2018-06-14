@@ -30,7 +30,8 @@ class Section1 extends React.Component{
             "user_payment_method" : "",
             "user_phone" : "",
             "varnish" : "",
-            "width" : ""
+            "width" : "",
+            "margin":4
         }
     };
     componentDidMount(){
@@ -67,7 +68,8 @@ class Section1 extends React.Component{
     };
     render(){
         return (
-    <section className="form-row"><div id="form-calculator" className="popup-wrapper">
+    <section className="form-row">
+        <div id="form-calculator" className="popup-wrapper">
         <div className="close-popup btn-close-popup"><i className="icon-cross"></i></div>
         <div id="final-price" className="price-wrapper">
             <span>0</span>

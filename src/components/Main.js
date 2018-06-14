@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import notify from 'bootstrap-notify';
 import base from '../base';
 import Header from './Header';
+import ExpressCalculation from './ExpressCalculation';
 import Section1 from './Section1';
 import Section2 from './Section2';
 import Footer from './Footer';
@@ -47,8 +48,8 @@ class Main extends React.Component{
         return (
             <React.Fragment>
                 <Header/>
+                <ExpressCalculation />
                 <Section1
-
                     calculator = { this.state.calculator }
                     updateCalculator = { this.updateCalculator }
                 />

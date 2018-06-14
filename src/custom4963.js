@@ -17,7 +17,6 @@ $(document).ready(function(){
         }
     });
 
-
     var _smoothScrolling = false;
     function smoothScroll(target) {
         _smoothScrolling = true;
@@ -124,10 +123,12 @@ $(document).ready(function(){
         $(window).scroll(function (e) {
             if (!_smallmenu && $(window).scrollTop() >= $contentposition) {
                 $('body').addClass('scroll');
+                $('.js-sticky-header').addClass('scroll');
                 $('.wrapper-select').removeClass('open');
                 _smallmenu = true;
             } else if (_smallmenu && $(window).scrollTop() < $contentposition) {
                 $('body').removeClass('scroll');
+                $('.js-sticky-header').removeClass('scroll');
                 $('.menu li a').removeClass('active');
                 _smallmenu = false;
             }

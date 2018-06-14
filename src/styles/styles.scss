@@ -1,3 +1,14 @@
 @import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-@import '../css/styles.css';
-
+//@import '../css/styles.css';
+@import url('https://fonts.googleapis.com/css?family=Montserrat:500,700|PT+Serif:400,700');
+@import './base/settings';
+@import './base/base';
+@import './components/content-container';
+@import './components/header';
+@import './components/button';
+@import './components/calculator';
+@import './components/custom-select';
+@import './components/side-images';
+@import './components/popup';
+@import './components/tooltop';
+@import '../../node_modules/magnific-popup/src/css/main';

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="435px" height="837px" viewBox="0 0 435 837" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>27347C96-9882-4273-9A49-F81384786D23</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEF4E2" offset="0%"></stop>
+            <stop stop-color="#FCC87F" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="01-PrintLab---Main-Page" transform="translate(0.000000, -466.000000)" fill="url(#linearGradient-1)">
+            <g id="01-FIRST-SCREEN" transform="translate(-269.000000, -21.000000)">
+                <g id="Background">
+                    <g id="orange_path" transform="translate(0.000000, 485.000000)">
+                        <path d="M0,118.12684 C154.779683,-5.19120234 270.79534,-31.3014485 348.04697,39.7961015 C463.924415,146.442426 523.037526,-33.2138339 637.261128,169.597599 C683.491788,251.683143 591.141745,406.360395 601.330064,472.016497 C610.462037,530.865244 668.078995,559.621719 691.40132,606.968674 C714.891964,654.657335 701.658375,716.45196 673.091565,756.934795 C637.261128,807.711122 566.114259,850.01152 439.636915,835.549912 C313.159572,821.088303 334.960813,785.510203 255.695282,780.519339 C202.851595,777.192096 117.619834,786.256023 0,807.711122 L0,118.12684 Z" id="Path-6"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

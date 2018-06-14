@@ -1,0 +1,47 @@
+.ui-tooltip, .arrow:after {
+}
+.ui-tooltip {
+  padding: 10px 20px;
+  color: $dark-grey;
+  border-radius: 1rem;
+  background-color: white;
+  box-shadow: 0 10px 50px 0 rgba(128,102,108,0.1);
+  z-index:1;
+}
+.arrow {
+  width: 70px;
+  height: 16px;
+  overflow: hidden;
+  position: absolute;
+  left: 50%;
+  margin-left: -35px;
+  bottom: -16px;
+}
+.tooltip__description{
+}
+.arrow.top {
+  top: -16px;
+  bottom: auto;
+}
+.arrow.left {
+  left: 20%;
+}
+.arrow:after {
+  content: "";
+  position: absolute;
+  color: white;
+  z-index:999;
+  left: 20px;
+  top: -20px;
+  width: 25px;
+  height: 25px;
+  background-color: white;
+  box-shadow: 6px 5px 9px -9px black;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.arrow.top:after {
+  bottom: -20px;
+  top: auto;
+}

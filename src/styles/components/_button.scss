@@ -1,14 +1,30 @@
 .button{
-  background-color: dodgerblue;
+  background-color: #FFFFFF;
+  background: linear-gradient(180deg, #FBAD51 0%, #F79258 100%);
+  box-shadow: 0 10px 25px 5px rgba(247,146,88,0.25);
+  border-radius: 1rem;
   border: none;
   color: white;
   display: inline-block;
   font-size: $font-size-large;
+  font-weight: 700;
   padding: $s-size;
   text-align: center;
   text-decoration: none;
   line-height: 1;
+  &:hover, &:visited, &:focus {
+    color: white;
+    text-decoration: none;
+  }
 }
-.button--link{
-  background: none;
+.button--calculator{
+  margin-top: 10rem;
+  width: 100%;
+  padding:3.8rem;
+}
+
+.button--header{
+  margin-top: 10rem;
+  width: 100%;
+  box-shadow: 0 5px 15px 0 rgba(247, 146, 88, 0.25);
 }
