@@ -9,7 +9,7 @@ class SectionGallery extends React.Component{
                 <div className="wrapper-container">
                     <div className="container visible">
                         <div className = "col-sm-4 col-xs-8 gallery-item">
-                            <div><img src = "./images/gallery/gallery-item-1.jpg" alt="1"/></div>
+                            <div><img src = "/images/gallery/gallery-item-1.jpg" alt="1"/></div>
                         </div>
                         <div className = "col-sm-4 col-xs-8 gallery-item">
                             <div><img src = "./images/gallery/gallery-item-2.jpg" alt="1"/></div>

@@ -4,8 +4,15 @@ import notify from 'bootstrap-notify';
 import base from '../base';
 import Header from './Header';
 import ExpressCalculation from './ExpressCalculation';
+import SectionBase from './SectionBase';
+import SectionDelivery from './SectionDelivery';
+import SectionQuality from './SectionQuality';
+import SectionPostPrint from './SectionPostPrint';
+import SectionDesign from './SectionDesign';
+import SectionLayoutProps from './SectionLayoutProps';
+import SectionQuestions from './SectionQuestions';
+import SectionFeedback from './SectionFeedback';
 import Section1 from './Section1';
-import Section2 from './Section2';
 import Footer from './Footer';
 import PageContent from './PageContent';
 import FormContent from './FormContent';
@@ -23,6 +30,7 @@ class Main extends React.Component{
             my_section :[],
             price : [],
             SectionBetterStick : [],
+            SectionBase : {}
         },
         calculator : {
             width : null,
@@ -45,20 +53,31 @@ class Main extends React.Component{
 
 
     render(){
-        return (
-            <React.Fragment>
-                <Header/>
-                <ExpressCalculation />
-                <Section1
-                    calculator = { this.state.calculator }
-                    updateCalculator = { this.updateCalculator }
-                />
-                <PageContent state = { this.state.stickers } />
-                <Section2/>
-                <FormContent/>
-                <Footer/>
-            </React.Fragment>
-        )
+            return (
+                <React.Fragment>
+                    <div className="section-top">
+                        <Header/>
+                        <ExpressCalculation />
+                        <div className="section-bg__top"></div>
+                    </div>
+                    <Section1
+                        calculator={ this.state.calculator }
+                        updateCalculator={ this.updateCalculator }
+                    />
+                    <SectionBase state={ this.state.stickers }/>
+                    <SectionDelivery/>
+                    <SectionQuality/>
+                    <SectionPostPrint/>
+                    <SectionDesign/>
+                    <SectionLayoutProps/>
+                    <SectionQuestions/>
+                    <SectionFeedback/>
+                    {/*<PageContent state = { this.state.stickers } />*/}
+                    {/*<Section2/>*/}
+                    {/*<FormContent/>*/}
+                    <Footer/>
+                </React.Fragment>
+            )
     }
 }
 

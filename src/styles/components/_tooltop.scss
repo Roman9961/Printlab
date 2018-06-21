@@ -1,5 +1,8 @@
 .ui-tooltip, .arrow:after {
 }
+div.ui-tooltip{
+  max-width: 450px;
+}
 .ui-tooltip {
   padding: 10px 20px;
   color: $dark-grey;
@@ -17,8 +20,14 @@
   margin-left: -35px;
   bottom: -16px;
 }
-.tooltip__description{
+.tooltip__container{
+  padding: $s-size;
+
 }
+.tooltip__description{
+  margin-bottom: $s-size;
+}
+
 .arrow.top {
   top: -16px;
   bottom: auto;

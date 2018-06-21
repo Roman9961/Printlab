@@ -3,8 +3,11 @@
   justify-content: space-between;
   align-items:center;
 }
-.header__logo img{
+.header__logo {
   width:15rem;
+  height: 2.4rem;
+  background: url('/images/logo.svg') no-repeat center center;
+  background-size: cover;
 }
 .header__content{
   align-items: center;

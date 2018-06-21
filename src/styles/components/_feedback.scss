@@ -1,0 +1,57 @@
+.section-block--feedback{
+  box-shadow: none;
+  max-width: 100%;
+}
+
+.feedback-form{
+  display: flex;
+  flex-direction: column;
+}
+.feedback-form__label{
+  font-family: 'PT Serif';
+  font-size: 2rem;
+  font-weight:500;
+  margin-right: $xl-size;
+  transition: all .3s ease-in-out;
+  &.error{
+    color: red;
+  }
+}
+.feedback-form__field{
+  border: none;
+  font-size: 2rem;
+  padding: 0;
+  border-bottom: solid 0.2rem $light-blue;
+  width:50rem;
+  transition: all .3s ease-in-out;
+  &.error{
+    border-bottom: solid 0.2rem red;
+  }
+}
+.feedback-form__input-block{
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  position: relative;
+  margin-top: 3rem;
+
+  &>p{
+    position: absolute;
+    width: fit-content;
+    margin: 0;
+    margin-top: 3rem;
+    font-size: $s-size;
+    visibility: hidden;
+    opacity: 0;
+    color: red;
+    transition: all .3s ease-in-out;
+  }
+  &>.active{
+    visibility: visible;
+    opacity:1;
+    margin-top: 4.5rem;
+  }
+}
+.feedback-form__button{
+  margin-top: 6rem;
+}

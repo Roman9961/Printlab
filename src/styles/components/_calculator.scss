@@ -44,6 +44,16 @@
   position: absolute;
   margin: 0 -9.5rem;
 }
+.info{
+  cursor:pointer;
+  background: url('/images/info.svg') no-repeat center center;
+  width:33px;
+  height:33px;
+}
+.info:hover{
+  background: url('/images/info_active.svg') no-repeat center center;
+
+}
 
 .express-calculator__basket{
   cursor: pointer;

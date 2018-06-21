@@ -6,7 +6,6 @@ const Header = e => (
             <div className="container">
                 <div  className="header">
                     <div className="header__logo">
-                        <img alt="Наклейки" title="Наклейки" src="images/logo.svg"/>
                     </div>
                     <div className="header__menu">
                         <div className="header__menu__item"><a href="javascript:;" data-scrollto=".menu-example">Цены</a></div>

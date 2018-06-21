@@ -9,16 +9,17 @@ export const updateTooltip = (selector)=> {
     var description = $("<div>").addClass("tooltip__description").html(element.data('description'));
     var parameters = $("<div>").addClass("tooltip__parameters");
     var parametersBasis = $("<div>").addClass("tooltip__parameters__basis").html(`<span><b>Основа:</b> ${data.basis}</span>`);
-    ;
     var parametersSizes = $("<div>").addClass("tooltip__parameters__sizes").html(`<span><b>Размер:</b> ${data.sizes}</span>`);
     var parametersAmount = $("<div>").addClass("tooltip__parameters__amount").html(`<span><b>Количество:</b> ${data.amount}</span>`);
 
-
-    var tooltip1 = $("<div>").addClass("tooltip__description");
-
-    tooltip1.append(description).append(parametersBasis).append(parametersSizes).append(parametersAmount)
-
+    var tooltip1 = $("<div>").addClass("tooltip__container");
+    parameters.append(parametersBasis).append(parametersSizes).append(parametersAmount);
+    tooltip1.append(description);
+    if(data.basis&&data.sizes&&data.amount) {
+        tooltip1.append(parameters);
+    }
         element.tooltip({
+
                 position: {
                     my: "center bottom-20",
                     at: "center top",

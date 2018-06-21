@@ -1,0 +1,17 @@
+.quality-container{
+  align-items: flex-start;
+}
+
+.quality-block{
+  max-width: 100%;
+ box-shadow: none;
+}
+.quality-block__header{
+  flex-direction: column;
+}
+.quality__title{
+  padding-left: 15px;
+}
+.quality__subtitle{
+  padding-left: 15px;
+}

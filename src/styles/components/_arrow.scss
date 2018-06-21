@@ -1,0 +1,43 @@
+
+.arrows {
+  position: relative;
+  width: 0.9rem;
+  height: 0.9rem;
+  display: inline-block;
+  right: 2px;
+  top: -9px;
+  transition: all .3s ease-in-out;
+  &:before,
+  &:after {
+    top: -5%;
+    height: 110%;
+    width: 26%;
+    transform: rotate(45deg);
+  }
+  &:before {
+    left: 69%;
+  }
+  &:before,
+  &:after {
+    content:"";
+    position: absolute;
+    background: $light-blue;
+    border-radius: 0.2rem;
+    display: block;
+    transform: rotate(45deg);
+    right: 70%
+  }
+  &:after {
+    transform: rotate(135deg);
+
+  }
+  &.up{
+    transform: rotate(180deg);
+    top:-10px;
+    &:before,
+    &:after {
+      background: $orange;
+    }
+  }
+}
+

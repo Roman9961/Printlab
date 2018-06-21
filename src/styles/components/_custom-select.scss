@@ -71,6 +71,10 @@
   -o-transition: all .3s ease-in-out;
   transition: all .3s ease-in-out;
 }
-.select-items div:hover, .same-as-selected {
+.select-items div:hover{
   background-color: rgba(171,198,216,0.3);
+}
+
+.select-items .same-as-selected {
+  color: #F58221;
 }

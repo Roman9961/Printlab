@@ -1,0 +1,18 @@
+.delivery-container{
+  align-items: flex-start;
+}
+
+.delivery-block{
+  margin: $l-size 0 0 0;
+  max-width: 64rem;
+}
+.delivery-block__container{
+  flex-direction: column;
+}
+.delivery__top{
+  padding-top: 50px;
+}
+
+.section-bg__top.delivery__bg{
+  height: 90%;
+}
