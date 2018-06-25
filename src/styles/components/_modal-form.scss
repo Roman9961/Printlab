@@ -1,0 +1,14 @@
+.modal-block__content__item__icon{
+  transition: all .3s ease-in-out;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  border: 2px solid $light-blue;
+  margin-right: $m-size;
+  padding:10px;
+  &.active{
+    transition: all .3s ease-in-out;
+    background: url("/images/checkmark.svg") no-repeat center center;
+    border: transparent;
+  }
+}

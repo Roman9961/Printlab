@@ -1,4 +1,5 @@
 import React from 'react';
+import {Transition} from 'react-transition-group'
 import base from '../base';
 import calc from './calculator';
 
@@ -31,7 +32,8 @@ class Section1 extends React.Component{
             "user_phone" : "",
             "varnish" : "",
             "width" : "",
-            "margin":4
+            "margin":4,
+            "selector": "final-price-main"
         }
     };
     componentDidMount(){
@@ -51,6 +53,9 @@ class Section1 extends React.Component{
         const calcProp = {...this.state.calcProp};
 
          calcProp[key] = value;
+         if(calcProp.form === 'Рулонная'){
+             calcProp.print_type = 'Рулонная'
+         }
          if(calcProp.height>378 || calcProp.width>278 ||  value === 'Рулонная'){
              calcProp.print_type = 'Рулонная';
          }
@@ -69,56 +74,81 @@ class Section1 extends React.Component{
     render(){
         return (
     <section className="form-row">
-        <div id="form-calculator" className="popup-wrapper">
+        <div id="form-calculator" >
         <div className="close-popup btn-close-popup"><i className="icon-cross"></i></div>
-        <div id="final-price" className="price-wrapper">
+        <div id="final-price-main" className="price-wrapper">
+            <div>Сумма заказа:</div>
             <span>0</span>
         </div>
-        <div className="popup">
-            <div className="container">
 
-                <div className="row">
-                    <div className="col-md-1 col-sm-2 col-xs-12">
-                        <div className="logo">
-                            <img alt="Наклейки" title="Наклейки" src="images/nakleyki-logo-header-on-white.svg"/>
-                        </div>
-                        <h2 className="visible-xs">Калькулятор <br/>цены и заказ</h2>
-                    </div>
-                    <div className="col-sm-4 col-xs-9 hidden-xs">
-                        <h2>Калькулятор <br/>цены и заказ</h2>
-                    </div>
-                    <div className="col-sm-6 col-md-offset-1 col-sm-offset-0 col-xs-12 text-right">
-                        <input name="p1_printOn" type="text" placeholder="на банки"/>
-                            <p className="with-green-arrow-top">Укажите на что хотите напечатать наклейки</p>
-                    </div>
+                <div className="container container--modal-info">
+                    <div>Укажите, на что хотите печатать наклейки:</div>
+                    <div><input className="modal-info__field" type="text" placeholder="на банки"/></div>
                 </div>
 
-                <div className="row no-padding">
-                    <div className="col-xs-4">
-                        <div className="form-step-wrapper active">
-                            <i data-step="1" className="icon-checkmark btn-step"></i>
-                            <p>1. Печать</p>
-                        </div>
-                    </div>
-                    <div className="col-xs-4">
-                        <div className="form-step-wrapper">
-                            <i data-step="2" className="icon-checkmark btn-step"></i>
-                            <p>2. Дизайн</p>
-                        </div>
-                    </div>
-                    <div className="col-xs-4">
-                        <div className="form-step-wrapper">
-                            <i data-step="3" className="icon-checkmark btn-step"></i>
-                            <p>3. Оплата и доставка</p>
-                        </div>
-                    </div>
-                </div>
 
                 <div className="row">
                     <div className="col-xs-12">
                         <form id="sendorder">
 
-                            <div id="part-1">
+                            <div id="part-1" className={`${!this.props.state.print?'hidden-part':''}`}>
+                                <div className="wrapper-container wrapper-container--modal-grey">
+                                <div className="container container--modal-info">
+                                    <div className="modal-block">
+                                    <div className="modal-block__title">Форма наклейки:</div>
+                                    <div className="modal-block__content">
+                                        <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-01" className= {`${this.state.calcProp.form=='Прямоугольная'?'active':''}`}>
+                                                <input type="radio" name="form" id="field_profile-01" value="Прямоугольная" onClick={this.handleChange}/>
+                                                <Transition in={this.state.calcProp.form=='Прямоугольная'} timeout={200}>
+                                                    {status=>(
+                                                            <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>
+                                                <div className="modal-block__content_item__icon modal-block__content_item__icon--rect"></div>
+                                                <span>Прямоугольная(без скругления)</span>
+                                            </label>
+                                        </div>
+                                        <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-02" className= {`${this.state.calcProp.form=='Простая форма'?'active':''}`}>
+                                                <input type="radio" name="form" id="field_profile-02" value="Простая форма" onClick={this.handleChange}/>
+                                                <Transition in={this.state.calcProp.form=='Простая форма'} timeout={200}>
+                                                    {status=>(
+                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>                                                <div className="modal-block__content_item__icon modal-block__content_item__icon--simple"></div>
+                                                <span>Наклейки простой формы</span>
+                                            </label>
+                                        </div>
+                                        <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-03" className= {`${this.state.calcProp.form=='Сложная форма'?'active':''}`}>
+                                                <input type="radio" name="form" id="field_profile-03" value="Сложная форма" onClick={this.handleChange}/>
+                                                <Transition in={this.state.calcProp.form=='Сложная форма'} timeout={200}>
+                                                    {status=>(
+                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>
+                                                <div className="modal-block__content_item__icon modal-block__content_item__icon--hard"></div>
+                                                <span>Наклейки сложной формы</span>
+                                            </label>
+                                        </div>
+                                        <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-04" className= {`${this.state.calcProp.form=='Рулонная'?'active':''}`}>
+                                                <input type="radio" name="form" id="field_profile-04" value="Рулонная" onClick={this.handleChange}/>
+                                                <Transition in={this.state.calcProp.form=='Рулонная'} timeout={200}>
+                                                    {status=>(
+                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>
+                                                <div className="modal-block__content_item__icon--roll modal-block__content_item__icon"></div>
+                                                <span>Рулонная цифровая печать</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
                                 <div className="form-field">
                                     <div className="row">
                                 <div className="col-lg-7 col-sm-6">
@@ -142,49 +172,7 @@ class Section1 extends React.Component{
                                 </div>
                                     </div>
                                 </div>
-                                {!(this.state.calcProp.print_type === 'Рулонная') &&
-                                <div className="form-field shape-row">
-                                    <div className="h3 primary-label">Форма наклейки:</div>
-                                    <div className="frm_container frm_opt_container">
-                                        <div className="frm_radio">
-                                            <label htmlFor="field_profile-11">
-                                                <input type="radio" name="form" id="field_profile-11" value="Прямоугольная" onClick={this.handleChange}/>
-                                                    <div className="shape-wrapper">
-                                                        <svg className="sprite-icon icon-shape">
-                                                            {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#shape-rect"></use>*/}
-                                                        </svg>
-                                                        <i className="icon-check"></i>
-                                                    </div>
-                                                    <span>Прямоугольная<br/>(без скругления)</span>
-                                            </label>
-                                        </div>
-                                        <div className="frm_radio">
-                                            <label htmlFor="field_profile-12">
-                                                <input type="radio" name="form" id="field_profile-12" value="Простая форма" onClick={this.handleChange}/>
-                                                    <div className="shape-wrapper">
-                                                        <svg className="sprite-icon icon-shape">
-                                                            {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#shape-round"></use>*/}
-                                                        </svg>
-                                                        <i className="icon-check"></i>
-                                                    </div>
-                                                    <span>Простая форма</span>
-                                            </label>
-                                        </div>
-                                        <div className="frm_radio">
-                                            <label htmlFor="field_profile-13">
-                                                <input type="radio" name="form" id="field_profile-13" value="Сложная форма" onClick={this.handleChange}/>
-                                                    <div className="shape-wrapper">
-                                                        <svg className="sprite-icon icon-shape">
-                                                            {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#shape-compl"></use>*/}
-                                                        </svg>
-                                                        <i className="icon-check"></i>
-                                                    </div>
-                                                    <span>Сложная форма</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                }
+
 
                                 <div className="form-field">
                                     <div className="row">
@@ -341,7 +329,7 @@ class Section1 extends React.Component{
 
                             </div>
 
-                            <div id="part-2" style={{display : 'none'}}>
+                            <div id="part-2" className={`${!this.props.state.design?'hidden-part':''}`}>
                                 <div className="h3 primary-label">Дизайн и контур порезки:</div>
                                 <div className="form-field">
                                     <div className="row frm_opt_container frm_container">
@@ -505,7 +493,7 @@ class Section1 extends React.Component{
                             </div>
                     </div>
 
-                    <div id="part-3" style={{display : 'none'}}>
+                    <div id="part-3" className={`${!this.props.state.deliver?'hidden-part':''}`}>
                         <div className="form-field">
                             <div className="h3 primary-label">Ваше имя:</div>
                             <div className="frm_container">
@@ -600,8 +588,6 @@ class Section1 extends React.Component{
                 </form>
             </div>
         </div>
-    </div>
-    </div>
 
 </div>
 </section>

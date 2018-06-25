@@ -1,0 +1,127 @@
+@import './modal-header';
+@import './modal-info';
+
+.ReactModal__Overlay{
+  background-color: white !important;
+  overflow: scroll !important;
+}
+
+.wrapper-container--modal-grey{
+  background: linear-gradient(270deg, #FBFCFD 0%, #F4F7F9 100%);
+}
+.modal-block{
+  display: flex;
+  flex-direction:column;
+}
+.modal-block__content__item{
+  border: 2px solid #ABC6D8;
+  border-radius: 0.5rem;
+}
+.hidden-part{
+  display: none;
+}
+.price-wrapper{
+  position: fixed;
+  display: flex;
+  color: white;
+  flex-direction: column;
+  align-items: center;
+  background-color: #F79258;
+  padding: $m-size 4.2rem $s-size;
+  right:0;
+  box-shadow: 0 10px 25px 0 rgba(0,0,0,0.1);
+  border-radius: 0.5rem 0 0 0.5rem;
+  font-size: $m-size;
+  font-weight: bold;
+  z-index:999;
+  span{
+    font-size: 2.6rem;
+  }
+}
+.modal-block__content{
+  display: flex;
+  justify-content:space-between;
+  flex-wrap: wrap;
+}
+.modal-block__content_item{
+  margin-bottom: 2rem;
+}
+.modal-block__content_item input{
+  width:1px;
+  display: none;
+}
+.modal-block__content_item label{
+  display: flex;
+  justify-content: flex-start;
+  align-items:center;
+  border:2px solid $light-blue;
+  border-radius: 1rem;
+  font-size: 1.8rem;
+  padding: 2rem;
+  width: 530px;
+  height:144px;
+  transition: all .3s ease-in-out;
+  &.active{
+    border: 4px solid #F79861;
+    transition: all .3s ease-in-out;
+  }
+}
+.modal-block__content_item label>*{
+  margin: 2rem;
+}
+
+.modal__check-icon, .modal__check-icon--form{
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  border: 2px solid $light-blue;
+  margin-right: $m-size;
+  padding:10px;
+  transition: all .3s ease-in-out;
+  &.entering,&.exiting{
+    width:0px;
+    height: 0px;
+    padding:0px;
+    border-width: 0;
+    margin-right:2.5rem;
+    margin-left: 1.5rem;
+    transition: all .2s ease-in-out;
+  }
+  &.exiting{
+    opacity: 0;
+  }
+  &.exited{
+    transition: all .2s ease-in-out;
+  }
+  &.entered, &.active{
+    background: url("/images/checkmark.svg") no-repeat center center;
+    width:29px;
+    height: 29px;
+    transition: all .2s ease-in-out;
+    border: transparent;
+  }
+}
+.modal__check-icon--form{
+  &.entering,&.exiting{
+    margin-left: 2.1em;
+    margin-right:3.2rem;
+  }
+}
+
+.modal-block__content_item__icon--rect{
+  background: url("/images/rectangle.svg") no-repeat;
+}
+.modal-block__content_item__icon--simple{
+  background: url("/images/simple.svg") no-repeat;
+}
+.modal-block__content_item__icon--hard{
+  background: url("/images/hard.svg") no-repeat;
+}
+.modal-block__content_item__icon--roll{
+  background: url("/images/roll.svg") no-repeat;
+}
+.modal-block__content_item__icon{
+  width: 4rem;
+  height: 4rem;
+  background-size: contain;
+}

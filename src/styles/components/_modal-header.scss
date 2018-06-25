@@ -1,0 +1,68 @@
+.wrapper-container--modal-header{
+  background-color: #333333;
+  margin-bottom: 10rem;
+}
+.modal-header__close{
+  position: relative;
+  width: 14px;
+  height: 14px;
+  cursor:pointer;
+  &:before,
+  &:after {
+    content:"";
+    position: absolute;
+    background-color: white;
+    border-radius: 0.2rem;
+    height: 100%;
+    width: 15%;
+    display: block;
+    transform: rotate(45deg);
+  }
+  &:before{
+    transform: rotate(135deg);
+  }
+}
+.container--modal-header{
+  position: relative;
+  margin-bottom: 3rem;
+  padding: 0  ;
+}
+.modal-header__bookmarks{
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  width:100%;
+}
+.modal-header__bookmarks__item{
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 5px 5px 0 rgba(0,0,0,0.1);
+  color: #595959;
+  display: flex;
+  font-family: "PT Serif";
+  font-size: 2.4rem;
+  border-radius: 0.5rem;
+  padding: $l-size;
+  width:35rem;
+
+}
+
+.modal-header__bookmarks__item__title{
+  position: absolute;
+  margin: 0 45px;
+  &.entering,&.exiting{
+    margin: 5px 45px;
+    transform: scale(1, 0);
+    transition: all .2s ease-in-out;
+  }
+  &.exited{
+    transition: all .2s ease-in-out;
+  }
+  &.entered{
+    font-weight: bold;
+    color: $orange;
+    transition: all .2s ease-in-out;
+  }
+}
+

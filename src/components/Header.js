@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Header = e => (
+const Header = (props) => (
     <header>
         <div className="wrapper-container">
             <div className="container">
@@ -48,7 +48,7 @@ const Header = e => (
                         <img alt="Наклейки" title="Наклейки" src="images/orange_path.svg"/>
                     </div>
                     <div className="col-md-6">
-                        <a href="javascript:;" rel="nofollow" className="button button--calculator">Посчитать цену</a>
+                        <a href="javascript:;" rel="nofollow" className="button button--calculator" onClick={()=>(props.handleModal({}))}>Посчитать цену</a>
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@ const Header = e => (
                     <div className="col-md-6 col-md-offset-1 col-sm-7 col-sm-offset-0">
                         <div className="wrapper-flex">
                             <span className="phone"  data-href="tel:+380678283212" ><span className="icon-call" ></span><i>(067) 828 32 12</i></span>
-                            <a href="javascript:;"  rel="nofollow" className="button">Посчитать наклейки</a>
+                            <a href="javascript:;"  rel="nofollow" className="button" >Посчитать наклейки</a>
                         </div>                </div>
                     <div className="col-md-3 col-sm-2">
                         <div className="menu-icon"><i></i></div>

@@ -48,7 +48,7 @@ module.exports = (env) => {
                         }
 
                     ]
-                },
+                }
                 )
             },{
                 test: /\.(eot|ttf|woff|woff2)$/,

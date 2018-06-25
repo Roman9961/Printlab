@@ -12,6 +12,7 @@ import SectionDesign from './SectionDesign';
 import SectionLayoutProps from './SectionLayoutProps';
 import SectionQuestions from './SectionQuestions';
 import SectionFeedback from './SectionFeedback';
+import ModalCalculator from './ModalCalculator';
 import Section1 from './Section1';
 import Footer from './Footer';
 import PageContent from './PageContent';
@@ -37,7 +38,8 @@ class Main extends React.Component{
             height   : null,
             quantity : null,
             _exchangeRate : null,
-        }
+        },
+        modal:false
     };
 
     componentDidMount(){
@@ -51,19 +53,24 @@ class Main extends React.Component{
 
     }
 
-
     render(){
+        const handleModal = (prop=null)=>{
+            this.setState(()=>({
+                modal:!this.state.modal,
+                calcProp:prop
+            }))
+        }
             return (
                 <React.Fragment>
                     <div className="section-top">
-                        <Header/>
+                        <Header handleModal = {handleModal}/>
                         <ExpressCalculation />
                         <div className="section-bg__top"></div>
                     </div>
-                    <Section1
-                        calculator={ this.state.calculator }
-                        updateCalculator={ this.updateCalculator }
-                    />
+                    {/*<Section1*/}
+                        {/*calculator={ this.state.calculator }*/}
+                        {/*updateCalculator={ this.updateCalculator }*/}
+                    {/*/>*/}
                     <SectionBase state={ this.state.stickers }/>
                     <SectionDelivery/>
                     <SectionQuality/>
@@ -72,6 +79,7 @@ class Main extends React.Component{
                     <SectionLayoutProps/>
                     <SectionQuestions/>
                     <SectionFeedback/>
+                    <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal}/>
                     {/*<PageContent state = { this.state.stickers } />*/}
                     {/*<Section2/>*/}
                     {/*<FormContent/>*/}

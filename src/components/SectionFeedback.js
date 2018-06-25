@@ -29,13 +29,13 @@ const SectionFeedback = ({
                                 <div className="feedback-form__input-block">
                                 <p className={`${touched.name && errors.name&&'active'}`}>{errors.name}</p>
                                     <label className={`feedback-form__label ${errors.name?'error':''}`} htmlFor="name">Ваше имя:</label>
-                                    <Field className={`feedback-form__field ${errors.name?'error':''}`} type="text" name="name" placeholder="Имя"/>
+                                    <Field className={`feedback-form__field ${errors.name?'error':''}`} type="text" id="name" name="name" placeholder="Имя"/>
                                 </div>
 
                                 <div className="feedback-form__input-block">
                                     <p className={`${touched.phone && errors.phone&&'active'}`}>{errors.phone}</p>
-                                    <label className={`feedback-form__label ${errors.phone?'error':''}`} htmlFor="name">Ваш телефон:</label>
-                                    <Field onFocus={phoneHandleFocus} className={`feedback-form__field ${errors.phone?'error':''}`}  type="text" name="phone" placeholder="+389999999999"/>
+                                    <label className={`feedback-form__label ${errors.phone?'error':''}`} htmlFor="phone">Ваш телефон:</label>
+                                    <Field onFocus={phoneHandleFocus} className={`feedback-form__field ${errors.phone?'error':''}`}  type="text" id="phone" name="phone" placeholder="+389999999999"/>
                                 </div>
 
                                 <div className="feedback-form__input-block">

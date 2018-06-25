@@ -141,7 +141,7 @@ class FastCalculator extends React.Component{
                 </div>
                 <div className="express-calculator__item express-calculator__item--final">
                     <input type="hidden" name="print_type" id="field_profile-117" value="Листовая"/>
-                    <div id={`final-price-${this.props.form}`} className="price-wrapper">
+                    <div id={`final-price-${this.props.form}`}>
                         <div>Стоимость:</div>
                         <div className="express-calculator__final-price">
                             <span>0</span><span> грн</span>
