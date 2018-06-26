@@ -80,11 +80,12 @@ class Section1 extends React.Component{
             <div>Сумма заказа:</div>
             <span>0</span>
         </div>
-
+            <div className="wrapper-container wrapper-container--modal">
                 <div className="container container--modal-info">
                     <div>Укажите, на что хотите печатать наклейки:</div>
                     <div><input className="modal-info__field" type="text" placeholder="на банки"/></div>
                 </div>
+            </div>
 
 
                 <div className="row">
@@ -99,7 +100,7 @@ class Section1 extends React.Component{
                                     <div className="modal-block__content">
                                         <div className="modal-block__content_item">
                                             <label htmlFor="field_profile-01" className= {`${this.state.calcProp.form=='Прямоугольная'?'active':''}`}>
-                                                <input type="radio" name="form" id="field_profile-01" value="Прямоугольная" onClick={this.handleChange}/>
+                                                <input className="radio-input" type="radio" name="form" id="field_profile-01" value="Прямоугольная" onClick={this.handleChange}/>
                                                 <Transition in={this.state.calcProp.form=='Прямоугольная'} timeout={200}>
                                                     {status=>(
                                                             <div className={`modal__check-icon--form ${status}`}></div>
@@ -111,18 +112,19 @@ class Section1 extends React.Component{
                                         </div>
                                         <div className="modal-block__content_item">
                                             <label htmlFor="field_profile-02" className= {`${this.state.calcProp.form=='Простая форма'?'active':''}`}>
-                                                <input type="radio" name="form" id="field_profile-02" value="Простая форма" onClick={this.handleChange}/>
+                                                <input className="radio-input" type="radio" name="form" id="field_profile-02" value="Простая форма" onClick={this.handleChange}/>
                                                 <Transition in={this.state.calcProp.form=='Простая форма'} timeout={200}>
                                                     {status=>(
                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                     )}
-                                                </Transition>                                                <div className="modal-block__content_item__icon modal-block__content_item__icon--simple"></div>
+                                                </Transition>
+                                                <div className="modal-block__content_item__icon modal-block__content_item__icon--simple"></div>
                                                 <span>Наклейки простой формы</span>
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
                                             <label htmlFor="field_profile-03" className= {`${this.state.calcProp.form=='Сложная форма'?'active':''}`}>
-                                                <input type="radio" name="form" id="field_profile-03" value="Сложная форма" onClick={this.handleChange}/>
+                                                <input className="radio-input" type="radio" name="form" id="field_profile-03" value="Сложная форма" onClick={this.handleChange}/>
                                                 <Transition in={this.state.calcProp.form=='Сложная форма'} timeout={200}>
                                                     {status=>(
                                                         <div className={`modal__check-icon--form ${status}`}></div>
@@ -134,7 +136,7 @@ class Section1 extends React.Component{
                                         </div>
                                         <div className="modal-block__content_item">
                                             <label htmlFor="field_profile-04" className= {`${this.state.calcProp.form=='Рулонная'?'active':''}`}>
-                                                <input type="radio" name="form" id="field_profile-04" value="Рулонная" onClick={this.handleChange}/>
+                                                <input className="radio-input" type="radio" name="form" id="field_profile-04" value="Рулонная" onClick={this.handleChange}/>
                                                 <Transition in={this.state.calcProp.form=='Рулонная'} timeout={200}>
                                                     {status=>(
                                                         <div className={`modal__check-icon--form ${status}`}></div>
@@ -148,6 +150,32 @@ class Section1 extends React.Component{
                                     </div>
                                 </div>
                             </div>
+
+                                <div className="wrapper-container wrapper-container--modal-grey">
+                                    <div className="container container--modal-info">
+                                        <div className="modal-block">
+                                            <div className="modal-block__title">Размер:</div>
+                                            <div className="modal-block__content">
+                                                <div className="modal-block__content_item">
+                                                    <span className="description top">Высота, мм</span>
+                                                    <input className="number-input"  type="number" name="height" id="field_profile-14" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} placeholder="302"/>
+                                                </div>
+                                                <div className="modal-block__content_item">
+                                                    <span className="description top">Ширина, мм</span>
+                                                    <input type="number" name="width" id="field_profile-15" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="modal-block">
+                                            <div className="modal-block__title">Количество:</div>
+                                             <div className="modal-block__content">
+                                                    <span className="description top">Штук</span>
+                                                    <input type="number" name="quantity" id="field_profile-16" value={this.state.calcProp.quantity} onChange={this.handleChange} min="0" max="99999" step="1" placeholder="21800"/>
+                                                    <i className="icon-check"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div className="form-field">
                                     <div className="row">
@@ -173,39 +201,6 @@ class Section1 extends React.Component{
                                     </div>
                                 </div>
 
-
-                                <div className="form-field">
-                                    <div className="row">
-                                        <div className="col-lg-7 col-md-6 col-sm-12">
-                                            <div className="h3 primary-label">Размер:</div>
-                                            <div className="frm_container">
-                                                <p className="error-msg"></p>
-                                                <div className="frm_item">
-                                                    <span className="description top">Высота, мм</span>
-                                                    <input  type="number" name="height" id="field_profile-14" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} placeholder="302"/>
-                                                        <i className="icon-check"></i>
-                                                </div>
-                                                <div className="frm_item h3 gray">х</div>
-                                                <div className="frm_item">
-                                                    <span className="description top">Ширина, мм</span>
-                                                    <input type="number" name="width" id="field_profile-15" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
-                                                        <i className="icon-check"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="col-lg-5 col-md-6 col-sm-12">
-                                            <div className="h3 primary-label">Количество:</div>
-                                            <div className="frm_container">
-                                                <div className="frm_item">
-                                                    <span className="description top">Штук</span>
-                                                    <input type="number" name="quantity" id="field_profile-16" value={this.state.calcProp.quantity} onChange={this.handleChange} min="0" max="99999" step="1" placeholder="21800"/>
-                                                        <i className="icon-check"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <div className="form-field">
                                     <div className="row">

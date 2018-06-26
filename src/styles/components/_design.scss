@@ -33,6 +33,7 @@
 .desing-img{
   position: absolute;
   z-index: 3;
+  transition: all .3s ease-in-out;
   max-width: 100%;
   left:0;
 }

@@ -5,9 +5,12 @@
   background-color: white !important;
   overflow: scroll !important;
 }
-
-.wrapper-container--modal-grey{
+.wrapper-container.wrapper-container--modal{
+  padding: $xl-size 0;
+}
+.wrapper-container.wrapper-container--modal-grey{
   background: linear-gradient(270deg, #FBFCFD 0%, #F4F7F9 100%);
+  padding: $xl-size 0;
 }
 .modal-block{
   display: flex;
@@ -46,9 +49,15 @@
 .modal-block__content_item{
   margin-bottom: 2rem;
 }
-.modal-block__content_item input{
+.radio-input{
   width:1px;
   display: none;
+}
+.number-input{
+  &::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin:0;
+  }
 }
 .modal-block__content_item label{
   display: flex;
