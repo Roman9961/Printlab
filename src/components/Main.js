@@ -54,7 +54,7 @@ class Main extends React.Component{
     }
 
     render(){
-        const handleModal = (prop=null)=>{
+        const handleModal = (prop={})=>{
             this.setState(()=>({
                 modal:!this.state.modal,
                 calcProp:prop
@@ -64,7 +64,7 @@ class Main extends React.Component{
                 <React.Fragment>
                     <div className="section-top">
                         <Header handleModal = {handleModal}/>
-                        <ExpressCalculation />
+                        <ExpressCalculation handleModal = {handleModal}/>
                         <div className="section-bg__top"></div>
                     </div>
                     {/*<Section1*/}
@@ -79,7 +79,7 @@ class Main extends React.Component{
                     <SectionLayoutProps/>
                     <SectionQuestions/>
                     <SectionFeedback/>
-                    <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal}/>
+                    <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}/>
                     {/*<PageContent state = { this.state.stickers } />*/}
                     {/*<Section2/>*/}
                     {/*<FormContent/>*/}

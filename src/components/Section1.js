@@ -1,10 +1,13 @@
 import React from 'react';
 import {Transition} from 'react-transition-group'
+import InputRange from 'react-input-range';
 import base from '../base';
 import calc from './calculator';
 
 class Section1 extends React.Component{
     state = {
+        tooltip:false,
+        range:4,
         calculator : {
 
         },
@@ -37,12 +40,22 @@ class Section1 extends React.Component{
         }
     };
     componentDidMount(){
-        this.ref = base.syncState('Stickers/calculator',{
-            context: this,
-            state: 'calculator',
-            then () {
-            }
-        });
+        this.ref = base.fetch('Stickers/calculator',{
+            context: this
+
+        }).then ((data)=>{
+            {
+                this.setState({calculator:data});
+                if(Object.keys(this.props.calcProp).length !== 0){
+                    this.props.calcProp.selector="final-price-main";
+                    this.setState((state)=>({
+                        ...state,
+                        calcProp:this.props.calcProp
+                    }));
+                }
+                calc(this.state);
+            };
+        })
 
     }
     componentDidUpdate(){
@@ -54,7 +67,20 @@ class Section1 extends React.Component{
 
          calcProp[key] = value;
          if(calcProp.form === 'Рулонная'){
-             calcProp.print_type = 'Рулонная'
+             calcProp.print_type = 'Рулонная';
+             if(parseInt(calcProp.margin)<3){
+                 this.state.range=3;
+             }else if(parseInt(calcProp.margin)>500){
+                 this.state.range=500;
+             }else if(isNaN(parseInt(calcProp.margin, 10))){
+                this.state.range=3;
+            }else{
+                 this.state.range=parseInt(calcProp.margin);
+             }
+         }else{
+             calcProp.print_type = 'Листовая';
+             calcProp.margin = 4;
+             this.state.range=4;
          }
          if(calcProp.height>378 || calcProp.width>278 ||  value === 'Рулонная'){
              calcProp.print_type = 'Рулонная';
@@ -62,15 +88,44 @@ class Section1 extends React.Component{
          if(calcProp.print_type === 'Рулонная'){
              calcProp.basis = 'Пластиковая';
          }
+         calcProp.margin = parseInt(calcProp.margin);
 
         this.setState({calcProp});
     }
-
-    handleChange = async (event) => {
-       await this.updatecalcProp(event.currentTarget.name, (event.currentTarget.name==='lamination')?event.currentTarget.checked:event.currentTarget.value);
-        const calculator = this.state;
-        await calc(calculator);
+    handleRange = (value) =>{
+        this.setState((state)=>({
+            ...state,
+            range:value
+        }
+        ));
     };
+    fixRange = (value) =>{
+        this.setState((state)=>({
+            ...state,
+            calcProp:{
+                ...state.calcProp,
+                margin:value
+            },
+            range:value
+        }
+        ));
+    };
+    handleChange = async (event) => {
+       if(Object.keys(event).length>0) {
+           await this.updatecalcProp(event.currentTarget.name, (event.currentTarget.name === 'lamination') ? event.currentTarget.checked : event.currentTarget.value);
+           const calculator = this.state;
+           await calc(calculator);
+       }
+    };
+
+    toolTipVisible = () => {
+        this.setState((state)=>({
+            ...state,
+            tooltip: !state.tooltip
+        }
+        ))
+    };
+
     render(){
         return (
     <section className="form-row">
@@ -151,30 +206,58 @@ class Section1 extends React.Component{
                                 </div>
                             </div>
 
-                                <div className="wrapper-container wrapper-container--modal-grey">
-                                    <div className="container container--modal-info">
+                                <div className="wrapper-container wrapper-container--modal">
+                                    <div className="container container--modal-input">
                                         <div className="modal-block">
                                             <div className="modal-block__title">Размер:</div>
-                                            <div className="modal-block__content">
-                                                <div className="modal-block__content_item">
-                                                    <span className="description top">Высота, мм</span>
+                                            <div className="modal-block__content modal-block__content--input">
+                                                <div className="modal-block__content_item modal-block__content_item--input">
                                                     <input className="number-input"  type="number" name="height" id="field_profile-14" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} placeholder="302"/>
+                                                    <span>Высота, мм</span>
                                                 </div>
-                                                <div className="modal-block__content_item">
-                                                    <span className="description top">Ширина, мм</span>
-                                                    <input type="number" name="width" id="field_profile-15" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
+                                                <div>x</div>
+                                                <div className="modal-block__content_item modal-block__content_item--input">
+                                                    <input className="number-input" type="number" name="width" id="field_profile-15" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
+                                                    <span>Ширина, мм</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="modal-block">
                                             <div className="modal-block__title">Количество:</div>
-                                             <div className="modal-block__content">
-                                                    <span className="description top">Штук</span>
-                                                    <input type="number" name="quantity" id="field_profile-16" value={this.state.calcProp.quantity} onChange={this.handleChange} min="0" max="99999" step="1" placeholder="21800"/>
-                                                    <i className="icon-check"></i>
+                                             <div className="modal-block__content modal-block__content--input">
+                                                 <div className="modal-block__content_item modal-block__content_item--input">
+                                                     <input className="number-input" type="number" name="quantity" id="field_profile-16" value={this.state.calcProp.quantity} onChange={this.handleChange} min="0" max="99999" step="1" placeholder="21800"/>
+                                                     <span>Штук</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    {this.state.calcProp.print_type==='Рулонная'&&(
+                                    <div className="container container--modal-input">
+                                        <div className="modal-block">
+                                            <div className="modal-block__title modal-block__title--range">Расстояние между наклейками:</div>
+                                            <div className="modal-block__content modal-block__content--input modal-block__content--input--range">
+                                                <div className="modal-block__content_item modal-block__content_item--input">
+                                                    <div className={`range-tooltip ${this.state.tooltip?'active':''}`} onMouseDown={this.toolTipVisible} onMouseUp={this.toolTipVisible}>
+                                                    <InputRange
+                                                        maxValue={500}
+                                                        minValue={3}
+                                                        formatLabel={value => `${value} мм`}
+                                                        value={this.state.range}
+                                                        onChange={this.handleRange}
+                                                        onChangeComplete = {this.fixRange}
+                                                    />
+                                                    </div>
+                                                </div>
+                                                <div className="modal-block__content_item modal-block__content_item--input">
+                                                    <input className="number-input" type="number" name="margin" id="field_profile-15" value={this.state.calcProp.margin} onChange={this.handleChange} min="3" max="500"/>
+                                                    <span>Ширина, мм</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    )}
+
                                 </div>
 
                                 <div className="form-field">

@@ -383,24 +383,23 @@ const calc = function (state) {
             var amount = 0;
             var amount1 =0;
             if(FigureA>list.width){
-                total1 = Math.floor(FigureA/(list.width+list.margin/2))
+                total1 = Math.floor(FigureA/(parseInt(list.width)+list.margin/2))
             }
             if(FigureA>list.height){
-                total2 = Math.floor(FigureA/(list.height+list.margin/2))
+                total2 = Math.floor(FigureA/(parseInt(list.height)+list.margin/2))
             }
             if(total1>total2){
-             amount = (Math.ceil(calcProp.quantity/total1) * list.height * FigureA)/1000;
-                amount1 =  (Math.ceil(calcProp.quantity/total2) * list.width * FigureA)/1000;
+             amount = (Math.ceil(calcProp.quantity/total1) * parseInt(list.height) * FigureA)/1000;
+                amount1 =  (Math.ceil(calcProp.quantity/total2) * parseInt(list.width) * FigureA)/1000;
             }
             else if (total1===total2){
-                amount = (Math.ceil(calcProp.quantity/total2) *  Math.min(list.width, list.height) * FigureA)/1000;
-                amount1 =  (Math.ceil(calcProp.quantity/total1) * Math.min(list.width, list.width) * FigureA)/1000;
+                amount = (Math.ceil(calcProp.quantity/total2) *  Math.min((parseInt(list.width)+list.margin/2), (parseInt(list.height)+list.margin/2)) * FigureA)/1000;
+                amount1 =  (Math.ceil(calcProp.quantity/total1) * Math.min((parseInt(list.width)+list.margin/2), (parseInt(list.height)+list.margin/2)) * FigureA)/1000;
             }
             else{
                 amount = (Math.ceil(calcProp.quantity/total2) * (list.width+list.margin/2) * (FigureA+list.margin/2))/1000;
                 amount1 =  (Math.ceil(calcProp.quantity/total1) * (list.height+list.margin/2) * (FigureA+list.margin/2))/1000;
             }
-
             return Math.min(amount, amount1);
         }
     }

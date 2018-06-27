@@ -53,6 +53,7 @@ class FastCalculator extends React.Component{
                         break;
                     case 'roll':
                         this.updatecalcProp('print_type', 'Рулонная');
+                        this.updatecalcProp('form', 'Рулонная');
                         break;
                 }
             }
@@ -65,12 +66,19 @@ class FastCalculator extends React.Component{
         calc(this.state);
     }
 
-    updatecalcProp =  async (key, value) =>{
+    updatecalcProp =   (key, value) =>{
         const calcProp = {...this.state.calcProp};
 
         calcProp[key] = value;
-
-        await this.setState(()=>({calcProp}));
+        if(calcProp.form === 'Рулонная'){
+            calcProp.print_type = 'Рулонная'
+        }else{
+            calcProp.print_type = 'Листовая'
+        }
+         this.setState((state)=>({
+             ...state,
+             calcProp
+         }));
     }
 
     handleChange = async (event) => {
@@ -147,7 +155,7 @@ class FastCalculator extends React.Component{
                             <span>0</span><span> грн</span>
                         </div>
                     </div>
-                    <div className="express-calculator__basket">
+                    <div className="express-calculator__basket" onClick={()=>{this.props.handleModal(this.state.calcProp)}}>
                         <img src="images/basket.svg" alt=""/>
                     </div>
                 </div>

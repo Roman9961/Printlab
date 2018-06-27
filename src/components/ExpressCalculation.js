@@ -6,10 +6,10 @@ class ExpressCalculation extends React.Component{
         return (
             <div className="container">
                 <div className="container__express-calculator">
-                        <FastCalculator form="rectangle"/>
-                        <FastCalculator form="simple"/>
-                        <FastCalculator form="hard"/>
-                        <FastCalculator form="roll"/>
+                        <FastCalculator form="rectangle" handleModal = {this.props.handleModal}/>
+                        <FastCalculator form="simple" handleModal = {this.props.handleModal}/>
+                        <FastCalculator form="hard" handleModal = {this.props.handleModal}/>
+                        <FastCalculator form="roll" handleModal = {this.props.handleModal}/>
                 </div>
            </div>
         )

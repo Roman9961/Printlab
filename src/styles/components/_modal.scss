@@ -1,5 +1,6 @@
 @import './modal-header';
 @import './modal-info';
+@import './modal-input-range';
 
 .ReactModal__Overlay{
   background-color: white !important;
@@ -15,6 +16,12 @@
 .modal-block{
   display: flex;
   flex-direction:column;
+}
+.modal-block__title{
+  margin-bottom:$m-size;
+}
+.modal-block__title--range{
+  margin-bottom:7rem;
 }
 .modal-block__content__item{
   border: 2px solid #ABC6D8;
@@ -46,19 +53,63 @@
   justify-content:space-between;
   flex-wrap: wrap;
 }
+.modal-block__content--input{
+  margin-right: $l-size;
+}
+.modal-block__content--input--range{
+  align-items: center;
+}
+
+.modal-block__content--input>*{
+  margin-right: $xl-size;
+}
+
+.modal-block__content--input--range .modal-block__content_item--input{
+  margin-right: 9rem;
+}
+
 .modal-block__content_item{
   margin-bottom: 2rem;
 }
+.modal-block__content_item--input{
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  span{
+    font-family: 'Montserrat';
+    font-size: $m-size;
+    color: $light-blue;
+    font-weight:bold;
+  }
+}
+
 .radio-input{
   width:1px;
   display: none;
 }
 .number-input{
+  width:19rem;
+  border: 4px solid $light-blue;
+  border-radius: 1rem;
+  font-family: 'Montserrat';
+  font-size: 2.4rem;
+  padding:0.8rem;
+  color: $light-blue;
+  text-align: center;
+  transition: all .3s ease-in-out;
+  -moz-appearance:textfield;
   &::-webkit-inner-spin-button{
     -webkit-appearance: none;
     margin:0;
   }
+  &:focus{
+    color: $dark-grey;
+    border-color: $orange;
+    transition: all .3s ease-in-out;
+  }
+
 }
+
 .modal-block__content_item label{
   display: flex;
   justify-content: flex-start;

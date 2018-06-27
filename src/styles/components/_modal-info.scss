@@ -1,4 +1,4 @@
-.container--modal-info{
+.container--modal-info, .container--modal-input{
   display: flex;
   font-size: 3.2rem;
   justify-content: space-between;
@@ -8,6 +8,10 @@
   &:after {
     content: none;
   }
+}
+.container--modal-input{
+  justify-content: flex-start;
+  margin-bottom: 4rem;
 }
 .modal-info__field {
   border: none;

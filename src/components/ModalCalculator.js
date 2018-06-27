@@ -39,6 +39,7 @@ class ModalCalculator extends React.Component{
                 {/*<ModalBlockForm/>*/}
                 <Section1
                     state = { this.state }
+                    calcProp = { this.props.calcProp}
                 />
             </Modal>
         )
