@@ -1,7 +1,6 @@
 import jQuery from 'jquery';
 import 'blueimp-file-upload';
 require('webpack-jquery-ui/widgets');
-require('magnific-popup');
 require('jquery-validation');
 
 

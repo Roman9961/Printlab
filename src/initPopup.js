@@ -1,5 +1,4 @@
 import jQuery from 'jquery';
-require('magnific-popup');
 
 
 
