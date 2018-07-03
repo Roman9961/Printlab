@@ -40,6 +40,7 @@ class ModalCalculator extends React.Component{
                 <Section1
                     state = { this.state }
                     calcProp = { this.props.calcProp}
+                    handleBookmark={handleBookmark}
                 />
             </Modal>
         )

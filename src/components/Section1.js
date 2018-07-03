@@ -36,7 +36,8 @@ class Section1 extends React.Component{
             "varnish" : "",
             "width" : "",
             "margin":4,
-            "selector": "final-price-main"
+            "selector": "final-price-main",
+            "outline":''
         }
     };
     componentDidMount(){
@@ -85,9 +86,7 @@ class Section1 extends React.Component{
          if(calcProp.height>378 || calcProp.width>278 ||  value === 'Рулонная'){
              calcProp.print_type = 'Рулонная';
          }
-         if(calcProp.print_type === 'Рулонная'){
-             calcProp.basis = 'Пластиковая';
-         }
+
          calcProp.margin = parseInt(calcProp.margin);
 
         this.setState({calcProp});
@@ -112,7 +111,12 @@ class Section1 extends React.Component{
     };
     handleChange = async (event) => {
        if(Object.keys(event).length>0) {
-           await this.updatecalcProp(event.currentTarget.name, (event.currentTarget.name === 'lamination') ? event.currentTarget.checked : event.currentTarget.value);
+           await this.updatecalcProp(event.currentTarget.name,
+               (event.currentTarget.name === 'lamination' && event.currentTarget.checked) ?
+                   event.currentTarget.value :
+                   (event.currentTarget.name === 'lamination' && !event.currentTarget.checked)?
+                       event.currentTarget.checked:
+                    event.currentTarget.value);
            const calculator = this.state;
            await calc(calculator);
        }
@@ -150,7 +154,7 @@ class Section1 extends React.Component{
                             <div id="part-1" className={`${!this.props.state.print?'hidden-part':''}`}>
                                 <div className="wrapper-container wrapper-container--modal-grey">
                                 <div className="container container--modal-info">
-                                    <div className="modal-block">
+                                    <div className="modal-block modal-block--radio">
                                     <div className="modal-block__title">Форма наклейки:</div>
                                     <div className="modal-block__content">
                                         <div className="modal-block__content_item">
@@ -212,12 +216,12 @@ class Section1 extends React.Component{
                                             <div className="modal-block__title">Размер:</div>
                                             <div className="modal-block__content modal-block__content--input">
                                                 <div className="modal-block__content_item modal-block__content_item--input">
-                                                    <input className="number-input"  type="number" name="height" id="field_profile-14" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} placeholder="302"/>
+                                                    <input className="number-input"  type="number" name="height" id="field_profile-05" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} placeholder="302"/>
                                                     <span>Высота, мм</span>
                                                 </div>
                                                 <div>x</div>
                                                 <div className="modal-block__content_item modal-block__content_item--input">
-                                                    <input className="number-input" type="number" name="width" id="field_profile-15" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
+                                                    <input className="number-input" type="number" name="width" id="field_profile-06" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
                                                     <span>Ширина, мм</span>
                                                 </div>
                                             </div>
@@ -226,7 +230,7 @@ class Section1 extends React.Component{
                                             <div className="modal-block__title">Количество:</div>
                                              <div className="modal-block__content modal-block__content--input">
                                                  <div className="modal-block__content_item modal-block__content_item--input">
-                                                     <input className="number-input" type="number" name="quantity" id="field_profile-16" value={this.state.calcProp.quantity} onChange={this.handleChange} min="0" max="99999" step="1" placeholder="21800"/>
+                                                     <input className="number-input" type="number" name="quantity" id="field_profile-07" value={this.state.calcProp.quantity} onChange={this.handleChange} min="0" max="99999" step="1" placeholder="21800"/>
                                                      <span>Штук</span>
                                                 </div>
                                             </div>
@@ -238,7 +242,12 @@ class Section1 extends React.Component{
                                             <div className="modal-block__title modal-block__title--range">Расстояние между наклейками:</div>
                                             <div className="modal-block__content modal-block__content--input modal-block__content--input--range">
                                                 <div className="modal-block__content_item modal-block__content_item--input">
-                                                    <div className={`range-tooltip ${this.state.tooltip?'active':''}`} onMouseDown={this.toolTipVisible} onMouseUp={this.toolTipVisible}>
+                                                    <div className={`range-tooltip ${this.state.tooltip?'active':''}`}
+                                                         onMouseDown={this.toolTipVisible}
+                                                         onTouchStart = {this.toolTipVisible}
+                                                         onMouseUp={this.toolTipVisible}
+                                                         onTouchEnd={this.toolTipVisible}
+                                                    >
                                                     <InputRange
                                                         maxValue={500}
                                                         minValue={3}
@@ -250,7 +259,7 @@ class Section1 extends React.Component{
                                                     </div>
                                                 </div>
                                                 <div className="modal-block__content_item modal-block__content_item--input">
-                                                    <input className="number-input" type="number" name="margin" id="field_profile-15" value={this.state.calcProp.margin} onChange={this.handleChange} min="3" max="500"/>
+                                                    <input className="number-input" type="number" name="margin" id="field_profile-08" value={this.state.calcProp.margin} onChange={this.handleChange} min="3" max="500"/>
                                                     <span>Ширина, мм</span>
                                                 </div>
                                             </div>
@@ -259,316 +268,398 @@ class Section1 extends React.Component{
                                     )}
 
                                 </div>
-
-                                <div className="form-field">
-                                    <div className="row">
-                                <div className="col-lg-7 col-sm-6">
-                                    <div className="h3 primary-label">Тип печати:</div>
-                                    <div className="frm_container frm_opt_container">
-                                        <div className="frm_item frm_radio">
-                                            <label htmlFor="field_profile-117">
-                                                <input type="radio" name="print_type" id="field_profile-117" value="Листовая"  checked={this.state.calcProp.print_type === 'Листовая'} onClick={this.handleChange}/>
-                                                <i></i>
-                                                Листовая
-                                            </label>
+                                <div className="wrapper-container wrapper-container--modal-grey">
+                                    <div className="container container--modal-info">
+                                        <div className="modal-block modal-block--radio">
+                                            <div className="modal-block__title">Тип печати:</div>
+                                            <div className="modal-block__content">
+                                            <div className="modal-block__content_item">
+                                                <label htmlFor="field_profile-09" className= {`${this.state.calcProp.type=='Цветная'?'active':''}`}>
+                                                    <input className="radio-input" type="radio" name="type" id="field_profile-09" value="Цветная" onClick={this.handleChange}/>
+                                                    <Transition in={this.state.calcProp.type=='Цветная'} timeout={200}>
+                                                        {status=>(
+                                                            <div className={`modal__check-icon--form ${status}`}></div>
+                                                        )}
+                                                    </Transition>
+                                                    <span>Цветная</span>
+                                                </label>
+                                            </div>
+                                            <div className="modal-block__content_item">
+                                                <label htmlFor="field_profile-10" className= {`${this.state.calcProp.type=='Черно-белая'?'active':''}`}>
+                                                    <input className="radio-input" type="radio" name="type" id="field_profile-10" value="Черно-белая" onClick={this.handleChange}/>
+                                                    <Transition in={this.state.calcProp.type=='Черно-белая'} timeout={200}>
+                                                        {status=>(
+                                                            <div className={`modal__check-icon--form ${status}`}></div>
+                                                        )}
+                                                    </Transition>
+                                                    <span>Черно-белая</span>
+                                                </label>
+                                            </div>
                                         </div>
-                                        <div className="frm_item frm_radio">
-                                            <label htmlFor="field_profile-118">
-                                                <input type="radio" name="print_type" id="field_profile-118" value="Рулонная" checked={this.state.calcProp.print_type === 'Рулонная'}  onChange={this.handleChange}/>
-                                                <i></i>
-                                                Рулонная
-                                            </label>
                                         </div>
                                     </div>
                                 </div>
+
+
+                                <div className="wrapper-container wrapper-container--modal">
+                                    <div className="container container--modal-info">
+                                        <div className="modal-block modal-block--radio">
+                                            <div className="modal-block__title">Основа:</div>
+                                            <div className="modal-block__content">
+                                                <div className="modal-block__content_item">
+                                                    <label htmlFor="field_profile-11" className= {`${this.state.calcProp.basis=='Бумажная'?'active':''}`}>
+                                                        <input className="radio-input" type="radio" name="basis" id="field_profile-11" value="Бумажная" onClick={this.handleChange}/>
+                                                        <Transition in={this.state.calcProp.basis=='Бумажная'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`modal__check-icon--form ${status}`}></div>
+                                                            )}
+                                                        </Transition>
+                                                        <div className="modal-block__content_item__icon--paper modal-block__content_item__icon"></div>
+                                                        <span>Самоклеящаяся бумага</span>
+                                                    </label>
+                                                </div>
+                                                <div className="modal-block__content_item">
+                                                    <label htmlFor="field_profile-12" className= {`${this.state.calcProp.basis=='Пластиковая'?'active':''}`}>
+                                                        <input className="radio-input" type="radio" name="basis" id="field_profile-12" value="Пластиковая" onClick={this.handleChange}/>
+                                                        <Transition in={this.state.calcProp.basis=='Пластиковая'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`modal__check-icon--form ${status}`}></div>
+                                                            )}
+                                                        </Transition>
+                                                        <div className="modal-block__content_item__icon--plastic modal-block__content_item__icon"></div>
+                                                        <span>Самоклеящаяся пленка</span>
+                                                    </label>
+                                                </div>
+                                                {this.state.calcProp.print_type==='Рулонная'&&(
+                                                    <React.Fragment>
+                                                        <div className="modal-block__content_item">
+                                                            <label htmlFor="field_profile-13" className= {`modal-block__content_item__label ${this.state.calcProp.basis=='transparent'?'active':''}`}>
+                                                                <input className="radio-input" type="radio" name="basis" id="field_profile-13" value="transparent" onClick={this.handleChange}/>
+                                                                <Transition in={this.state.calcProp.basis=='transparent'} timeout={200}>
+                                                                    {status=>(
+                                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                                    )}
+                                                                </Transition>
+                                                                <div className="modal-block__content_item__icon--transparent modal-block__content_item__icon"></div>
+                                                                <span>Прозрачная основа</span>
+                                                                <div className="modal-block__content_item__description">
+                                                                    Для лучшего качества печати на прозрачной основе
+                                                                    используется рулонная цифровая или УФ печать, предварительно печатается слой белой краски (белила) для обеспечения более насыщенного основного изображения
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                        <div className="modal-block__content_item">
+                                                            <label htmlFor="field_profile-14" className= {`${this.state.calcProp.basis=='white'?'active':''}`}>
+                                                                <input className="radio-input" type="radio" name="basis" id="field_profile-14" value="white" onClick={this.handleChange}/>
+                                                                <Transition in={this.state.calcProp.basis=='white'} timeout={200}>
+                                                                    {status=>(
+                                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                                    )}
+                                                                </Transition>
+                                                                <div className="modal-block__content_item__icon--white modal-block__content_item__icon"></div>
+                                                                <span>Белая основа</span>
+                                                            </label>
+                                                        </div>
+                                                    </React.Fragment>
+                                                )}
+
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
 
-                                <div className="form-field">
-                                    <div className="row">
-                                        <div className="col-lg-7 col-sm-6">
-                                            <div className="h3 primary-label">Тип печати:</div>
-                                            <div className="frm_container frm_opt_container">
-                                                <div className="frm_item frm_radio">
-                                                    <label htmlFor="field_profile-17">
-                                                        <input type="radio" name="type" id="field_profile-17"
-                                                               value="Цветная" onClick={this.handleChange}/>
-                                                        <i></i>
-                                                        Цветная
-                                                    </label>
-                                                </div>
-                                                <div className="frm_item frm_radio">
-                                                    <label htmlFor="field_profile-18">
-                                                        <input type="radio" name="type" id="field_profile-18"
-                                                               value="Черно-белая" onClick={this.handleChange}/>
-                                                        <i></i>
-                                                        Черно-белая
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {!(this.state.calcProp.print_type === 'Рулонная') &&
-                                        <div className="col-lg-5 col-sm-6">
-                                            <div className="h3 primary-label">Основа:</div>
-                                            <div className="frm_container frm_opt_container">
-                                                <div className="frm_item frm_radio">
-                                                    <label htmlFor="field_profile-19">
-                                                        <input type="radio" name="basis" id="field_profile-19"
-                                                               value="Бумажная"
-                                                               checked={!(this.state.calcProp.print_type === 'Рулонная') && (this.state.calcProp.basis === 'Бумажная')     }
-                                                               onClick={this.handleChange}/>
-                                                        <i></i>
-                                                        Бумажная <br/>(самоклейка)
-                                                    </label>
-                                                </div>
-                                                <div className="frm_item frm_radio">
-                                                    <label htmlFor="field_profile-110">
-                                                        <input type="radio" name="basis" id="field_profile-110"
-                                                               value="Пластиковая"
-                                                               checked={(this.state.calcProp.print_type === 'Рулонная') || (this.state.calcProp.basis === 'Пластиковая')}
-                                                               onChange={this.handleChange}/>
-                                                        <i></i>
-                                                        Пластиковая <br/>(Oracal)
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        }
-                                    </div>
-                                </div>
 
-                                <div className="form-field dop-obrobotka-row">
-                                    <div className="h3 primary-label">Дополнительная обработка:</div>
-                                    <div className="frm_container">
-                                        <div className="row">
-
-                                            <div className="col-sm-6">
-                                                <div className="frm_container frm_opt_container">
-                                                    <div className="frm_item frm_checkbox">
-                                                        <label htmlFor="field_profile-113">
-                                                            <input type="checkbox" name="lamination" id="field_profile-113"  onClick={this.handleChange}/>
-                                                                <i></i>
-                                                                Ламинация
+                                <div className="wrapper-container wrapper-container--modal-grey">
+                                    <div className="container container--modal-info">
+                                        <div className="modal-block modal-block--radio">
+                                            <div className="modal-block__title">Дополнительная обработка:</div>
+                                            <div className="modal-block__content">
+                                                <div className="modal-block__content_item">
+                                                    <div className="modal-block__content_item__checkbox-container">
+                                                        <div className="modal-block__content_item__checkbox-container__checkboxes">
+                                                            <label htmlFor="field_profile-16">
+                                                                <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.lamination=='matt'?'active':''}`}>
+                                                                    <div className="modal-checkbox"></div>
+                                                                </div>
+                                                                <input type="checkbox" name="lamination" id="field_profile-16" value="matt" checked ={this.state.calcProp.lamination=='matt'}  onClick={this.handleChange}/>
+                                                                <div className="modal-checkbox__title">Матовая ламинация</div>
+                                                            </label>
+                                                            <label htmlFor="field_profile-15">
+                                                            <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.lamination=='gloss'?'active':''}`}>
+                                                                <div className="modal-checkbox"></div>
+                                                            </div>
+                                                            <input type="checkbox" name="lamination" id="field_profile-15" value="gloss" checked ={this.state.calcProp.lamination=='gloss'} onClick={this.handleChange}/>
+                                                            <div className="modal-checkbox__title">Глянцевая ламинация</div>
                                                         </label>
+                                                        </div>
+                                                        <hr/>
+                                                        <div className="modal-block__content_item__description">
+                                                            Советуем ламинировать наклейки для часто используемых поверхностей (ноутбук, телефон, флакон, чемодан).
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <p className="description bottom">Рекомендуем ламинировать наклейки для часто используемых поверхностей (ноутбук, телефон, флакон, чемодан).</p>
-                                            </div>
-
-                                            <div className="col-sm-6">
-                                                <div className="frm_container frm_opt_container">
-                                                    <div className="frm_item frm_checkbox disabled">
-                                                        <label htmlFor="field_profile-111">
-                                                            <input type="checkbox" disabled name="stamping" id="field_profile-111" value="Да" />
-                                                                <i></i>
-                                                                Тиснение
-                                                        </label>
-                                                    </div>
-                                                    <div className="frm_item frm_checkbox disabled">
-                                                        <label htmlFor="field_profile-112">
-                                                            <input type="checkbox" disabled name="varnish" id="field_profile-112" value="Да"/>
-                                                                <i></i>
-                                                                УФ-лак
-                                                        </label>
+                                                <div className="modal-block__content_item">
+                                                    <div className="modal-block__content_item__checkbox-container">
+                                                        <div className="modal-block__content_item__checkbox-container__checkboxes">
+                                                            <label htmlFor="field_profile-17">
+                                                                <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.stamping?'active':''}`}>
+                                                                    <div className="modal-checkbox"></div>
+                                                                </div>
+                                                                <input type="checkbox" disabled name="stamping" id="field_profile-17" value={false} checked ={this.state.calcProp.stamping}  onClick={this.handleChange}/>
+                                                                <div className="modal-checkbox__title">Тиснение</div>
+                                                            </label>
+                                                            <label htmlFor="field_profile-18">
+                                                                <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.varnish?'active':''}`}>
+                                                                    <div className="modal-checkbox"></div>
+                                                                </div>
+                                                                <input type="checkbox" disabled name="varnish" id="field_profile-18" value={false} checked ={this.state.calcProp.varnish} onClick={this.handleChange}/>
+                                                                <div className="modal-checkbox__title">УФ-лак</div>
+                                                            </label>
+                                                        </div>
+                                                        <hr/>
+                                                        <div className="modal-block__content_item__description">
+                                                            Эта опция пока недоступна в калькуляторе, обратитесь за просчетом к нашим сотрудникам.
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <p className="description bottom">Эта опция пока недоступна в калькуляторе, обратитесь за просчетом к нашим сотрудникам.</p>
-                                            </div>
-
                                         </div>
                                     </div>
                                     <div className="clearfix"></div>
                                 </div>
+                            </div>
 
-                                <div className="form-field">
-                                    <div className="h3 primary-label">Срок печати:</div>
-                                    <div className="frm_container frm_opt_container">
-                                        <div className="frm_item frm_radio">
-                                            <label htmlFor="field_profile-114">
-                                                <input type="radio" name="print_time" id="field_profile-114" value="2" onClick={this.handleChange}/>
-                                                    <i></i>
-                                                    2дня (+20%)
-                                            </label>
-                                        </div>
-                                        <div className="frm_item frm_radio">
-                                            <label htmlFor="field_profile-115">
-                                                <input type="radio" name="print_time" id="field_profile-115" defaultChecked value="4" onClick={this.handleChange}/>
-                                                    <i></i>
-                                                    4 дня
-                                            </label>
+                                <div className="wrapper-container wrapper-container--modal">
+                                    <div className="container container--modal-info">
+                                        <div className="modal-block modal-block--radio">
+                                            <div className="modal-block__title">Срок печати:</div>
+                                            <div className="modal-block__content">
+                                                <div className="modal-block__content_item">
+                                                    <label htmlFor="field_profile-19" className= {`${this.state.calcProp.print_time=='2'?'active':''}`}>
+                                                        <input className="radio-input" type="radio" name="print_time" id="field_profile-19" value="2" onClick={this.handleChange}/>
+                                                        <Transition in={this.state.calcProp.print_time=='2'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`modal__check-icon--form ${status}`}></div>
+                                                            )}
+                                                        </Transition>
+                                                        <div className="modal-block__content_item__icon--paper modal-block__content_item__icon"></div>
+                                                        <span>2дня (+20%)</span>
+                                                    </label>
+                                                </div>
+                                                <div className="modal-block__content_item">
+                                                    <label htmlFor="field_profile-20" className= {`${this.state.calcProp.print_time=='4'?'active':''}`}>
+                                                        <input className="radio-input" type="radio" name="print_time" id="field_profile-20" defaultChecked value="4" onClick={this.handleChange}/>
+                                                        <Transition in={this.state.calcProp.print_time=='4'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`modal__check-icon--form ${status}`}></div>
+                                                            )}
+                                                        </Transition>
+                                                        <div className="modal-block__content_item__icon--plastic modal-block__content_item__icon"></div>
+                                                        <span>4 дня</span>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="text-right">
-                                    <a href="javascript:;" data-step="2" rel="nofollow" className="btn-step btn btn-primary">Перейти к дизайну</a>
+
+                                <div className="wrapper-container wrapper-container--modal">
+                                    <div className="container container--modal-info">
+                                        <div className="modal-block modal-block--radio">
+                                            <div className="modal-block__content modal-block__content--button">
+                                                <div className="modal-block__content_item">
+                                                        <a rel="nofollow" className="button button--design" onClick={()=>{this.props.handleBookmark({
+                                                            print:false,
+                                                            design:true,
+                                                            deliver:false
+                                                        })}}>Перейти к дизайну</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
 
                             </div>
 
                             <div id="part-2" className={`${!this.props.state.design?'hidden-part':''}`}>
-                                <div className="h3 primary-label">Дизайн и контур порезки:</div>
-                                <div className="form-field">
-                                    <div className="row frm_opt_container frm_container">
-                                        <div className="col-sm-4">
-                                            <div className="frm_item frm_radio designselector">
-                                                <label htmlFor="field_profile-21">
-                                                    <input type="radio" name="design" id="field_profile-21" value="У меня есть макет и контур порезки"/>
-                                                        <i></i>
-                                                        У меня есть макет <br/>и контур порезки
-                                                </label>
+
+
+                                <div className="wrapper-container wrapper-container--modal-grey">
+                                    <div className="container container--modal-info">
+                                        <div className="modal-block modal-block--design">
+                                            <div className="modal-block__title">Дизайн и контур порезки:</div>
+                                            <div className="modal-block__content modal-block__content--design">
+                                                <div className="modal-block__content_item">
+                                                    <label htmlFor="field_profile-21" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.design=='design-all'?'active':''}`}>
+                                                        <input className="radio-input" type="radio" name="design" id="field_profile-21" value="design-all" onClick={this.handleChange}/>
+                                                        <Transition in={this.state.calcProp.design=='design-all'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`modal__check-icon--form ${status}`}></div>
+                                                            )}
+                                                        </Transition>
+                                                        <span>У меня есть макет и контур порезки</span>
+                                                        <Transition in={this.state.calcProp.design=='design-all'} timeout={200}>
+                                                            {status=>(
+                                                            <div className={`file-upload-container ${status}`}>
+                                                                <div className="modal-block__content_item__description">
+                                                                    Если ваш макет соответствует требованиям к макету , то
+                                                                    загрузите его:
+                                                                </div>
+                                                                <label htmlFor="upload1" className="file-upload">
+                                                                    <div className="fileform">
+                                                                        <div className="button button--design">
+                                                                            <span>Загрузить макет</span>
+                                                                        </div>
+                                                                        <input className="upload"  id="upload1" type="file" name="files[]" multiple/>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                            )}
+                                                        </Transition>
+                                                    </label>
+                                                </div>
+
+                                                <div className="modal-block__content_item">
+                                                    <label htmlFor="field_profile-22" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.design=='design-outline'?'active':''}`}>
+                                                        <input className="radio-input" type="radio" name="design" id="field_profile-22" value="design-outline" onClick={this.handleChange}/>
+                                                        <Transition in={this.state.calcProp.design=='design-outline'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`modal__check-icon--form ${status}`}></div>
+                                                            )}
+                                                        </Transition>
+                                                        <span>У меня есть макет, но мне нужен контур порезки</span>
+                                                        <Transition in={this.state.calcProp.design=='design-outline'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`file-upload-container ${status}`}>
+                                                                    <div className="modal-block__content_item__outline">
+                                                                        <div className="outline-content">
+                                                                            <label htmlFor="outline1" className={`outline-item ${this.state.calcProp.outline=='rectangle'?'active':''}`}>
+                                                                                <div className="outline-icon outline-icon--rectangle"></div>
+                                                                                <div className="outline-description">Прямоугольный</div>
+                                                                                <input className="radio-input" id="outline1" type="radio" name="outline"  value="rectangle" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div className="outline-content">Скругленные углы:</div>
+                                                                        <div className="outline-content">
+                                                                            <label htmlFor="outline2" className={`outline-item ${this.state.calcProp.outline=='radius35'?'active':''}`}>
+                                                                                <div className="outline-icon outline-icon--radius35"></div>
+                                                                                <div className="outline-description">Радиус 3,5 мм</div>
+                                                                                <input className="radio-input" id="outline2" type="radio" name="outline"  value="radius35" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                            <label htmlFor="outline3" className={`outline-item ${this.state.calcProp.outline=='radius50'?'active':''}`}>
+                                                                                <div className="outline-icon outline-icon--radius50"></div>
+                                                                                <div className="outline-description">Радиус 5 мм</div>
+                                                                                <input className="radio-input" id="outline3" type="radio" name="outline"  value="radius50" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                            <label htmlFor="outline4" className={`outline-item ${this.state.calcProp.outline=='radius100'?'active':''}`}>
+                                                                                <div className="outline-icon outline-icon--radius100"></div>
+                                                                                <div className="outline-description">Радиус 10 мм</div>
+                                                                                <input className="radio-input" id="outline4" type="radio" name="outline"  value="radius100" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                            <label htmlFor="outline5" className={`outline-item ${this.state.calcProp.outline=='ellipse'?'active':''}`}>
+                                                                                <div className="outline-icon outline-icon--ellipse"></div>
+                                                                                <div className="outline-description">Овал</div>
+                                                                                <input className="radio-input" id="outline5" type="radio" name="outline"  value="ellipse" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                            <label htmlFor="outline6" className={`outline-item outline-item--centered ${this.state.calcProp.outline=='circle'?'active':''}`}>
+                                                                                <div className="outline-icon outline-icon--circle"></div>
+                                                                                <div className="outline-description">Круг</div>
+                                                                                <input className="radio-input" id="outline6" type="radio" name="outline"  value="circle" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                            <label htmlFor="outline7" className={`outline-item ${this.state.calcProp.outline=='star'?'active':''}`}>
+                                                                                <div className="outline-icon-draw outline-icon-draw--star"></div>
+                                                                                <div className="outline-description">Звезда</div>
+                                                                                <input className="radio-input" id="outline7" type="radio" name="outline"  value="star" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                            <label htmlFor="outline8" className={`outline-item ${this.state.calcProp.outline=='cloud'?'active':''}`}>
+                                                                                <div className="outline-icon-draw outline-icon-draw--cloud"></div>
+                                                                                <div className="outline-description outline-description--draw">“Облако” + 100 грн</div>
+                                                                                <input className="radio-input" id="outline8" type="radio" name="outline"  value="cloud" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                            <label htmlFor="outline9" className={`outline-item ${this.state.calcProp.outline=='chopped'?'active':''}`}>
+                                                                                <div className="outline-icon-draw outline-icon-draw--chopped"></div>
+                                                                                <div className="outline-description outline-description--draw">“Рубленый” +100 грн</div>
+                                                                                <input className="radio-input" id="outline9" type="radio" name="outline"  value="chopped" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                            <label htmlFor="outline10" className={`outline-item ${this.state.calcProp.outline=='accent'?'active':''}`}>
+                                                                                <div className="outline-icon-draw outline-icon-draw--accent"></div>
+                                                                                <div className="outline-description outline-description--draw">“Акцент” +100 грн</div>
+                                                                                <input className="radio-input" id="outline10" type="radio" name="outline"  value="accent" onClick={this.handleChange}/>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <label htmlFor="upload2" className="file-upload">
+                                                                        <div className="fileform fileform--outline">
+                                                                            <div className="button button--design">
+                                                                                <span>Загрузить макет</span>
+                                                                            </div>
+                                                                            <input className="upload" id="upload2" type="file" name="files[]" multiple/>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            )}
+                                                        </Transition>
+                                                    </label>
+                                                </div>
+
+                                                <div className="modal-block__content_item">
+                                                    <label htmlFor="field_profile-23" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.design=='design-none'?'active':''}`}>
+                                                        <input className="radio-input" type="radio" name="design" id="field_profile-23" value="design-none" onClick={this.handleChange}/>
+                                                        <Transition in={this.state.calcProp.design=='design-none'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`modal__check-icon--form ${status}`}></div>
+                                                            )}
+                                                        </Transition>
+                                                        <span>У меня нет макета, мне нужен дизайн</span>
+                                                        <Transition in={this.state.calcProp.design=='design-none'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`file-upload-container ${status}`}>
+                                                                    <div className="modal-block__content_item__description">
+                                                                        Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна.
+                                                                    </div>
+                                                                    <label htmlFor="upload3" className="file-upload">
+                                                                        <div className="fileform">
+                                                                            <div className="button button--design">
+                                                                                <span>Загрузить пример</span>
+                                                                            </div>
+                                                                            <input className="upload"  id="upload3" type="file" name="files[]" multiple/>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            )}
+                                                        </Transition>
+                                                    </label>
+                                                </div>
+
+
                                             </div>
-                                            <div className="txt-content">
-                                                <p>Если ваш макет соответствует</p>
-                                                <p><a href="images/trebovaniya-k-maketam-nakleyki-na.pdf" target="_blank" download="Abaka требования к макетам">требования к макету</a></p>
-                                                <p>то загрузите его:</p>
-
-                                                <div className="fileform">
-                                                    <div className="selectbutton btn btn-primary">
-                                                        <span>Загрузить макет</span>
-                                                    </div>
-                                                    <input id="upload" type="file" name="files[]" multiple/>
-                                                </div>
-                                                <svg className="sprite-icon linked-file">
-                                                    {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#linked-file"></use>*/}
-                                                </svg>
-                                                <div id="fileformlabel">
-                                            </div>
-                                            <input name="file_link" type="text" placeholder="Или вставьте ссылку на скачивание"/>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <div className="frm_item frm_radio designselector">
-                                            <label htmlFor="field_profile-22">
-                                                <input type="radio" name="design" id="field_profile-22" value="У меня есть макет, но мне нужен контур порезки"/>
-                                                    <i></i>
-                                                    У меня есть макет, но мне нужен <br/>контур порезки
-                                            </label>
-                                        </div>
-                                        <div className="txt-content">
-                                            <div className="frm_container frm_opt_container row">
-                                                <div className="frm_item frm_radio col-lg-12 col-xs-6">
-                                                    <label htmlFor="field_profile-210">
-                                                        <input type="radio" name="cut_form" id="field_profile-210" value="прямоугольный"/>
-                                                            <svg className="sprite-icon form-part2-shape1">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape1"></use>*/}
-                                                            </svg>
-                                                            <span>Прямоугольный</span>
-                                                    </label>
-                                                </div>
-
-                                                <div className="frm_item frm_radio col-lg-4 col-xs-6">
-                                                    <label htmlFor="field_profile-211">
-                                                        <input type="radio" name="cut_form" id="field_profile-211" value="радиус 3.5мм"/>
-                                                            <svg className="sprite-icon form-part2-shape2">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape2"></use>*/}
-                                                            </svg>
-                                                            <span>радиус 3,5мм</span>
-                                                    </label>
-                                                </div>
-
-                                                <div className="frm_item frm_radio col-lg-4 col-xs-6">
-                                                    <label htmlFor="field_profile-212">
-                                                        <input type="radio" name="cut_form" id="field_profile-212" value="радиус 5мм"/>
-                                                            <svg className="sprite-icon form-part2-shape3">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape3"></use>*/}
-                                                            </svg>
-                                                            <span>радиус 5мм</span>
-                                                    </label>
-                                                </div>
-
-                                                <div className="frm_item frm_radio col-lg-4 col-xs-6">
-                                                    <label htmlFor="field_profile-213">
-                                                        <input type="radio" name="cut_form" id="field_profile-213" value="радиус 10мм"/>
-                                                            <svg className="sprite-icon form-part2-shape4">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape4"></use>*/}
-                                                            </svg>
-                                                            <span>радиус 10мм</span>
-                                                    </label>
-                                                </div>
-
-                                                <div className="frm_item frm_radio col-lg-4 col-xs-6">
-                                                    <label htmlFor="field_profile-214">
-                                                        <input type="radio" name="cut_form" id="field_profile-214" value="овал"/>
-                                                            <svg className="sprite-icon form-part2-shape5">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape5"></use>*/}
-                                                            </svg>
-                                                            <span>овал</span>
-                                                    </label>
-                                                </div>
-
-                                                <div className="frm_item frm_radio col-lg-4 col-xs-6">
-                                                    <label htmlFor="field_profile-215">
-                                                        <input type="radio" name="cut_form" id="field_profile-215" value="круг"/>
-                                                            <svg className="sprite-icon form-part2-shape6">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape6"></use>*/}
-                                                            </svg>
-                                                            <span>круг</span>
-                                                    </label>
-                                                </div>
-
-                                                <div className="frm_item frm_radio col-lg-4 col-xs-6">
-                                                    <label htmlFor="field_profile-216">
-                                                        <input type="radio" name="cut_form" id="field_profile-216" value="звезда"/>
-                                                            <svg className="sprite-icon form-part2-shape7">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape7"></use>*/}
-                                                            </svg>
-                                                            <span>звезда</span>
-                                                    </label>
-                                                </div>
-
-                                                <div className="frm_item frm_radio col-lg-4 col-xs-6">
-                                                    <label htmlFor="field_profile-217">
-                                                        <input type="radio" name="cut_form" id="field_profile-217" value="«Облако» +100грн"/>
-                                                            <svg className="sprite-icon form-part2-shape8">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape8"></use>*/}
-                                                            </svg>
-                                                            <span>«Облако»<br/>+100грн</span>
-                                                    </label>
-                                                </div>
-
-                                                <div className="frm_item frm_radio col-lg-4 col-xs-6">
-                                                    <label htmlFor="field_profile-218">
-                                                        <input type="radio" name="cut_form" id="field_profile-218" value="«Рубленый» +100грн"/>
-                                                            <svg className="sprite-icon form-part2-shape9">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape9"></use>*/}
-                                                            </svg>
-                                                            <span>«Рубленый»<br/>+100грн</span>
-                                                    </label>
-                                                </div>
-
-                                                <div className="frm_item frm_radio col-lg-4 col-xs-6">
-                                                    <label htmlFor="field_profile-219">
-                                                        <input type="radio" name="cut_form" id="field_profile-219" value="«Акцент» +100грн"/>
-                                                            <svg className="sprite-icon form-part2-shape10">
-                                                                {/*<use xmlns:xlink="http://www.w3.org/2000/xlink" xlink:href="#form-part2-shape10"></use>*/}
-                                                            </svg>
-                                                            <span>«Акцент»<br/>+100грн</span>
-                                                    </label>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <div className="frm_item frm_radio designselector">
-                                            <label htmlFor="field_profile-23">
-                                                <input type="radio" name="design" id="field_profile-23" value="У меня нет макета, мне нужен дизайн"/>
-                                                    <i></i>
-                                                    У меня нет макета, <br/>мне нужен дизайн
-                                            </label>
-                                        </div>
-                                        <div className="txt-content">
-                                            <p className="description">Мы делаем отличный дизайн наклеек. Стоимость индивидуального дизайна от 400грн, в зависимости от уровня сложности работы.</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="text-right">
-                                <a href="javascript:;" data-step="1" rel="nofollow" className="btn-step btn btn-primary">Назад к просчету</a>
-                                <a href="javascript:;" data-step="3" rel="nofollow" className="btn-step btn btn-primary">Оформить заказ</a>
-                            </div>
+                                <div className="wrapper-container wrapper-container--modal">
+                                    <div className="container container--modal-info">
+                                        <div className="modal-block modal-block--radio">
+                                            <div className="modal-block__content modal-block__content--button">
+                                                <div className="modal-block__content_item">
+                                                    <a rel="nofollow" className="button button--back button--design  button--modal" onClick={()=>{this.props.handleBookmark({
+                                                        print:true,
+                                                        design:false,
+                                                        deliver:false
+                                                    })}}><div>Назад</div></a>
+                                                </div>
+                                                <div className="modal-block__content_item">
+                                                    <a rel="nofollow" className="button button--design button--modal" onClick={()=>{this.props.handleBookmark({
+                                                        print:false,
+                                                        design:false,
+                                                        deliver:true
+                                                    })}}>Оформить заказ</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                     </div>
 
                     <div id="part-3" className={`${!this.props.state.deliver?'hidden-part':''}`}>

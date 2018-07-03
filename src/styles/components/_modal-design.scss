@@ -1,0 +1,188 @@
+.modal-block--design{
+  width:100%;
+  align-items: center;
+}
+.modal-block__content.modal-block__content--design{
+  justify-content: center;
+  font-family: Montserrat, Helvetica, Arial, sans-serif;
+}
+.modal-block__content_item .modal-block__content_item__label--design{
+  width:67rem;
+}
+.modal-block__content_item label .file-upload{
+  all: unset;
+}
+.file-upload{
+  input{
+    display: none;
+  }
+}
+.file-upload .fileform{
+  margin-left:0;
+  margin-top: 4rem;
+  &--outline{
+    margin-top: 0;
+  }
+}
+.file-upload-container{
+  opacity: 0;
+  transition: all .3s ease-in-out;
+  &.entering,&.exiting{
+    display: block;
+    transition: all .2s ease-in-out;
+  }
+  &.exiting{
+    opacity: 0;
+  }
+  &.exited{
+    transition: all .2s ease-in-out;
+    display: none;
+  }
+  &.entered{
+    opacity: 1;
+    display: block;
+}
+}
+.modal-block__content_item__outline{
+  display: flex;
+  flex-direction: column;
+}
+.outline-content{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  color: #ABC6D8;
+  input{
+    display: none;
+  }
+}
+.modal-block__content_item .outline-item{
+  all:unset;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-right: $xl-size;
+  margin-bottom: $xl-size;
+  text-align: center;
+  .outline-icon-draw{
+    width: 13rem;
+    height:7rem;
+    margin-top: -0.7rem;
+    background-size: contain;
+
+    &--star{
+      background: url('/images/outline-star.svg') no-repeat center center;
+    }
+    &--cloud{
+      background: url('/images/outline-cloud.svg') no-repeat center center;
+    }
+    &--chopped{
+      background: url('/images/outline-chopped.svg') no-repeat center center;
+    }
+    &--accent{
+      background: url('/images/outline-accent.svg') no-repeat center center;
+    }
+  }
+  .outline-icon{
+    transition: all .3s ease-in-out;
+    width: 12rem;
+    height:6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:before, &:after{
+      transition: all .3s ease-in-out;
+    }
+    &:before{
+      content: '' ;
+      display: block ;
+      position: absolute ;
+      background-color: #FFD8C2;
+      width:10rem;
+      height:5rem;
+    }
+    &:after{
+      content: '' ;
+      display: block ;
+      position: relative ;
+      width: 12rem;
+      height: 7rem;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border: 2px dashed #ABC6D8;
+    }
+    &--rectangle{
+    }
+    &--radius35 {
+      &:before, &:after{
+        border-radius: 0.5rem;
+      }
+    }
+    &--radius50 {
+      &:before, &:after{
+        border-radius: 1rem;
+      }
+    }
+    &--radius100 {
+      &:before, &:after{
+        border-radius: 4rem;
+      }
+    }
+    &--ellipse {
+      &:before{
+        width:10rem;
+        height:4rem;
+        border-radius: 50%;
+      }
+      &:after{
+        width:12rem;
+        height:6rem;
+        border-radius: 50%;
+      }
+    }
+    &--circle {
+      &:before{
+        width:5rem;
+        height:5rem;
+        border-radius: 50%;
+      }
+      &:after{
+        width:7rem;
+        height:7rem;
+        border-radius: 50%;
+      }
+    }
+  }
+  &--centered{
+    width:13.8rem;
+    align-items: center;
+  }
+  &.active{
+    border: none;
+    margin-right: $xl-size;
+    .outline-icon{
+          &:before{
+            background-color: #F79258;
+          }
+          &:after{
+            border: 2px solid $dark-grey;
+          }
+    }
+    .outline-description{
+      color: $dark-grey;
+    }
+  }
+
+}
+.outline-content .outline-item >*{
+  margin: 0;
+}
+.outline-item .outline-description{
+  color: #ABC6D8;
+  margin-top: 0.5rem;
+}
+.outline-item  .outline-description--draw{
+  width: 13rem;
+}
+

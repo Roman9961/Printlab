@@ -456,7 +456,7 @@ var isDevelopment =true;
 
     const $body = $('body');
 
-    $body.on('click','#upload', function () {
+    $body.on('click','.upload', function () {
         $(this).fileupload({
             url: 'server/php/',
             dataType: 'json',
