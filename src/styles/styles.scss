@@ -2,6 +2,7 @@
 //@import '../css/styles.css';
 @import url('https://fonts.googleapis.com/css?family=Montserrat:500,700|PT+Serif:400,700');
 //@import "../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
+//@import '../../node_modules/react-select/dist/react-select.css';
 @import './base/settings';
 @import './base/base';
 @import './components/modal';
@@ -11,6 +12,7 @@
 @import './components/button';
 @import './components/calculator';
 @import './components/custom-select';
+@import './components/react-select';
 @import './components/side-images';
 @import './components/popup';
 @import './components/tooltop';

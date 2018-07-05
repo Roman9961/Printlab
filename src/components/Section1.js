@@ -1,7 +1,7 @@
 import React from 'react';
 import {Transition} from 'react-transition-group'
 import InputRange from 'react-input-range';
-import customSelect from '../custom_select';
+import Select from 'react-select';
 import base from '../base';
 import calc from './calculator';
 
@@ -42,10 +42,12 @@ class Section1 extends React.Component{
             "outline":''
         },
         np:{
-            cities:[],
-            warehouses:[],
             city:'Киев',
             warehouse:'1'
+        },
+        options:{
+            cities:[],
+            warehouses:[],
         }
     };
     componentDidMount(){
@@ -84,8 +86,10 @@ class Section1 extends React.Component{
             const content = await rawResponse.json();
 
             let cities=[];
+            let citiesOptions=[];
             content.data.map((city)=>{
-                cities.push({name:city.DescriptionRu})
+                cities.push({name:city.DescriptionRu});
+                citiesOptions.push({value:city.DescriptionRu,label:city.DescriptionRu});
             });
             cities = cities.sort((a,b)=>{
                 if(a.name<b.name) return -1;
@@ -94,12 +98,11 @@ class Section1 extends React.Component{
             });
             this.setState(state=>({
                 ...state,
-                np:{
-                    ...state.np,
-                    cities
+                options:{
+                    ...state.options,
+                    cities:citiesOptions
                 }
             }));
-            customSelect();
         })();
         (async () => {
             const rawResponse = await fetch("https://api.novaposhta.ua/v2.0/json/", {
@@ -121,8 +124,10 @@ class Section1 extends React.Component{
             const content = await rawResponse.json();
 
             let warehouses=[];
+            let warehousesOptions=[];
             content.data.map((warehouse)=>{
-                warehouses.push({name:warehouse.DescriptionRu, id:warehouse.Number})
+                warehouses.push({name:warehouse.DescriptionRu, id:warehouse.Number});
+                warehousesOptions.push({value:warehouse.Number,label:warehouse.DescriptionRu});
             });
             warehouses = warehouses.sort((a,b)=>{
                 if(parseInt(a.id)<parseInt(b.id)) return -1;
@@ -131,12 +136,11 @@ class Section1 extends React.Component{
             });
             this.setState(state=>({
                 ...state,
-                np:{
-                    ...state.np,
-                    warehouses
+                options:{
+                    ...state.options,
+                    warehouses:warehousesOptions
                 }
             }));
-            customSelect();
         })();
 
     }
@@ -223,11 +227,9 @@ class Section1 extends React.Component{
         ))
     };
 
-    selectHandleChange = async (event) => {
-        const id = event.currentTarget.value;
-
-
-        if(event.currentTarget.name ==='city') {
+    selectHandleChange = async (value, key) => {
+        const id = value;
+        if(key==='city') {
             (async() => {
                 const rawResponse = await fetch("https://api.novaposhta.ua/v2.0/json/", {
                     method: 'POST',
@@ -248,25 +250,26 @@ class Section1 extends React.Component{
                 const content = await rawResponse.json();
 
                 let warehouses = [];
-                content.data.map((warehouse)=> {
-                    warehouses.push({name: warehouse.DescriptionRu, id: warehouse.Number})
+                let warehousesOptions=[];
+                content.data.map((warehouse)=>{
+                    warehouses.push({name:warehouse.DescriptionRu, id:warehouse.Number});
+                    warehousesOptions.push({value:warehouse.Number,label:warehouse.DescriptionRu});
                 });
-                warehouses = warehouses.sort((a, b)=> {
-                    if (parseInt(a.id) < parseInt(b.id)) return -1;
-                    if (parseInt(a.id) > parseInt(b.id)) return 1;
+                warehouses = warehouses.sort((a,b)=>{
+                    if(parseInt(a.id)<parseInt(b.id)) return -1;
+                    if(parseInt(a.id)>parseInt(b.id)) return 1;
                     return 0;
                 });
                 this.setState(state=>({
                     ...state,
-                    np: {
-                        ...state.np,
-                        warehouses
+                    options:{
+                        ...state.options,
+                        warehouses:warehousesOptions
                     }
                 }));
-                customSelect();
             })();
         }
-        await this.updateDeliveryProp(event.currentTarget.name, id);
+        await this.updateDeliveryProp(key, id);
     };
 
     render(){
@@ -921,29 +924,46 @@ class Section1 extends React.Component{
                                         <div className="feedback-form__input-block">
                                             <label className="feedback-form__label" htmlFor="email">Населенный пункт:</label>
                                             <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
-                                                <select name="city" onChange={this.selectHandleChange} value={this.state.np.city}>
-                                                    {
-                                                       this.state.np.cities.map((city,key)=> {
-                                                            return(
-                                                                <option key={key} value={city.name}>{city.name}</option>
-                                                                )
-                                                        })
-                                                    }
-                                                </select>
+                                                <Select
+                                                    id="city-select"
+                                                    ref={(ref) => { this.select = ref; }}
+                                                    onBlurResetsInput={false}
+                                                    onSelectResetsInput={false}
+                                                    autoFocus
+                                                    options={this.state.options.cities}
+                                                    clearable={false}
+                                                    simpleValue
+                                                    name="city"
+                                                    value={this.state.np.city}
+                                                    onChange={value=>{this.selectHandleChange(value, 'city')}}
+                                                />
+                                                {/*<select name="city" onChange={this.selectHandleChange} value={this.state.np.city} onInput={(e)=>{console.log(e)}}>*/}
+                                                    {/*{*/}
+                                                       {/*this.state.np.cities.map((city,key)=> {*/}
+                                                            {/*return(*/}
+                                                                {/*<option key={key} value={city.name}>{city.name}</option>*/}
+                                                                {/*)*/}
+                                                        {/*})*/}
+                                                    {/*}*/}
+                                                {/*</select>*/}
                                             </div>
                                         </div>
                                         <div className="feedback-form__input-block">
                                             <label className="feedback-form__label" htmlFor="email">Отделение Новой почты:</label>
                                             <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
-                                                <select name="warehouse" onChange={this.selectHandleChange} value={this.state.np.warehouse}>
-                                                    {
-                                                        this.state.np.warehouses.map((warehouse,key)=> {
-                                                            return(
-                                                                <option key={key} value={warehouse.id}>{warehouse.name}</option>
-                                                            )
-                                                        })
-                                                    }
-                                                </select>
+                                                <Select
+                                                    id="warehouse-select"
+                                                    ref={(ref) => { this.select = ref; }}
+                                                    onBlurResetsInput={false}
+                                                    onSelectResetsInput={false}
+                                                    autoFocus
+                                                    options={this.state.options.warehouses}
+                                                    clearable={false}
+                                                    simpleValue
+                                                    name="city"
+                                                    value={this.state.np.warehouse}
+                                                    onChange={value=>{this.selectHandleChange(value, 'warehouse')}}
+                                                />
                                             </div>
                                         </div>
                                         <div className="feedback-form__input-block">
