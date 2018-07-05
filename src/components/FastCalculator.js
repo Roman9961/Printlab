@@ -10,6 +10,7 @@ class FastCalculator extends React.Component{
         },
         calcProp:{
             "basis" : "Пластиковая",
+            "basis_param":"white",
             "print_type" : "Листовая",
             "cut_form" : "",
             "design" : "",
@@ -34,6 +35,13 @@ class FastCalculator extends React.Component{
             "varnish" : "",
             "selector": `final-price-${this.props.form}`,
             "margin":4
+        },
+        customSizes: false,
+        title:{
+            rectangle:'Наклейки прямоугольные',
+            simple:'Наклейки простой формы',
+            hard:'Наклейки сложной формы',
+            roll:'Рулонная цифровая печать'
         }
     };
     componentDidMount(){
@@ -69,11 +77,20 @@ class FastCalculator extends React.Component{
     updatecalcProp =   (key, value) =>{
         const calcProp = {...this.state.calcProp};
 
+
         calcProp[key] = value;
+        calcProp.selector = `final-price-${this.props.form}`;
         if(calcProp.form === 'Рулонная'){
             calcProp.print_type = 'Рулонная'
         }else{
-            calcProp.print_type = 'Листовая'
+            calcProp.print_type = 'Листовая';
+            if( calcProp.width>378){
+                calcProp.width =378;
+            }
+            if( calcProp.height>278){
+                calcProp.height =278;
+            }
+
         }
          this.setState((state)=>({
              ...state,
@@ -90,12 +107,25 @@ class FastCalculator extends React.Component{
     selectHandleChange = async (event) => {
         const str = event.currentTarget.value;
         const props = JSON.parse(`${str}`);
-
-        await this.updatecalcProp('width', props.width);
-        await this.updatecalcProp('height', props.height);
-
-        const calculator = this.state;
-        await calc(calculator);
+        if(
+            Number.isInteger(parseInt(props.width))&&
+            Number.isInteger(parseInt(props.height))
+        ) {
+            this.setState((state)=>({
+                ...state,
+                customSizes: false
+            }));
+            await this.updatecalcProp('width', props.width);
+            await this.updatecalcProp('height', props.height);
+            const calculator = this.state;
+            await calc(calculator);
+        }
+        else{
+            this.setState((state)=>({
+                ...state,
+                customSizes: true
+            }));
+        }
     };
     render(){
         return (
@@ -104,7 +134,7 @@ class FastCalculator extends React.Component{
                     <img src={`images/${this.props.form}.svg`} alt=""/>
                 </div>
                 <div className="express-calculator__item">
-                    <div className="express-calculator__title express-calculator__item--header">Наклейки прямоугольные</div>
+                    <div className="express-calculator__title express-calculator__item--header">{this.state.title[this.props.form]}</div>
                     <div
                         className={`info info--${this.props.form}`}
                         data-description="sfglskflksd"
@@ -121,9 +151,21 @@ class FastCalculator extends React.Component{
                         <select name="sizes" onChange={this.selectHandleChange}>
                             <option value='{"width":40,"height":40}'>40x40</option>
                             <option value='{"width":60,"height":60}'>60x60</option>
+                            <option value='{"width":"custom","height":"custom"}'>Произвольные</option>
                         </select>
                     </div>
                 </div>
+                {
+                    this.state.customSizes && (
+                        <div className="express-calculator__item">
+                            <span className="custom-sizes-description">Ширина х Высота</span>
+                            <div className="custom-sizes-container">
+                                <input className="custom-sizes" type="number" name="width" value={this.state.calcProp.width} onChange={this.handleChange}/>
+                                <input className="custom-sizes" type="number" name="height" value={this.state.calcProp.height} onChange={this.handleChange}/>
+                            </div>
+                        </div>
+                    )
+                }
 
 
                 <div className="express-calculator__item">

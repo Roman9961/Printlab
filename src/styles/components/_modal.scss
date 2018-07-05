@@ -63,6 +63,14 @@
   justify-content:space-between;
   flex-wrap: wrap;
 }
+.modal-block__content--order{
+  justify-content: flex-end;
+  padding: 0 200px;
+}
+.modal-block__content--deliver{
+  justify-content: flex-end;
+  padding: 0 100px;
+}
 .modal-block__content--button{
   justify-content:flex-end;
 }
@@ -145,6 +153,7 @@
   &.active{
     border: 4px solid #F79861;
     transition: all .3s ease-in-out;
+    font-weight: bold;
   }
 }
 .modal-block__content_item label>*{
@@ -236,7 +245,12 @@
 .modal-block__content_item .modal-block__content_item__label{
   height: auto;
   flex-wrap: wrap;
+  &--design{
+    flex-wrap: inherit;
+    font-weight: normal;
+  }
 }
+
 .modal__check-icon, .modal__check-icon--form{
   width: 29px;
   height: 29px;
@@ -299,8 +313,20 @@
 .modal-block__content_item__icon--white{
   background: url("/images/base-white.svg") no-repeat;
 }
+.modal-block__content_item__icon--liq-pay{
+  background: url("/images/payment_liq-pay.svg") no-repeat;
+}
+.modal-block__content_item__icon--cashless{
+  background: url("/images/payment_cashless.svg") no-repeat;
+  height: 5rem !important;
+}
 .modal-block__content_item__icon{
   width: 4rem;
   height: 4rem;
   background-size: contain;
+  &--design{
+      width: 8rem;
+      height: 6rem;
+      background-size: contain;
+  }
 }

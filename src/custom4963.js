@@ -457,9 +457,10 @@ var isDevelopment =true;
 
     $body.on('click','.upload', function () {
         $(this).fileupload({
-            url: 'server/php/',
+            url: '/server/php/index.php',
             dataType: 'json',
             done: function (e, data) {
+                console.log(data);
                 $.each(data.result.files, function (index, file) {
                     $('#fileformlabel').append('<div class="parent"><i class="icon-checkmark"></i><div class="fname">'+file.name+'</div><i class="fa fa-trash delete js-delete" data-name = "'+ file.name +'" data-delete-url = "'+ file.deleteUrl +'" data-url = "'+ file.url +'"></i></div>');
                     $('#user_files').append('<input type="hidden" name="user_files[]" value="'+file.name+'" />');

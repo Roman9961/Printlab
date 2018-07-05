@@ -1,6 +1,7 @@
 import React from 'react';
 import {Transition} from 'react-transition-group'
 import InputRange from 'react-input-range';
+import customSelect from '../custom_select';
 import base from '../base';
 import calc from './calculator';
 
@@ -12,7 +13,8 @@ class Section1 extends React.Component{
 
         },
         calcProp:{
-            "basis" : "",
+            "basis" : "Пластиковая",
+            "basis_param":"white",
             "print_type" : "",
             "cut_form" : "",
             "design" : "",
@@ -38,6 +40,12 @@ class Section1 extends React.Component{
             "margin":4,
             "selector": "final-price-main",
             "outline":''
+        },
+        np:{
+            cities:[],
+            warehouses:[],
+            city:'Киев',
+            warehouse:'1'
         }
     };
     componentDidMount(){
@@ -56,7 +64,80 @@ class Section1 extends React.Component{
                 }
                 calc(this.state);
             };
-        })
+        });
+
+        (async () => {
+            const rawResponse = await fetch("https://api.novaposhta.ua/v2.0/json/", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        "modelName": "Address",
+                        "calledMethod": "getCities",
+                        "methodProperties": { },
+                        "apiKey": "0252bfcbba5e10fda4f7e7cdfb497458"
+                    })
+            });
+            const content = await rawResponse.json();
+
+            let cities=[];
+            content.data.map((city)=>{
+                cities.push({name:city.DescriptionRu})
+            });
+            cities = cities.sort((a,b)=>{
+                if(a.name<b.name) return -1;
+                if(a.name>b.name) return 1;
+                return 0;
+            });
+            this.setState(state=>({
+                ...state,
+                np:{
+                    ...state.np,
+                    cities
+                }
+            }));
+            customSelect();
+        })();
+        (async () => {
+            const rawResponse = await fetch("https://api.novaposhta.ua/v2.0/json/", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        "modelName": "AddressGeneral",
+                        "calledMethod": "getWarehouses",
+                        "methodProperties": {
+                            "CityName": "Киев",
+                        },
+                        "apiKey": "0252bfcbba5e10fda4f7e7cdfb497458"
+                    })
+            });
+            const content = await rawResponse.json();
+
+            let warehouses=[];
+            content.data.map((warehouse)=>{
+                warehouses.push({name:warehouse.DescriptionRu, id:warehouse.Number})
+            });
+            warehouses = warehouses.sort((a,b)=>{
+                if(parseInt(a.id)<parseInt(b.id)) return -1;
+                if(parseInt(a.id)>parseInt(b.id)) return 1;
+                return 0;
+            });
+            this.setState(state=>({
+                ...state,
+                np:{
+                    ...state.np,
+                    warehouses
+                }
+            }));
+            customSelect();
+        })();
 
     }
     componentDidUpdate(){
@@ -89,8 +170,20 @@ class Section1 extends React.Component{
 
          calcProp.margin = parseInt(calcProp.margin);
 
-        this.setState({calcProp});
+         this.setState((state)=>({
+             ...state,
+             calcProp
+         }));
     }
+    updateDeliveryProp =  (key, value) =>{
+        const np = {...this.state.np};
+        np[key] = value;
+        this.setState((state)=>({
+            ...state,
+            np
+        }));
+    }
+
     handleRange = (value) =>{
         this.setState((state)=>({
             ...state,
@@ -128,6 +221,52 @@ class Section1 extends React.Component{
             tooltip: !state.tooltip
         }
         ))
+    };
+
+    selectHandleChange = async (event) => {
+        const id = event.currentTarget.value;
+
+
+        if(event.currentTarget.name ==='city') {
+            (async() => {
+                const rawResponse = await fetch("https://api.novaposhta.ua/v2.0/json/", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            "modelName": "AddressGeneral",
+                            "calledMethod": "getWarehouses",
+                            "methodProperties": {
+                                "CityName": id,
+                            },
+                            "apiKey": "0252bfcbba5e10fda4f7e7cdfb497458"
+                        })
+                });
+                const content = await rawResponse.json();
+
+                let warehouses = [];
+                content.data.map((warehouse)=> {
+                    warehouses.push({name: warehouse.DescriptionRu, id: warehouse.Number})
+                });
+                warehouses = warehouses.sort((a, b)=> {
+                    if (parseInt(a.id) < parseInt(b.id)) return -1;
+                    if (parseInt(a.id) > parseInt(b.id)) return 1;
+                    return 0;
+                });
+                this.setState(state=>({
+                    ...state,
+                    np: {
+                        ...state.np,
+                        warehouses
+                    }
+                }));
+                customSelect();
+            })();
+        }
+        await this.updateDeliveryProp(event.currentTarget.name, id);
     };
 
     render(){
@@ -330,12 +469,12 @@ class Section1 extends React.Component{
                                                         <span>Самоклеящаяся пленка</span>
                                                     </label>
                                                 </div>
-                                                {this.state.calcProp.print_type==='Рулонная'&&(
+                                                {this.state.calcProp.basis=='Пластиковая'&&(
                                                     <React.Fragment>
                                                         <div className="modal-block__content_item">
-                                                            <label htmlFor="field_profile-13" className= {`modal-block__content_item__label ${this.state.calcProp.basis=='transparent'?'active':''}`}>
-                                                                <input className="radio-input" type="radio" name="basis" id="field_profile-13" value="transparent" onClick={this.handleChange}/>
-                                                                <Transition in={this.state.calcProp.basis=='transparent'} timeout={200}>
+                                                            <label htmlFor="field_profile-13" className= {`modal-block__content_item__label ${this.state.calcProp.basis_param=='transparent'?'active':''}`}>
+                                                                <input className="radio-input" type="radio" name="basis_param" id="field_profile-13" value="transparent" onClick={this.handleChange}/>
+                                                                <Transition in={this.state.calcProp.basis_param=='transparent'} timeout={200}>
                                                                     {status=>(
                                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                                     )}
@@ -349,9 +488,9 @@ class Section1 extends React.Component{
                                                             </label>
                                                         </div>
                                                         <div className="modal-block__content_item">
-                                                            <label htmlFor="field_profile-14" className= {`${this.state.calcProp.basis=='white'?'active':''}`}>
-                                                                <input className="radio-input" type="radio" name="basis" id="field_profile-14" value="white" onClick={this.handleChange}/>
-                                                                <Transition in={this.state.calcProp.basis=='white'} timeout={200}>
+                                                            <label htmlFor="field_profile-14" className= {`${this.state.calcProp.basis_param=='white'?'active':''}`}>
+                                                                <input className="radio-input" type="radio" name="basis_param" id="field_profile-14" value="white" onClick={this.handleChange}/>
+                                                                <Transition in={this.state.calcProp.basis_param=='white'} timeout={200}>
                                                                     {status=>(
                                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                                     )}
@@ -663,96 +802,178 @@ class Section1 extends React.Component{
                     </div>
 
                     <div id="part-3" className={`${!this.props.state.deliver?'hidden-part':''}`}>
-                        <div className="form-field">
-                            <div className="h3 primary-label">Ваше имя:</div>
-                            <div className="frm_container">
-                                <input name="user_name" type="text" placeholder="Вадим"/>
-                            </div>
-                        </div>
-                        <div className="form-field">
-                            <div className="row">
-                                <div className="col-lg-5 col-sm-6">
-                                    <div className="h3 primary-label">Телефон:</div>
-                                    <div className="frm_container">
-                                        <input name="user_phone" type="tel" placeholder="+38 066 910 32 19"/>
+
+                        <div className="wrapper-container wrapper-container--modal-grey">
+                            <div className="container container--modal-info">
+                                <div className="modal-block modal-block--radio">
+                                    <div className="modal-block__content modal-block__content--order">
+                                        <div className="feedback-form__input-block">
+                                            <label className="feedback-form__label" htmlFor="name">Ваше имя:</label>
+                                            <input className="feedback-form__field" type="text" id="name" name="name"/>
+                                        </div>
+
+                                        <div className="feedback-form__input-block">
+                                            <label className="feedback-form__label" htmlFor="phone">Ваше телефон:</label>
+                                            <input className="feedback-form__field" type="text" id="phone" name="phone"/>
+                                        </div>
+
+                                        <div className="feedback-form__input-block">
+                                            <label className="feedback-form__label" htmlFor="email">Ваше email:</label>
+                                            <input className="feedback-form__field" type="text" id="email" name="email"/>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="col-sm-6">
-                                    <div className="h3 primary-label">Почта:</div>
-                                    <div className="frm_container">
-                                        <input name="user_mail" type="email" placeholder="vadim@gmail.com"/>
-                                            <p className="error-msg"></p>
+                            </div>
+                        </div>
+                        <div className="wrapper-container wrapper-container--modal">
+                            <div className="container container--modal-info">
+                                <div className="modal-block modal-block--design">
+                                    <div className="modal-block__title">Оплата:</div>
+                                    <div className="modal-block__content modal-block__content--design">
+                                        <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-24" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.user_payment_method=='liq-pay'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_payment_method" id="field_profile-24" value="liq-pay" onClick={this.handleChange}/>
+                                                <Transition in={this.state.calcProp.user_payment_method=='liq-pay'} timeout={200}>
+                                                    {status=>(
+                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>
+                                                <div className="modal-block__content_item__icon modal-block__content_item__icon--design modal-block__content_item__icon--liq-pay"></div>
+                                                <span>Оплата LiqPay (Visa/MasterCard, Приват24, Терминал)</span>
+                                            </label>
+                                        </div>
+                                        <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-25" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.user_payment_method=='cashless'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_payment_method" id="field_profile-25" value="cashless" onClick={this.handleChange}/>
+                                                <Transition in={this.state.calcProp.user_payment_method=='cashless'} timeout={200}>
+                                                    {status=>(
+                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>
+                                                <div className="modal-block__content_item__icon modal-block__content_item__icon--design modal-block__content_item__icon--cashless"></div>
+                                                <span>Оплата LiqPay (Visa/MasterCard, Приват24, Терминал)</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="form-field">
-                            <div className="h3 primary-label">Оплата:</div>
-                            <div className="frm_container frm_opt_container">
-                                <div className="frm_item frm_radio">
-                                    <label htmlFor="field_profile-31">
-                                        <input name="user_payment_method" type="radio" id="field_profile-31" value="Оплата LiqPay"/>
-                                            <i></i>
-                                            Оплата LiqPay (Visa/MasterCard, <br/>Приват24, Терминал)
-                                    </label>
-                                </div>
-                                <div className="frm_item frm_radio">
-                                    <label htmlFor="field_profile-32">
-                                        <input type="radio" name="user_payment_method" id="field_profile-32" value="Безналичный"/>
-                                            <i></i>
-                                            Безналичный расчет <br/>(для юр.лиц + 5%)
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-field">
-                            <div className="h3 primary-label">Доставка:</div>
-                            <div className="frm_container frm_opt_container">
 
-                                <div className="frm_item frm_radio">
-                                    <label htmlFor="field_profile-37">
-                                        <input type="radio" name="user_delivery" id="field_profile-37" value="Новая Почта"/>
-                                            <i></i>
-                                            Новая Почта (оплата по тарифам Новой Почты)
-                                    </label>
-                                </div>
-                                <div className="frm_item frm_radio">
-                                    <label htmlFor="field_profile-36">
-                                        <input type="radio" name="user_delivery" id="field_profile-36" value="Доставка по Одессе"/>
-                                            <i></i>
-                                            Доставка по Одессе
-                                    </label>
-                                    <p className="description" id="form_delivery" style={{display : 'none'}}>+30-50 грн в зависимости <br className="hidden-xs"/>от Вашего района</p>
-                                </div>
-                                <div className="frm_item frm_radio">
-                                    <label htmlFor="field_profile-35">
-                                        <input type="radio" name="user_delivery" id="field_profile-35" value="Самовывоз"/>
-                                            <i></i>
-                                            Самовывоз
-                                    </label>
+                        <div className="wrapper-container wrapper-container--modal-grey">
+                            <div className="container container--modal-info">
+                                <div className="modal-block modal-block--radio">
+                                    <div className="modal-block__title">Способ доставки:</div>
+                                    <div className="modal-block__content">
+                                        <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-26" className= {`${this.state.calcProp.user_delivery=='np'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-26" value="np" onClick={this.handleChange}/>
+                                                <Transition in={this.state.calcProp.user_delivery=='np'} timeout={200}>
+                                                    {status=>(
+                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>
+                                                <span>Новая Почта (оплата по тарифам Новой Почты)</span>
+                                            </label>
+                                        </div>
+                                        <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-27" className= {`modal-block__content_item__label ${this.state.calcProp.user_delivery=='kiev'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-27" value="kiev" onClick={this.handleChange}/>
+                                                <Transition in={this.state.calcProp.user_delivery=='kiev'} timeout={200}>
+                                                    {status=>(
+                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>
+                                                <span>Доставка по Киеву</span>
+                                                <div className="modal-block__content_item__description">+30-50 грн в зависимости от Вашего района</div>
+                                            </label>
+                                        </div>
+                                        <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-28" className= {`${this.state.calcProp.user_delivery=='self'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-28" value="self" onClick={this.handleChange}/>
+                                                <Transition in={this.state.calcProp.user_delivery=='self'} timeout={200}>
+                                                    {status=>(
+                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>
+                                                <span>Самовывоз</span>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div id="form_contacts" style={{display : 'none'}} className="form-field">
-                            <div className="h3 primary-label">Адрес доставки:</div>
-                            <div className="frm_container">
-                                <input type="textarea" name="user_contacts" rows="3" placeholder="Укажите имя получателя, его телефон, город и номер отделения Новой почты" />
+
+                        <div className="wrapper-container wrapper-container--modal">
+                            <div className="container container--modal-info">
+                                <div className="modal-block modal-block--radio">
+                                    <div className="modal-block__content modal-block__content--deliver">
+                                        <div className="feedback-form__input-block">
+                                            <label className="feedback-form__label" htmlFor="delivery_sirname">ФИО получателя:</label>
+                                            <input className="feedback-form__field feedback-form__field--deliver" type="text" id="delivery_sirname" name="delivery_sirname" value={this.state.calcProp.delivery_sirname}/>
+                                        </div>
+
+                                        <div className="feedback-form__input-block">
+                                            <label className="feedback-form__label" htmlFor="delivery_phone">Ваше телефон:</label>
+                                            <input className="feedback-form__field feedback-form__field--deliver" type="text" id="delivery_phone" name="delivery_phone" value={this.state.calcProp.delivery_phone}/>
+                                        </div>
+
+                                        <div className="feedback-form__input-block">
+                                            <label className="feedback-form__label" htmlFor="email">Населенный пункт:</label>
+                                            <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
+                                                <select name="city" onChange={this.selectHandleChange} value={this.state.np.city}>
+                                                    {
+                                                       this.state.np.cities.map((city,key)=> {
+                                                            return(
+                                                                <option key={key} value={city.name}>{city.name}</option>
+                                                                )
+                                                        })
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="feedback-form__input-block">
+                                            <label className="feedback-form__label" htmlFor="email">Отделение Новой почты:</label>
+                                            <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
+                                                <select name="warehouse" onChange={this.selectHandleChange} value={this.state.np.warehouse}>
+                                                    {
+                                                        this.state.np.warehouses.map((warehouse,key)=> {
+                                                            return(
+                                                                <option key={key} value={warehouse.id}>{warehouse.name}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="feedback-form__input-block">
+                                            <label className="feedback-form__label" htmlFor="delivery_comment">ФИО получателя:</label>
+                                            <input className="feedback-form__field feedback-form__field--deliver" type="text" id="delivery_comment" name="delivery_comment" value={this.state.calcProp.delivery_comment}/>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="form-field">
-                            <div className="h3 primary-label">Комментарий:</div>
-                            <div className="frm_container">
-                                <input type="textarea" name="user_comment" rows="3" placeholder="Введите ваш комментарий" />
+
+                        <div className="wrapper-container wrapper-container--modal-grey">
+                            <div className="container container--modal-info">
+                                <div className="modal-block modal-block--radio">
+                                    <div className="modal-block__content modal-block__content--button">
+                                        <div className="modal-block__content_item">
+                                            <a rel="nofollow" className="button button--back button--design  button--modal" onClick={()=>{this.props.handleBookmark({
+                                                print:false,
+                                                design:true,
+                                                deliver:false
+                                            })}}><div>Назад</div></a>
+                                        </div>
+                                        <div className="modal-block__content_item">
+                                            <a rel="nofollow" className="button button--design button--modal" onClick={()=>{alert('Заказ принят ;)')}}>Оформить заказ</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div id="user_files">
 
-                        </div>
-
-                        <div className="text-right">
-                            <input type="submit" className="btn btn-primary" value="Подтвердить заказ"/>
-                        </div>
                     </div>
                 </form>
             </div>

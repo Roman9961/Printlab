@@ -36,7 +36,6 @@ class SectionPostPrint extends React.Component{
                                    </div>
                                    <div className="section-block__content ">
                                        <div className="section-block__item__description">
-                                           Ламинация – это покрытие листа тонким слоем прозрачной пленки, он соединяется с отпечатанной основой при помощи температуры и давления (горячая ламинация).
                                        </div>
                                    </div>
                                </div>
@@ -56,7 +55,6 @@ class SectionPostPrint extends React.Component{
                                    </div>
                                    <div className="section-block__content">
                                        <div className="section-block__item__description">
-                                           По технологии изготовления – это нанесение специального лака с целью придание печатной продукции глянца. Он выполняет одновременно защитную и декоративную функцию.
                                        </div>
                                    </div>
                                </div>
@@ -76,7 +74,6 @@ class SectionPostPrint extends React.Component{
                                    </div>
                                    <div className="section-block__content">
                                        <div className="section-block__item__description">
-                                           Тиснение фольгой – это нанесение блестящей металлической фольги в виде отдельных букв, рисунка или подложкие. Представляет собой процесс переноса на поверхность материала слоя металлической фольги путем штамповки.
                                        </div>
                                    </div>
                                </div>

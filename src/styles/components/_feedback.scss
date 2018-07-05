@@ -24,8 +24,24 @@
   border-bottom: solid 0.2rem $light-blue;
   width:50rem;
   transition: all .3s ease-in-out;
+  background-color: transparent;
   &.error{
     border-bottom: solid 0.2rem red;
+  }
+}
+.feedback-form__field--deliver{
+  width:60rem;
+  &.custom-select--deliver {
+    border-bottom-width: 0.1rem;
+    .select-items{
+      max-height: 300px;
+      overflow-y: scroll;
+    }
+    .select-selected {
+      &:after {
+        height:40px;
+      }
+    }
   }
 }
 .feedback-form__input-block{

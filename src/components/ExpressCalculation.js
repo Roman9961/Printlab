@@ -1,7 +1,14 @@
 import React from 'react';
 import FastCalculator from './FastCalculator';
+import customSelect from '../custom_select';
+
 
 class ExpressCalculation extends React.Component{
+
+    componentDidMount(){
+        customSelect();
+    };
+
     render(){
         return (
             <div className="container">

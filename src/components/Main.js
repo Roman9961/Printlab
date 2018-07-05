@@ -1,6 +1,5 @@
 import React from 'react';
 import {render} from 'react-dom';
-import notify from 'bootstrap-notify';
 import base from '../base';
 import Header from './Header';
 import ExpressCalculation from './ExpressCalculation';
@@ -13,10 +12,7 @@ import SectionLayoutProps from './SectionLayoutProps';
 import SectionQuestions from './SectionQuestions';
 import SectionFeedback from './SectionFeedback';
 import ModalCalculator from './ModalCalculator';
-import Section1 from './Section1';
 import Footer from './Footer';
-import PageContent from './PageContent';
-import FormContent from './FormContent';
 import {initPopup} from '../initPopup';
 
 
@@ -45,10 +41,7 @@ class Main extends React.Component{
     componentDidMount(){
         this.ref = base.syncState('Stickers/stickers',{
             context: this,
-            state: 'stickers',
-            then () {
-                initPopup();
-            }
+            state: 'stickers'
         });
 
     }
