@@ -13,7 +13,6 @@ import SectionQuestions from './SectionQuestions';
 import SectionFeedback from './SectionFeedback';
 import ModalCalculator from './ModalCalculator';
 import Footer from './Footer';
-import {initPopup} from '../initPopup';
 
 
 

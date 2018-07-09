@@ -4,7 +4,6 @@ import Router from './components/Router';
 import './styles/styles.scss';
 import './custom_select';
 require("babel-polyfill");
-require('./custom4963');
 
 
 render(<Router/>, document.querySelector('.bod'));

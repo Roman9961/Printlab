@@ -1,4 +1,5 @@
 import jQuery from 'jquery';
+require('webpack-jquery-ui/tooltip.js');
 const $ = jQuery;
 
 export const updateTooltip = (selector)=> {
