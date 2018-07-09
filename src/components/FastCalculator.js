@@ -33,10 +33,11 @@ class FastCalculator extends React.Component{
             "user_payment_method" : "",
             "user_phone" : "",
             "varnish" : "",
-            "selector": `final-price-${this.props.form}`,
-            "margin":4
+            "margin":4,
+            "price":0,
         },
         customSizes: false,
+        customAmount: false,
         title:{
             rectangle:'Наклейки прямоугольные',
             simple:'Наклейки простой формы',
@@ -45,10 +46,10 @@ class FastCalculator extends React.Component{
         }
     };
     componentDidMount(){
-        this.ref = base.syncState('Stickers/calculator',{
-            context: this,
-            state: 'calculator',
-            then () {
+        this.setState((state)=>({
+            ...state,
+            calculator: this.props.calculator
+        }));
                 switch (this.props.form) {
                     case 'rectangle':
                         this.updatecalcProp('form', 'Прямоугольная');
@@ -64,22 +65,29 @@ class FastCalculator extends React.Component{
                         this.updatecalcProp('form', 'Рулонная');
                         break;
                 }
-            }
-        });
-
-
     }
+
     componentDidUpdate(){
         updateTooltip(this.props.form);
-        calc(this.state);
+
+            const price = calc(this.state);
+
+            if(price!=this.state.calcProp.price){
+                this.setState((state)=>({
+                            ...state,
+                            calcProp:{
+                                ...state.calcProp,
+                                price
+                            }
+                        }));
+            }
+
     }
 
     updatecalcProp =   (key, value) =>{
         const calcProp = {...this.state.calcProp};
-
-
+        
         calcProp[key] = value;
-        calcProp.selector = `final-price-${this.props.form}`;
         if(calcProp.form === 'Рулонная'){
             calcProp.print_type = 'Рулонная'
         }else{
@@ -100,8 +108,6 @@ class FastCalculator extends React.Component{
 
     handleChange = async (event) => {
         await this.updatecalcProp(event.currentTarget.name, event.currentTarget.value);
-        const calculator = this.state;
-        await calc(calculator);
     };
 
     selectHandleChange = async (event) => {
@@ -117,13 +123,30 @@ class FastCalculator extends React.Component{
             }));
             await this.updatecalcProp('width', props.width);
             await this.updatecalcProp('height', props.height);
-            const calculator = this.state;
-            await calc(calculator);
         }
         else{
             this.setState((state)=>({
                 ...state,
                 customSizes: true
+            }));
+        }
+    };
+
+    selectQuantityHandleChange = async (event) => {
+        const str = event.currentTarget.value;
+        if(
+            str !='custom'
+        ) {
+            this.setState((state)=>({
+                ...state,
+                customAmount: false
+            }));
+            await this.updatecalcProp('quantity', str);
+        }
+        else{
+            this.setState((state)=>({
+                ...state,
+                customAmount: true
             }));
         }
     };
@@ -157,7 +180,7 @@ class FastCalculator extends React.Component{
                 </div>
                 {
                     this.state.customSizes && (
-                        <div className="express-calculator__item">
+                        <div className="express-calculator__item express-calculator__item--custom">
                             <span className="custom-sizes-description">Ширина х Высота</span>
                             <div className="custom-sizes-container">
                                 <input className="custom-sizes" type="number" name="width" value={this.state.calcProp.width} onChange={this.handleChange}/>
@@ -171,14 +194,25 @@ class FastCalculator extends React.Component{
                 <div className="express-calculator__item">
                     <span className="description top">Количество</span>
                     <div className="custom-select">
-                        <select name="quantity" onChange={this.handleChange}>
+                        <select name="quantity" onChange={this.selectQuantityHandleChange}>
                             <option value="100">100шт.</option>
                             <option value="200">200шт.</option>
                             <option value="500">500шт.</option>
                             <option value="1000">1000шт.</option>
+                            <option value="custom">Другое</option>
                         </select>
                     </div>
                 </div>
+                {
+                    this.state.customAmount && (
+                        <div className="express-calculator__item express-calculator__item--custom">
+                            <span className="custom-sizes-description"></span>
+                            <div className="custom-sizes-container">
+                                <input className="custom-sizes" type="number" name="quantity" value={this.state.calcProp.quantity} onChange={this.handleChange}/>
+                            </div>
+                        </div>
+                    )
+                }
 
                 <div className="express-calculator__item">
                     <span className="description top">Материал</span>
@@ -191,10 +225,10 @@ class FastCalculator extends React.Component{
                 </div>
                 <div className="express-calculator__item express-calculator__item--final">
                     <input type="hidden" name="print_type" id="field_profile-117" value="Листовая"/>
-                    <div id={`final-price-${this.props.form}`}>
+                    <div>
                         <div>Стоимость:</div>
                         <div className="express-calculator__final-price">
-                            <span>0</span><span> грн</span>
+                            <span>{this.state.calcProp.price}</span><span> грн</span>
                         </div>
                     </div>
                     <div className="express-calculator__basket" onClick={()=>{this.props.handleModal(this.state.calcProp)}}>

@@ -14,7 +14,7 @@ const customSelect = ()=>{
 
     for (i = 0; i < x.length; i++) {
         selElmnt = x[i].getElementsByTagName("select")[0];
-        if(selElmnt.options.length>0) {
+        if(selElmnt && selElmnt.options.length>0) {
             /*for each element, create a new DIV that will act as the selected item:*/
             a = document.createElement("DIV");
             a.setAttribute("class", "select-selected");

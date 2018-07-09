@@ -53,17 +53,13 @@ class Main extends React.Component{
                 calcProp:prop
             }))
         }
-            return (
+            return Object.keys(this.state.stickers).length>0?(
                 <React.Fragment>
                     <div className="section-top">
                         <Header handleModal = {handleModal}/>
                         <ExpressCalculation handleModal = {handleModal}/>
                         <div className="section-bg__top"></div>
                     </div>
-                    {/*<Section1*/}
-                        {/*calculator={ this.state.calculator }*/}
-                        {/*updateCalculator={ this.updateCalculator }*/}
-                    {/*/>*/}
                     <SectionBase state={ this.state.stickers }/>
                     <SectionDelivery/>
                     <SectionQuality/>
@@ -73,12 +69,9 @@ class Main extends React.Component{
                     <SectionQuestions/>
                     <SectionFeedback/>
                     <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}/>
-                    {/*<PageContent state = { this.state.stickers } />*/}
-                    {/*<Section2/>*/}
-                    {/*<FormContent/>*/}
                     <Footer/>
                 </React.Fragment>
-            )
+            ):'...loading';
     }
 }
 

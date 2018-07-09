@@ -17,7 +17,7 @@
     transform: rotate(180deg);
     transform-origin: center center;
     top: 10px;
-    right: 10px;
+    right: 6px;
     width: 12px;
     height: 30px;
     -webkit-transition: all .3s ease-in-out;
@@ -45,7 +45,7 @@
 /*style the items (options), including the selected item:*/
 .select-items div,.select-selected {
   color: $dark-grey;
-  padding: 8px 16px;
+  padding: 8px 8px;
   border: 1px solid transparent;
   border-color: transparent transparent #ABC6D8 transparent;
   cursor: pointer;

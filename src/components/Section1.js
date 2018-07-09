@@ -38,8 +38,8 @@ class Section1 extends React.Component{
             "varnish" : "",
             "width" : "",
             "margin":4,
-            "selector": "final-price-main",
-            "outline":''
+            "outline":'',
+            "price":0
         },
         np:{
             city:'Киев',
@@ -54,18 +54,19 @@ class Section1 extends React.Component{
         this.ref = base.fetch('Stickers/calculator',{
             context: this
 
-        }).then ((data)=>{
-            {
-                this.setState({calculator:data});
+        }).then ((calculator)=>{
+
+                this.setState(state=>({
+                    ...state,
+                    calculator
+                }));
                 if(Object.keys(this.props.calcProp).length !== 0){
-                    this.props.calcProp.selector="final-price-main";
                     this.setState((state)=>({
                         ...state,
                         calcProp:this.props.calcProp
                     }));
                 }
-                calc(this.state);
-            };
+
         });
 
         (async () => {
@@ -144,8 +145,20 @@ class Section1 extends React.Component{
         })();
 
     }
-    componentDidUpdate(){
-        calc(this.state);
+    componentDidUpdate(data){
+
+        if(Object.keys(this.state.calculator).length>0 && this.state.calcProp != data.calcProp) {
+            const price = calc(this.state);
+            if (price != this.state.calcProp.price) {
+                this.setState((state)=>({
+                    ...state,
+                    calcProp:{
+                        ...state.calcProp,
+                        price
+                    }
+                }));
+            }
+        }
     }
 
      updatecalcProp =  (key, value) =>{
@@ -167,9 +180,6 @@ class Section1 extends React.Component{
              calcProp.print_type = 'Листовая';
              calcProp.margin = 4;
              this.state.range=4;
-         }
-         if(calcProp.height>378 || calcProp.width>278 ||  value === 'Рулонная'){
-             calcProp.print_type = 'Рулонная';
          }
 
          calcProp.margin = parseInt(calcProp.margin);
@@ -215,7 +225,6 @@ class Section1 extends React.Component{
                        event.currentTarget.checked:
                     event.currentTarget.value);
            const calculator = this.state;
-           await calc(calculator);
        }
     };
 
@@ -279,7 +288,7 @@ class Section1 extends React.Component{
         <div className="close-popup btn-close-popup"><i className="icon-cross"></i></div>
         <div id="final-price-main" className="price-wrapper">
             <div>Сумма заказа:</div>
-            <span>0</span>
+            <span>{this.state.calcProp.price}</span>
         </div>
             <div className="wrapper-container wrapper-container--modal">
                 <div className="container container--modal-info">
@@ -291,7 +300,14 @@ class Section1 extends React.Component{
 
                 <div className="row">
                     <div className="col-xs-12">
-                        <form id="sendorder">
+                        <form id="sendorder" onSubmit={(e)=>{
+                            e.preventDefault();
+                            const data = {
+                                ...this.state.calcProp,
+                                ...this.state.np
+                            }
+
+                        }}>
 
                             <div id="part-1" className={`${!this.props.state.print?'hidden-part':''}`}>
                                 <div className="wrapper-container wrapper-container--modal-grey">
@@ -361,7 +377,7 @@ class Section1 extends React.Component{
                                                     <input className="number-input"  type="number" name="height" id="field_profile-05" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} placeholder="302"/>
                                                     <span>Высота, мм</span>
                                                 </div>
-                                                <div>x</div>
+                                                <div className="x-size"></div>
                                                 <div className="modal-block__content_item modal-block__content_item--input">
                                                     <input className="number-input" type="number" name="width" id="field_profile-06" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
                                                     <span>Ширина, мм</span>
@@ -402,7 +418,7 @@ class Section1 extends React.Component{
                                                 </div>
                                                 <div className="modal-block__content_item modal-block__content_item--input">
                                                     <input className="number-input" type="number" name="margin" id="field_profile-08" value={this.state.calcProp.margin} onChange={this.handleChange} min="3" max="500"/>
-                                                    <span>Ширина, мм</span>
+                                                    <span>Расстояние, мм</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -544,16 +560,16 @@ class Section1 extends React.Component{
                                                 <div className="modal-block__content_item">
                                                     <div className="modal-block__content_item__checkbox-container">
                                                         <div className="modal-block__content_item__checkbox-container__checkboxes">
-                                                            <label htmlFor="field_profile-17">
+                                                            <label htmlFor="field_profile-17" className="disable">
                                                                 <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.stamping?'active':''}`}>
-                                                                    <div className="modal-checkbox"></div>
+                                                                    <div className="modal-checkbox disable"></div>
                                                                 </div>
                                                                 <input type="checkbox" disabled name="stamping" id="field_profile-17" value={false} checked ={this.state.calcProp.stamping}  onClick={this.handleChange}/>
                                                                 <div className="modal-checkbox__title">Тиснение</div>
                                                             </label>
-                                                            <label htmlFor="field_profile-18">
+                                                            <label htmlFor="field_profile-18" className="disable">
                                                                 <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.varnish?'active':''}`}>
-                                                                    <div className="modal-checkbox"></div>
+                                                                    <div className="modal-checkbox disable"></div>
                                                                 </div>
                                                                 <input type="checkbox" disabled name="varnish" id="field_profile-18" value={false} checked ={this.state.calcProp.varnish} onClick={this.handleChange}/>
                                                                 <div className="modal-checkbox__title">УФ-лак</div>
@@ -654,7 +670,9 @@ class Section1 extends React.Component{
                                                                         <div className="button button--design">
                                                                             <span>Загрузить макет</span>
                                                                         </div>
-                                                                        <input className="upload"  id="upload1" type="file" name="files[]" multiple/>
+                                                                        <input className="upload23"  id="upload1" type="file" name="files[]" multiple onChange={(e)=>{
+                                                                            console.log(e.currentTarget.files);
+                                                                        }} />
                                                                     </div>
                                                                 </label>
                                                             </div>
@@ -834,7 +852,7 @@ class Section1 extends React.Component{
                                     <div className="modal-block__title">Оплата:</div>
                                     <div className="modal-block__content modal-block__content--design">
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-24" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.user_payment_method=='liq-pay'?'active':''}`}>
+                                            <label htmlFor="field_profile-24" className= {`modal-block__content_item__label modal-block__content_item__label--pay ${this.state.calcProp.user_payment_method=='liq-pay'?'active':''}`}>
                                                 <input className="radio-input" type="radio" name="user_payment_method" id="field_profile-24" value="liq-pay" onClick={this.handleChange}/>
                                                 <Transition in={this.state.calcProp.user_payment_method=='liq-pay'} timeout={200}>
                                                     {status=>(
@@ -846,7 +864,7 @@ class Section1 extends React.Component{
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-25" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.user_payment_method=='cashless'?'active':''}`}>
+                                            <label htmlFor="field_profile-25" className= {`modal-block__content_item__label modal-block__content_item__label--pay ${this.state.calcProp.user_payment_method=='cashless'?'active':''}`}>
                                                 <input className="radio-input" type="radio" name="user_payment_method" id="field_profile-25" value="cashless" onClick={this.handleChange}/>
                                                 <Transition in={this.state.calcProp.user_payment_method=='cashless'} timeout={200}>
                                                     {status=>(
@@ -987,7 +1005,8 @@ class Section1 extends React.Component{
                                             })}}><div>Назад</div></a>
                                         </div>
                                         <div className="modal-block__content_item">
-                                            <a rel="nofollow" className="button button--design button--modal" onClick={()=>{alert('Заказ принят ;)')}}>Оформить заказ</a>
+                                            <input className="button button--design button--modal" type="submit" value="Оформить заказ" />
+                                            {/*<a rel="nofollow" className="button button--design button--modal" onClick={()=>{alert('Заказ принят ;)')}}>Оформить заказ</a>*/}
                                         </div>
                                     </div>
                                 </div>

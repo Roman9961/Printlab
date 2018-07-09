@@ -34,15 +34,10 @@ const calc = function (state) {
     var formCalc = $('#sendorder'); //Form object
 
 
-    switchDelivery();
-    calculateStickersOnList();
-    calculateTotal();
 
 
 
-    formCalc.find('input').off().focus(function(){
-        notifyme(calcProp);
-    });
+
     /**
      *
      * @param element - jquery object
@@ -76,11 +71,10 @@ const calc = function (state) {
 
             }
             if(isNaN(totalpricehrncom) || totalpricehrncom === Number.POSITIVE_INFINITY || totalpricehrncom === Number.NEGATIVE_INFINITY) totalpricehrncom = 0;
-            $(`#${state.calcProp.selector} span`).first().text(totalpricehrncom.toFixed(2));
-
+                return totalpricehrncom.toFixed(2);
         }
 
-        printResults();
+        return printResults();
     }
 
     //Функция добавления стоимости за срочность заказа
@@ -483,7 +477,9 @@ const calc = function (state) {
         }
     }
 
-
+    switchDelivery();
+    calculateStickersOnList();
+    return calculateTotal();
 
 }
 

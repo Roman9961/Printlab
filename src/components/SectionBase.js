@@ -67,7 +67,6 @@ class SectionBase extends React.Component{
        }else{
            return (
                <React.Fragment>
-                   ...Loading
                </React.Fragment>
            )
        }

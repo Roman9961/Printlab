@@ -21,6 +21,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  &--custom{
+    padding:15px 0;
+  }
 }
 
 .express-calculator__item >*{
