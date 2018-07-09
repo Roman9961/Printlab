@@ -20,7 +20,7 @@ class ExpressCalculation extends React.Component{
 
     render(){
             return Object.keys(this.state.calculator).length>0?(
-                <div className="container">
+                <div className="container prices">
                     <div className="container__express-calculator">
                         <FastCalculator form="rectangle" calculator={this.state.calculator}
                                         handleModal={this.props.handleModal}/>

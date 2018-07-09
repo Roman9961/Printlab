@@ -1,5 +1,10 @@
 import React from 'react';
-
+const stickyMenuOpen =()=>{
+    document.getElementsByClassName('sticky-header')[0].classList.add('sticky-hover');
+}
+const stickyMenuClose =()=>{
+    document.getElementsByClassName('sticky-header')[0].classList.remove('sticky-hover');
+}
 const Header = (props) => (
     <header>
         <div className="wrapper-container">
@@ -8,9 +13,9 @@ const Header = (props) => (
                     <div className="header__logo">
                     </div>
                     <div className="header__menu">
-                        <div className="header__menu__item"><a href="javascript:;" data-scrollto=".menu-example">Цены</a></div>
-                        <div className="header__menu__item"><a href="javascript:;" data-scrollto=".menu-print">Требования к макетам <br className="hidden-xs"/></a></div>
-                        <div className="header__menu__item"><a href="javascript:;" data-scrollto=".row-with-us">Оплата и доставка</a></div>
+                        <div className="header__menu__item"><a href="javascript:;" data-scrollto=".prices">Цены</a></div>
+                        <div className="header__menu__item"><a href="javascript:;" data-scrollto=".requairements">Требования к макетам <br className="hidden-xs"/></a></div>
+                        <div className="header__menu__item"><a href="javascript:;" data-scrollto=".delivery__top">Оплата и доставка</a></div>
                     </div>
                     <div className="header__contacts">
                         <div className="header__contacts__phone">
@@ -22,7 +27,7 @@ const Header = (props) => (
                                 <span>(044) 232 10 88</span>
                             </div>
                         </div>
-                        <span>zakaz@okprint.com.ua</span>
+                        <a href="mailto:zakaz@okprint.com.ua">zakaz@okprint.com.ua</a>
                     </div>
                 </div>
             </div>
@@ -54,7 +59,7 @@ const Header = (props) => (
             </div>
 
         </div>
-        <div className="sticky-header  js-sticky-header">
+        <div className={`sticky-header ${props.stickyMenu?'scroll':''}`} onMouseEnter={stickyMenuOpen} onMouseLeave={stickyMenuClose}>
             <div className="container">
                 <div className="row">
                     <div className="col-md-2 col-sm-3">
@@ -63,16 +68,21 @@ const Header = (props) => (
                     </div>
                     <div className="col-md-6 col-md-offset-1 col-sm-7 col-sm-offset-0">
                         <div className="wrapper-flex">
-                            <span className="phone"  data-href="tel:+380678283212" ><span className="icon-call" ></span><i>(067) 828 32 12</i></span>
-                            <a href="javascript:;"  rel="nofollow" className="button" >Посчитать наклейки</a>
+                            <div className="header__contacts__phone__icon">
+                                <img alt="Наклейки" title="Наклейки" src="images/call.svg"/>
+                            </div>
+                            <div className="header__contacts header__contacts__phone__block">
+                                <a href="tel:+380678283212"> (067) 828 32 12</a>
+                            </div>
+                            <a href="javascript:;"  rel="nofollow" className="button" onClick={()=>(props.handleModal({}))}>Посчитать наклейки</a>
                         </div>                </div>
                     <div className="col-md-3 col-sm-2">
                         <div className="menu-icon"><i></i></div>
-                        <div className="header__menu sticky-header--menu">
-                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".row-example">Цены</a></div>
-                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".row-print">Требования к макетам</a></div>
-                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".row-gallery">Дизайн</a></div>
-                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".row-with-us">Оплата и доставка</a></div>
+                        <div className={`header__menu sticky-header--menu ${props.stickyMenu?'open':''}`}>
+                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".prices">Цены</a></div>
+                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".requairements">Требования к макетам</a></div>
+                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".design">Дизайн</a></div>
+                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".delivery__top">Оплата и доставка</a></div>
                         </div>
                     </div>
                 </div>

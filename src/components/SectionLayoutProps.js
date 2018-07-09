@@ -3,7 +3,7 @@ import React from 'react';
 const SectionLayoutProps = ()=>{
            return (
                <section>
-                   <div className="container">
+                   <div className="container requairements">
                        <div className="section-container section-container--layout-props">
                            <h1 className="section__title">Требования к макетам</h1>
                            <div className="section-block__container section-block__container--layout-props">

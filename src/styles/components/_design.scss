@@ -4,9 +4,11 @@
 .design-img-container{
   position: relative;
   width:100%;
+  z-index:0;
 }
 .section-block__container--design{
   margin-top: 28rem;
+  z-index:0;
 }
 .section-block--design{
   box-shadow: none;

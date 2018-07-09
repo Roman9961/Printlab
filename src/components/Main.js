@@ -35,7 +35,8 @@ class Main extends React.Component{
             quantity : null,
             _exchangeRate : null,
         },
-        modal:false
+        modal:false,
+        stickyMenu:false
     };
 
     componentDidMount(){
@@ -43,6 +44,29 @@ class Main extends React.Component{
             context: this,
             state: 'stickers'
         });
+        window.addEventListener('scroll', this.handleScroll);
+
+    }
+
+    handleScroll = () => {
+        const delay = 4000;
+        let timeout = null;
+        let stickyMenu = false;
+        const el = document.getElementsByClassName('sticky-header')[0];
+        el.classList.remove('sticky-hide');
+        if(window.scrollY>100){
+            stickyMenu =true;
+
+        }
+        this.setState(state=>({
+            ...state,
+            stickyMenu
+        }));
+        clearTimeout(timeout);
+        timeout = setTimeout(()=>{
+            el.classList.add('sticky-hide');
+        },delay);
+
 
     }
 
@@ -56,7 +80,7 @@ class Main extends React.Component{
             return Object.keys(this.state.stickers).length>0?(
                 <React.Fragment>
                     <div className="section-top">
-                        <Header handleModal = {handleModal}/>
+                        <Header handleModal = {handleModal} stickyMenu={this.state.stickyMenu&&!this.state.modal}/>
                         <ExpressCalculation handleModal = {handleModal}/>
                         <div className="section-bg__top"></div>
                     </div>

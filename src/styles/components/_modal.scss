@@ -168,6 +168,7 @@
 
 .modal-block__content_item label{
   display: flex;
+  cursor: pointer;
   justify-content: flex-start;
   align-items:center;
   border:2px solid $light-blue;

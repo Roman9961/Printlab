@@ -5,7 +5,7 @@ class SectionDesign extends React.Component{
            return (
                <section>
 
-                   <div className="container">
+                   <div className="container design">
                        <div className="section-container section-container--design">
                            <div className="design-img-container">
                                <img className="desing-img" src="images/design_bg_1.png" alt=""/>

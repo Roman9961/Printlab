@@ -40,6 +40,10 @@
   flex-direction:column;
   align-items: flex-end;
   font-weight: bold;
+  a{
+    text-decoration: none;
+    color: inherit;
+  }
 }
 .header__contacts__phone{
   display: flex;
@@ -53,6 +57,10 @@
   &__block{
     display: flex;
     flex-direction: column;
+    a{
+      text-decoration: none;
+      color: inherit;
+    }
   }
 }
 
@@ -73,6 +81,12 @@
   &.scroll{
     opacity:1;
     top:0;
+    &.sticky-hide{
+      opacity:0;
+      &.sticky-hover {
+        opacity:1;
+      }
+    }
   }
   & .logo img{
     width:15rem;
@@ -106,7 +120,7 @@
   &.open+.sticky-header--menu {
     height: auto;
     max-height: 200vh;
-    padding: 2.5rem;
+    padding: 2.5rem 0;
   }
   &.open i{
     background: 0 0;
