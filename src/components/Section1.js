@@ -1,11 +1,109 @@
 import React from 'react';
+import Modal from 'react-modal';
 import {Transition} from 'react-transition-group'
 import InputRange from 'react-input-range';
+import { Textbox } from 'react-inputs-validation';
+import { Base64 } from 'js-base64';
 import Select from 'react-select';
 import base from '../base';
 import calc from './calculator';
+import jQuery from 'jquery';
+import 'blueimp-file-upload';
 
 class Section1 extends React.Component{
+    constructor() {
+        super();
+        this.validateForm = this.validateForm.bind(this);
+    }
+
+    toggleValidating(validate) {
+        this.setState({ validate });
+    }
+
+    validateForm (e){
+        e.preventDefault();
+        this.toggleValidating(true);
+        const {
+            hasNameError,
+            hasPhoneError,
+            hasEmailError,
+            deliveryNameError,
+            deliveryPhoneError
+        } = this.state;
+
+        const validate = !hasNameError&&!hasPhoneError&&!hasEmailError&&!deliveryNameError&&!deliveryPhoneError;
+        if (validate) {
+            alert('All validated!');
+        }
+        if(validate) {
+            let data = {
+                calcProp: this.state.calcProp,
+                delivery:{
+                    ...this.state.delivery
+                },
+                status: 'wait',
+                files: this.state.files,
+                user:this.state.user
+            };
+            if(data.delivery.method == 'np'){
+                data = {
+                    ...data,
+                    delivery:{
+                        ...data.delivery,
+                        ...this.state.np
+                    }
+                }
+            }
+
+            const immediatelyAvailableReference = base.push('orders', {
+                data: data,
+            }).then(newLocation => {
+                if(data.user.payment_method == 'liq-pay') {
+                    const generatedKey = newLocation.key;
+                    const data1 = {
+                        'public_key': process.env.LIQPAY_PUBLIC_KEY,
+                        'action': 'pay',
+                        'amount': data.calcProp.price,
+                        'currency': 'UAH',
+                        'description': 'description text',
+                        'order_id': `${generatedKey}`,
+                        'sandbox': '1',
+                        'version': '3'
+                    };
+
+                    const dataL = JSON.stringify(data1);
+
+                    const crypto = require('crypto');
+                    let str = crypto.createHash('sha1').update(process.env.LIQPAY_PRIVATE_KEY + dataL + process.env.LIQPAY_PRIVATE_KEY);
+
+                    const signature = str.digest('base64');
+                    window.LiqPayCheckoutCallback = function () {
+                        LiqPayCheckout.init({
+                            data: dataL,
+                            embedTo: "#liqpay_checkout",
+                            signature: signature,
+                            mode: "popup" // embed || popup,
+                        }).on("liqpay.callback", function (data) {
+                            console.log(data.status);
+                            console.log(data);
+                            base.update(`orders/${data.order_id}`, {
+                                data: {status: data.status}
+                            });
+                        }).on("liqpay.ready", function (data) {
+                            // ready
+                        }).on("liqpay.close", function (data) {
+                            // close
+                        });
+                    }();
+                }
+            }).catch(err => {
+                //handle error
+            });
+            //available immediately, you don't have to wait for the callback to be called
+        }else{
+            this.handleModal();
+        }
+    }
     state = {
         tooltip:false,
         range:4,
@@ -27,19 +125,14 @@ class Section1 extends React.Component{
             "stamping" : "",
             "stickersonlist" : "",
             "type" : "",
-            "user_comment" : "",
-            "user_contacts" : "",
-            "user_delivery" : "",
-            "user_delivery_district" : "",
-            "user_mail" : "",
-            "user_name" : "",
-            "user_payment_method" : "",
-            "user_phone" : "",
             "varnish" : "",
             "width" : "",
             "margin":4,
             "outline":'',
             "price":0
+        },
+        user:{
+            phone:'+380'
         },
         np:{
             city:'Киев',
@@ -48,7 +141,18 @@ class Section1 extends React.Component{
         options:{
             cities:[],
             warehouses:[],
-        }
+        },
+        delivery:{
+            phone:'+380'
+        },
+        files:[],
+        hasNameError:true,
+        hasPhoneError:true,
+        hasEmailError:true,
+        deliveryNameError:true,
+        deliveryPhoneError:true,
+        modal:false,
+        validate:false
     };
     componentDidMount(){
         this.ref = base.fetch('Stickers/calculator',{
@@ -188,7 +292,8 @@ class Section1 extends React.Component{
              ...state,
              calcProp
          }));
-    }
+    };
+
     updateDeliveryProp =  (key, value) =>{
         const np = {...this.state.np};
         np[key] = value;
@@ -281,6 +386,51 @@ class Section1 extends React.Component{
         await this.updateDeliveryProp(key, id);
     };
 
+    handleFileupload = (e, data)=>{
+        this.setState(state=>({
+            ...state,
+            files:data.result.files
+        }));
+    };
+
+    handleFileSend =(e, data)=>{
+        const files = this.state.files;
+        if(files.length>0){
+            files.map(file=>{
+                fetch(
+                    file.deleteUrl,
+                    {
+                        method: "DELETE"
+                    }
+                );
+            })
+        }
+    };
+
+    handleFiles = (e)=>{
+        jQuery(e.currentTarget).fileupload({
+            url: 'server/php/index.php',
+            singleFileUploads: false,
+            maxFileSize: 5,
+            dataType: 'json',
+            beforeSend:this.handleFileSend,
+            done: this.handleFileupload,
+            error: function(info){
+                console.log(info);
+            }
+        })
+    };
+
+    handleModal = ()=>{
+    this.setState(state=>({
+        ...state,
+        modal:!state.modal
+    }));
+
+
+
+}
+
     render(){
         return (
     <section className="form-row">
@@ -300,14 +450,7 @@ class Section1 extends React.Component{
 
                 <div className="row">
                     <div className="col-xs-12">
-                        <form id="sendorder" onSubmit={(e)=>{
-                            e.preventDefault();
-                            const data = {
-                                ...this.state.calcProp,
-                                ...this.state.np
-                            }
-
-                        }}>
+                        <form id="sendorder" onSubmit={this.validateForm}>
 
                             <div id="part-1" className={`${!this.props.state.print?'hidden-part':''}`}>
                                 <div className="wrapper-container wrapper-container--modal-grey">
@@ -670,9 +813,7 @@ class Section1 extends React.Component{
                                                                         <div className="button button--design">
                                                                             <span>Загрузить макет</span>
                                                                         </div>
-                                                                        <input className="upload23"  id="upload1" type="file" name="files[]" multiple onChange={(e)=>{
-                                                                            console.log(e.currentTarget.files);
-                                                                        }} />
+                                                                        <input className="upload23"  id="upload1" type="file" name="files[]" multiple onClick={this.handleFiles} />
                                                                     </div>
                                                                 </label>
                                                             </div>
@@ -755,7 +896,7 @@ class Section1 extends React.Component{
                                                                             <div className="button button--design">
                                                                                 <span>Загрузить макет</span>
                                                                             </div>
-                                                                            <input className="upload" id="upload2" type="file" name="files[]" multiple/>
+                                                                            <input className="upload" id="upload2" type="file" name="files[]" multiple onClick={this.handleFiles}/>
                                                                         </div>
                                                                     </label>
                                                                 </div>
@@ -784,7 +925,7 @@ class Section1 extends React.Component{
                                                                             <div className="button button--design">
                                                                                 <span>Загрузить пример</span>
                                                                             </div>
-                                                                            <input className="upload"  id="upload3" type="file" name="files[]" multiple/>
+                                                                            <input className="upload"  id="upload3" type="file" name="files[]" multiple onClick={this.handleFiles}/>
                                                                         </div>
                                                                     </label>
                                                                 </div>
@@ -830,17 +971,96 @@ class Section1 extends React.Component{
                                     <div className="modal-block__content modal-block__content--order">
                                         <div className="feedback-form__input-block">
                                             <label className="feedback-form__label" htmlFor="name">Ваше имя:</label>
-                                            <input className="feedback-form__field" type="text" id="name" name="name"/>
+                                            <Textbox
+                                                classNameInput="validation_input"
+                                                classNameWrapper="validation_wrapper"
+                                                classNameContainer="validation_container"
+                                                id="name"
+                                                name="name"
+                                                type="text"
+                                                tabIndex="0"
+                                                validate={this.state.validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                                                validationCallback={(res) =>
+                                                    this.setState({ hasNameError: res, validate:false})}
+                                                value={this.state.user.name}
+                                                onBlur={()=>{}}
+                                                onChange={(name)=> {this.setState(state=>({user: {...state.user,name}}))}
+                                                }
+                                                validationOption={{
+                                                    type:"string",
+                                                    showMsg:true,
+                                                    msgOnError:'Введите Ваше имя',
+                                                    check: true,
+                                                    required: true
+                                                }}
+                                            />
                                         </div>
 
                                         <div className="feedback-form__input-block">
                                             <label className="feedback-form__label" htmlFor="phone">Ваше телефон:</label>
-                                            <input className="feedback-form__field" type="text" id="phone" name="phone"/>
+                                            <Textbox
+                                                classNameInput="validation_input"
+                                                classNameWrapper="validation_wrapper"
+                                                classNameContainer="validation_container"
+                                                id="phone"
+                                                name="phone"
+                                                type="phone"
+                                                tabIndex="0"
+                                                validate={this.state.validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                                                validationCallback={(res) =>
+                                                    this.setState({ hasPhoneError: res, validate:false})}
+                                                value={this.state.user.phone}
+                                                onBlur={()=>{}}
+                                                onChange={phone=> {
+                                                    if (!phone||!phone.match(/\+/)){
+                                                        this.setState(state=>({user: {...state.user,phone:'+380'}}))
+                                                    }
+                                                    else if(!phone.match(/^\+[0-9]*$/)){;
+                                                    }
+                                                    else if (phone.match(/^\+380[0-9]{0,9}$/)) {
+                                                        this.setState(state=>({user: {...state.user,phone}}))
+                                                    }else if(phone.length<4){
+                                                        this.setState(state=>({user: {...state.user,phone:'+380'}}))
+                                                    }
+                                                }
+                                                }
+                                                validationOption={{
+                                                    type:"string",
+                                                    reg:/\+380[0-9]{9}/,
+                                                    regMsg:'Некорректный телефон',
+                                                    showMsg:true,
+                                                    check: true,
+                                                    required: true
+                                                }}
+                                            />
                                         </div>
 
                                         <div className="feedback-form__input-block">
                                             <label className="feedback-form__label" htmlFor="email">Ваше email:</label>
-                                            <input className="feedback-form__field" type="text" id="email" name="email"/>
+                                                <Textbox
+                                                classNameInput="validation_input"
+                                                classNameWrapper="validation_wrapper"
+                                                classNameContainer="validation_container"
+                                                id="email"
+                                                name="email"
+                                                type="text"
+                                                tabIndex="0"
+                                                validate={this.state.validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                                                validationCallback={(res) =>
+                                                    this.setState({ hasEmailError: res, validate:false})}
+                                                value={this.state.user.email}
+                                                onBlur={()=>{}}
+                                                onChange={email=>this.setState(state=>({user:{...state.user,email}}))}
+                                                validationOption={{
+                                                    type:"string",
+                                                    reg:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                                                    regMsg:'Некорректный E-mail',
+                                                    showMsg:true,
+                                                    msgOnError:'Некорректный E-mail',                                                    check: true,
+                                                    required: true
+
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -852,9 +1072,24 @@ class Section1 extends React.Component{
                                     <div className="modal-block__title">Оплата:</div>
                                     <div className="modal-block__content modal-block__content--design">
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-24" className= {`modal-block__content_item__label modal-block__content_item__label--pay ${this.state.calcProp.user_payment_method=='liq-pay'?'active':''}`}>
-                                                <input className="radio-input" type="radio" name="user_payment_method" id="field_profile-24" value="liq-pay" onClick={this.handleChange}/>
-                                                <Transition in={this.state.calcProp.user_payment_method=='liq-pay'} timeout={200}>
+                                            <label htmlFor="field_profile-24" className= {`modal-block__content_item__label modal-block__content_item__label--pay ${this.state.user.payment_method=='liq-pay'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_payment_method" id="field_profile-24" value="liq-pay"
+                                                       onClick={
+                                                           (method)=>
+                                                               this.setState(
+                                                                   (state)=>(
+                                                                   {
+                                                                       ...state,
+                                                                       user: {
+                                                                           ...state.user,
+                                                                           payment_method: 'liq-pay'
+                                                                       }
+                                                                   }
+                                                                   )
+                                                               )
+                                                       }
+                                                />
+                                                <Transition in={this.state.user.payment_method=='liq-pay'} timeout={200}>
                                                     {status=>(
                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                     )}
@@ -863,16 +1098,31 @@ class Section1 extends React.Component{
                                                 <span>Оплата LiqPay (Visa/MasterCard, Приват24, Терминал)</span>
                                             </label>
                                         </div>
+
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-25" className= {`modal-block__content_item__label modal-block__content_item__label--pay ${this.state.calcProp.user_payment_method=='cashless'?'active':''}`}>
-                                                <input className="radio-input" type="radio" name="user_payment_method" id="field_profile-25" value="cashless" onClick={this.handleChange}/>
-                                                <Transition in={this.state.calcProp.user_payment_method=='cashless'} timeout={200}>
+                                            <label  htmlFor="field_profile-25" className= {`modal-block__content_item__label modal-block__content_item__label--pay ${this.state.user.payment_method=='cashless'?'active':''}`}>
+                                                <input tabIndex="0" className="radio-input" type="radio" name="user_payment_method" id="field_profile-25" value="cashless"
+                                                       onClick={
+                                                           (method)=>this.setState(
+                                                               (state)=>(
+                                                               {
+                                                                   ...state,
+                                                                   user:{
+                                                                       ...state.user,
+                                                                       payment_method:'cashless'
+                                                                   }
+                                                               }
+                                                               )
+                                                           )
+                                                       }
+                                                />
+                                                <Transition in={this.state.user.payment_method=='cashless'} timeout={200}>
                                                     {status=>(
                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                     )}
                                                 </Transition>
                                                 <div className="modal-block__content_item__icon modal-block__content_item__icon--design modal-block__content_item__icon--cashless"></div>
-                                                <span>Оплата LiqPay (Visa/MasterCard, Приват24, Терминал)</span>
+                                                <span>Безналичный расчет (для юр.лиц + 5%)</span>
                                             </label>
                                         </div>
                                     </div>
@@ -886,9 +1136,22 @@ class Section1 extends React.Component{
                                     <div className="modal-block__title">Способ доставки:</div>
                                     <div className="modal-block__content">
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-26" className= {`${this.state.calcProp.user_delivery=='np'?'active':''}`}>
-                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-26" value="np" onClick={this.handleChange}/>
-                                                <Transition in={this.state.calcProp.user_delivery=='np'} timeout={200}>
+                                            <label htmlFor="field_profile-26" className= {`${this.state.delivery.method=='np'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-26" value="np"
+                                                       onClick={
+                                                           (method)=>this.setState(
+                                                               (state)=>(
+                                                               {
+                                                                   ...state,
+                                                                   delivery:{
+                                                                       ...state.delivery,
+                                                                       method:'np'
+                                                                   }
+                                                               }
+                                                               )
+                                                           )
+                                                       }/>
+                                                <Transition in={this.state.delivery.method=='np'} timeout={200}>
                                                     {status=>(
                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                     )}
@@ -897,9 +1160,22 @@ class Section1 extends React.Component{
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-27" className= {`modal-block__content_item__label ${this.state.calcProp.user_delivery=='kiev'?'active':''}`}>
-                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-27" value="kiev" onClick={this.handleChange}/>
-                                                <Transition in={this.state.calcProp.user_delivery=='kiev'} timeout={200}>
+                                            <label htmlFor="field_profile-27" className= {`modal-block__content_item__label ${this.state.delivery.method=='kiev'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-27" value="kiev"
+                                                       onClick={
+                                                           (method)=>this.setState(
+                                                               (state)=>(
+                                                               {
+                                                                   ...state,
+                                                                   delivery:{
+                                                                       ...state.delivery,
+                                                                       method:'kiev'
+                                                                   }
+                                                               }
+                                                               )
+                                                           )
+                                                       }/>
+                                                <Transition in={this.state.delivery.method=='kiev'} timeout={200}>
                                                     {status=>(
                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                     )}
@@ -909,9 +1185,22 @@ class Section1 extends React.Component{
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-28" className= {`${this.state.calcProp.user_delivery=='self'?'active':''}`}>
-                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-28" value="self" onClick={this.handleChange}/>
-                                                <Transition in={this.state.calcProp.user_delivery=='self'} timeout={200}>
+                                            <label htmlFor="field_profile-28" className= {`${this.state.delivery.method=='self'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-28" value="self"
+                                                       onClick={
+                                                           (method)=>this.setState(
+                                                               (state)=>(
+                                                                        {
+                                                                            ...state,
+                                                                            delivery:{
+                                                                                ...state.delivery,
+                                                                                method:'self'
+                                                                            }
+                                                                        }
+                                                                    )
+                                                           )
+                                                       }/>
+                                                <Transition in={this.state.delivery.method=='self'} timeout={200}>
                                                     {status=>(
                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                     )}
@@ -927,66 +1216,136 @@ class Section1 extends React.Component{
 
                         <div className="wrapper-container wrapper-container--modal">
                             <div className="container container--modal-info">
-                                <div className="modal-block modal-block--radio">
+                                <div className="modal-block modal-block">
                                     <div className="modal-block__content modal-block__content--deliver">
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="delivery_sirname">ФИО получателя:</label>
-                                            <input className="feedback-form__field feedback-form__field--deliver" type="text" id="delivery_sirname" name="delivery_sirname" value={this.state.calcProp.delivery_sirname}/>
+                                            <label className="feedback-form__label" htmlFor="delivery_name">ФИО получателя:</label>
+                                            <Textbox
+                                                classNameInput="validation_input validation_input--deliver"
+                                                classNameWrapper="validation_wrapper"
+                                                classNameContainer="validation_container"
+                                                id="delivery_name"
+                                                name="delivery_name"
+                                                type="text"
+                                                tabIndex="0"
+                                                validate={this.state.validate}
+                                                validationCallback={(res) =>
+                                                    this.setState({ deliveryNameError: res, validate:false})}
+                                                value={this.state.delivery.name}
+                                                onBlur={()=>{}}
+                                                onChange={(name)=> {this.setState(state=>({delivery: {...state.delivery,name}}))}}
+                                                validationOption={{
+                                                    type:"string",
+                                                    showMsg:true,
+                                                    msgOnError:'Введите ФИО получателя',
+                                                    check: true,
+                                                    required: true
+                                                }}
+                                            />
                                         </div>
 
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="delivery_phone">Ваше телефон:</label>
-                                            <input className="feedback-form__field feedback-form__field--deliver" type="text" id="delivery_phone" name="delivery_phone" value={this.state.calcProp.delivery_phone}/>
+                                            <label className="feedback-form__label" htmlFor="delivery_phone">Ваш телефон:</label>
+                                            <Textbox
+                                                classNameInput="validation_input validation_input--deliver"
+                                                classNameWrapper="validation_wrapper"
+                                                classNameContainer="validation_container"
+                                                id="delivery_phone"
+                                                name="delivery_phone"
+                                                type="phone"
+                                                tabIndex="0"
+                                                validate={this.state.validate}
+                                                validationCallback={(res) =>
+                                                    this.setState({ deliveryPhoneError: res, validate:false})}
+                                                value={this.state.delivery.phone}
+                                                onBlur={()=>{}}
+                                                onChange={phone=> {
+                                                    if (!phone||!phone.match(/\+/)){
+                                                        this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
+                                                    }
+                                                    else if(!phone.match(/^\+[0-9]*$/)){;
+                                                    }
+                                                    else if (phone.match(/^\+380[0-9]{0,9}$/)) {
+                                                        this.setState(state=>({delivery: {...state.delivery,phone}}))
+                                                    }else if(phone.length<4){
+                                                        this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
+                                                    }
+                                                }
+                                                }
+                                                validationOption={{
+                                                    type:"string",
+                                                    reg:/\+380[0-9]{9}/,
+                                                    regMsg:'Некорректный телефон',
+                                                    showMsg:true,
+                                                    msgOnError:'Некорректный телефон',
+                                                    check: true,
+                                                    required: true
+                                                }}
+                                            />
                                         </div>
+                                        {this.state.delivery.method=='np'&&(
+                                            <React.Fragment>
+                                                <div className="feedback-form__input-block">
+                                                    <label className="feedback-form__label" htmlFor="email">Населенный пункт:</label>
+                                                    <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
+                                                        <Select
+                                                            id="city-select"
+                                                            ref={(ref) => { this.select = ref; }}
+                                                            onBlurResetsInput={false}
+                                                            onSelectResetsInput={false}
+                                                            options={this.state.options.cities}
+                                                            clearable={false}
+                                                            simpleValue
+                                                            name="city"
+                                                            value={this.state.np.city}
+                                                            onChange={value=>{this.selectHandleChange(value, 'city')}}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="feedback-form__input-block">
+                                                    <label className="feedback-form__label" htmlFor="email">Отделение Новой почты:</label>
+                                                    <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
+                                                        <Select
+                                                            id="warehouse-select"
+                                                            ref={(ref) => { this.select = ref; }}
+                                                            onBlurResetsInput={false}
+                                                            onSelectResetsInput={false}
+                                                            options={this.state.options.warehouses}
+                                                            clearable={false}
+                                                            simpleValue
+                                                            name="city"
+                                                            value={this.state.np.warehouse}
+                                                            onChange={value=>{this.selectHandleChange(value, 'warehouse')}}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </React.Fragment>
+                                        )}
 
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="email">Населенный пункт:</label>
-                                            <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
-                                                <Select
-                                                    id="city-select"
-                                                    ref={(ref) => { this.select = ref; }}
-                                                    onBlurResetsInput={false}
-                                                    onSelectResetsInput={false}
-                                                    autoFocus
-                                                    options={this.state.options.cities}
-                                                    clearable={false}
-                                                    simpleValue
-                                                    name="city"
-                                                    value={this.state.np.city}
-                                                    onChange={value=>{this.selectHandleChange(value, 'city')}}
-                                                />
-                                                {/*<select name="city" onChange={this.selectHandleChange} value={this.state.np.city} onInput={(e)=>{console.log(e)}}>*/}
-                                                    {/*{*/}
-                                                       {/*this.state.np.cities.map((city,key)=> {*/}
-                                                            {/*return(*/}
-                                                                {/*<option key={key} value={city.name}>{city.name}</option>*/}
-                                                                {/*)*/}
-                                                        {/*})*/}
-                                                    {/*}*/}
-                                                {/*</select>*/}
-                                            </div>
-                                        </div>
-                                        <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="email">Отделение Новой почты:</label>
-                                            <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
-                                                <Select
-                                                    id="warehouse-select"
-                                                    ref={(ref) => { this.select = ref; }}
-                                                    onBlurResetsInput={false}
-                                                    onSelectResetsInput={false}
-                                                    autoFocus
-                                                    options={this.state.options.warehouses}
-                                                    clearable={false}
-                                                    simpleValue
-                                                    name="city"
-                                                    value={this.state.np.warehouse}
-                                                    onChange={value=>{this.selectHandleChange(value, 'warehouse')}}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="delivery_comment">ФИО получателя:</label>
-                                            <input className="feedback-form__field feedback-form__field--deliver" type="text" id="delivery_comment" name="delivery_comment" value={this.state.calcProp.delivery_comment}/>
+                                            <label className="feedback-form__label" htmlFor="delivery_comment">Комментарий:</label>
+                                            <Textbox
+                                                classNameInput="validation_input validation_input--deliver"
+                                                classNameWrapper="validation_wrapper"
+                                                classNameContainer="validation_container"
+                                                id="delivery_comment"
+                                                name="delivery_comment"
+                                                type="text"
+                                                tabIndex="0"
+                                                value={this.state.delivery.comment}
+                                                onBlur={()=>{}}
+                                                onChange={
+                                                    (comment)=> {
+                                                        this.setState(state=>(
+                                                            {delivery: {...state.delivery,comment}})
+                                                        )
+                                                    }
+                                                }
+                                                validationOption={{
+                                                    check: false,
+                                                    required: false
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -1005,8 +1364,15 @@ class Section1 extends React.Component{
                                             })}}><div>Назад</div></a>
                                         </div>
                                         <div className="modal-block__content_item">
-                                            <input className="button button--design button--modal" type="submit" value="Оформить заказ" />
-                                            {/*<a rel="nofollow" className="button button--design button--modal" onClick={()=>{alert('Заказ принят ;)')}}>Оформить заказ</a>*/}
+                                            <div
+                                                className="button button--design button--modal"
+                                                onClick={this.validateForm}
+                                            >
+                                                Оформить заказ
+                                            </div>
+                                            <input type="submit" style={{ display: 'none' }} />
+
+                                            {/*<a rel="nofollow" className="button button--design button--modal" >Оформить заказ</a>*/}
                                         </div>
                                     </div>
                                 </div>
@@ -1019,6 +1385,16 @@ class Section1 extends React.Component{
         </div>
 
 </div>
+        <Modal
+            isOpen={this.state.modal}
+            onRequestClose={this.handleModal}
+            contentLabel="Error"
+            closeTimeoutMS={200}
+            className="modal-error"
+            overlayClassName = "modal-error-overlay"
+        >
+           <div>Заполните необходимые поля</div>
+        </Modal>
 </section>
         )
     }

@@ -1,10 +1,13 @@
 import React from 'react';
+import Scroll from 'react-scroll-to-element';
+
 const stickyMenuOpen =()=>{
     document.getElementsByClassName('sticky-header')[0].classList.add('sticky-hover');
 }
 const stickyMenuClose =()=>{
     document.getElementsByClassName('sticky-header')[0].classList.remove('sticky-hover');
 }
+
 const Header = (props) => (
     <header>
         <div className="wrapper-container">
@@ -13,9 +16,9 @@ const Header = (props) => (
                     <div className="header__logo">
                     </div>
                     <div className="header__menu">
-                        <div className="header__menu__item"><a href="javascript:;" data-scrollto=".prices">Цены</a></div>
-                        <div className="header__menu__item"><a href="javascript:;" data-scrollto=".requairements">Требования к макетам <br className="hidden-xs"/></a></div>
-                        <div className="header__menu__item"><a href="javascript:;" data-scrollto=".delivery__top">Оплата и доставка</a></div>
+                        <Scroll type="class" element="prices"><div className="header__menu__item"><a href="javascript:;">Цены</a></div></Scroll>
+                        <Scroll type="class" element="requairements"><div className="header__menu__item"><a href="javascript:;" >Требования к макетам <br className="hidden-xs"/></a></div></Scroll>
+                        <Scroll type="class" element="delivery__top"><div className="header__menu__item"><a href="javascript:;" >Оплата и доставка</a></div></Scroll>
                     </div>
                     <div className="header__contacts">
                         <div className="header__contacts__phone">
@@ -77,12 +80,14 @@ const Header = (props) => (
                             <a href="javascript:;"  rel="nofollow" className="button" onClick={()=>(props.handleModal({}))}>Посчитать наклейки</a>
                         </div>                </div>
                     <div className="col-md-3 col-sm-2">
-                        <div className="menu-icon"><i></i></div>
+                        <div className="menu-icon" onClick={(e)=>{
+                            e.currentTarget.classList.toggle('open');
+                        }}><i></i></div>
                         <div className={`header__menu sticky-header--menu ${props.stickyMenu?'open':''}`}>
-                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".prices">Цены</a></div>
-                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".requairements">Требования к макетам</a></div>
-                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".design">Дизайн</a></div>
-                            <div className="header__menu__item"><a href="javascript:;" data-scrollto=".delivery__top">Оплата и доставка</a></div>
+                            <Scroll type="class" element="prices"><div className="header__menu__item"><a href="javascript:;">Цены</a></div></Scroll>
+                            <Scroll type="class" element="requairements"><div className="header__menu__item"><a href="javascript:;">Требования к макетам</a></div></Scroll>
+                            <Scroll type="class" element="design"><div className="header__menu__item"><a href="javascript:;">Дизайн</a></div></Scroll>
+                            <Scroll type="class" element="delivery__top"><div className="header__menu__item"><a href="javascript:;">Оплата и доставка</a></div></Scroll>
                         </div>
                     </div>
                 </div>

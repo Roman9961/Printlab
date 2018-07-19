@@ -24,14 +24,6 @@ class FastCalculator extends React.Component{
             "stamping" : "",
             "stickersonlist" : "",
             "type" : "",
-            "user_comment" : "",
-            "user_contacts" : "",
-            "user_delivery" : "",
-            "user_delivery_district" : "",
-            "user_mail" : "",
-            "user_name" : "",
-            "user_payment_method" : "",
-            "user_phone" : "",
             "varnish" : "",
             "margin":4,
             "price":0,
@@ -79,6 +71,7 @@ class FastCalculator extends React.Component{
                                 ...state.calcProp,
                                 price
                             }
+
                         }));
             }
 

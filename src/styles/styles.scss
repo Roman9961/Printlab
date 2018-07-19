@@ -1,11 +1,13 @@
 @import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //@import '../css/styles.css';
+@import '../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css';
 @import url('https://fonts.googleapis.com/css?family=Montserrat:500,700|PT+Serif:400,700');
 //@import "../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
 //@import '../../node_modules/react-select/dist/react-select.css';
 @import './base/settings';
 @import './base/base';
 @import './components/modal';
+@import './components/modal_error';
 @import './components/content-container';
 @import './components/arrow';
 @import './components/header';
@@ -25,3 +27,5 @@
 @import './components/question';
 @import './components/feedback';
 @import './components/footer';
+@import './components/validationl-input';
+@import './components/slider-carousel';

@@ -3,9 +3,14 @@
 @import './modal-design';
 @import './modal-input-range';
 
-.ReactModal__Overlay{
-  background-color: white !important;
-  overflow: scroll !important;
+.modal-calculator-overlay{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: white;
+  overflow: scroll;
 }
 .wrapper-container.wrapper-container--modal{
   padding: $xl-size 0;
@@ -183,6 +188,7 @@
     transition: all .3s ease-in-out;
     font-weight: bold;
   }
+
 }
 .modal-block__content_item label>*{
   margin: 2rem;
@@ -261,7 +267,7 @@
     }
   }
   input {
-    display: none;
+    display: block;
   }
   .modal-checkbox__title {
     font-family: 'Montserrat';
@@ -355,10 +361,10 @@
   background: url("/images/base-white.svg") no-repeat;
 }
 .modal-block__content_item__icon--liq-pay{
-  background: url("/images/payment_liq-pay.svg") no-repeat;
+  background: url("/images/payment_liq-pay.svg") no-repeat center;
 }
 .modal-block__content_item__icon--cashless{
-  background: url("/images/payment_cashless.svg") no-repeat;
+  background: url("/images/payment_cashless.svg") no-repeat center;
   height: 5rem !important;
 }
 .modal-block__content_item__icon{
@@ -371,3 +377,4 @@
       background-size: contain;
   }
 }
+

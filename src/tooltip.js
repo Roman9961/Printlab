@@ -19,6 +19,7 @@ export const updateTooltip = (selector)=> {
     if(data.basis&&data.sizes&&data.amount) {
         tooltip1.append(parameters);
     }
+
         element.tooltip({
 
                 position: {

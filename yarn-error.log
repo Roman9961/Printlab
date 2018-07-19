@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn
+  /usr/local/bin/node /usr/local/bin/yarn add
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
@@ -15,13 +15,9 @@ Platform:
 
 npm manifest: 
   {
-    "name": "cotd",
+    "name": "printlab",
     "version": "0.0.3",
     "private": true,
-    "engines": {
-      "node": ">=10.0.0",
-      "npm": ">=6.0.0"
-    },
     "devDependencies": {
       "concurrently": "3.5.1",
       "cross-env": "5.0.5",
@@ -30,7 +26,6 @@ npm manifest:
       "webpack-dev-server": "2.5.1"
     },
     "dependencies": {
-      "node": "10.0.0",
       "autoprefixer-stylus": "0.14.0",
       "babel-cli": "6.24.1",
       "babel-core": "6.25.0",
@@ -61,9 +56,14 @@ npm manifest:
       "react-dom": "^16.3.0-alpha.1",
       "react-firebaseui": "^1.2.3",
       "react-google-recaptcha": "^0.12.0",
+      "react-input-range": "^1.3.0",
+      "react-inputs-validation": "^1.0.1",
       "react-key-index": "^0.1.1",
+      "react-modal": "^3.4.5",
       "react-router-dom": "^4.2.2",
-      "react-transition-group": "^2.2.1",
+      "react-scroll-to-element": "^0.2.0",
+      "react-select": "^1.2.1",
+      "react-transition-group": "^2.3.1",
       "sass-loader": "6.0.6",
       "serve": "^6.5.0",
       "style-loader": "0.18.2",
@@ -553,6 +553,10 @@ Lockfile:
   atob@^2.1.1:
     version "2.1.1"
     resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
+  
+  autobind-decorator@^1.3.4:
+    version "1.4.3"
+    resolved "https://registry.yarnpkg.com/autobind-decorator/-/autobind-decorator-1.4.3.tgz#4c96ffa77b10622ede24f110f5dbbf56691417d1"
   
   autoprefixer-stylus@0.14.0:
     version "0.14.0"
@@ -1748,6 +1752,10 @@ Lockfile:
     version "4.1.0"
     resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
   
+  can-use-dom@^0.1.0:
+    version "0.1.0"
+    resolved "https://registry.yarnpkg.com/can-use-dom/-/can-use-dom-0.1.0.tgz#22cc4a34a0abc43950f42c6411024a3f6366b45a"
+  
   caniuse-api@^1.5.2:
     version "1.6.1"
     resolved "https://registry.yarnpkg.com/caniuse-api/-/caniuse-api-1.6.1.tgz#b534e7c734c4f81ec5fbe8aca2ad24354b962c6c"
@@ -1898,6 +1906,10 @@ Lockfile:
       define-property "^0.2.5"
       isobject "^3.0.0"
       static-extend "^0.1.1"
+  
+  classnames@^2.1.1, classnames@^2.2.4:
+    version "2.2.6"
+    resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   
   clean-css@4.1.x:
     version "4.1.11"
@@ -2778,6 +2790,10 @@ Lockfile:
       object-assign "^4.0.1"
       tapable "^0.2.7"
   
+  enquire.js@^2.1.1:
+    version "2.1.6"
+    resolved "https://registry.yarnpkg.com/enquire.js/-/enquire.js-2.1.6.tgz#3e8780c9b8b835084c3f60e166dbc3c2a3c89814"
+  
   entities@~1.1.1:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
@@ -3116,6 +3132,10 @@ Lockfile:
       p-finally "^1.0.0"
       signal-exit "^3.0.0"
       strip-eof "^1.0.0"
+  
+  exenv@^1.2.0:
+    version "1.2.2"
+    resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
   
   expand-brackets@^0.1.4:
     version "0.1.5"
@@ -4917,6 +4937,12 @@ Lockfile:
     version "5.0.1"
     resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   
+  json2mq@^0.2.0:
+    version "0.2.0"
+    resolved "https://registry.yarnpkg.com/json2mq/-/json2mq-0.2.0.tgz#b637bd3ba9eabe122c83e9720483aeb10d2c904a"
+    dependencies:
+      string-convert "^0.2.0"
+  
   json3@^3.3.2:
     version "3.3.2"
     resolved "https://registry.yarnpkg.com/json3/-/json3-3.3.2.tgz#3c0434743df93e2f5c42aee7b19bcb483575f4e1"
@@ -5734,6 +5760,10 @@ Lockfile:
     version "4.1.1"
     resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   
+  object-assign@^2.0.0:
+    version "2.1.1"
+    resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-2.1.1.tgz#43c36e5d569ff8e4816c4efa8be02d26967c18aa"
+  
   object-copy@^0.1.0:
     version "0.1.0"
     resolved "https://registry.yarnpkg.com/object-copy/-/object-copy-0.1.0.tgz#7e7d858b781bd7c991a41ba975ed3812754e998c"
@@ -6458,7 +6488,7 @@ Lockfile:
     dependencies:
       asap "~2.0.3"
   
-  prop-types@>=15.5.0:
+  prop-types@>=15.5.0, prop-types@^15.5.8:
     version "15.6.2"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
     dependencies:
@@ -6673,11 +6703,51 @@ Lockfile:
       prop-types ">=15.5.0"
       react-async-script ">=0.9.1"
   
+  react-input-autosize@^2.1.2:
+    version "2.2.1"
+    resolved "https://registry.yarnpkg.com/react-input-autosize/-/react-input-autosize-2.2.1.tgz#ec428fa15b1592994fb5f9aa15bb1eb6baf420f8"
+    dependencies:
+      prop-types "^15.5.8"
+  
+  react-input-range@^1.3.0:
+    version "1.3.0"
+    resolved "https://registry.yarnpkg.com/react-input-range/-/react-input-range-1.3.0.tgz#f96d001631ab817417f1e26d8f9f9684b4827f59"
+    dependencies:
+      autobind-decorator "^1.3.4"
+      prop-types "^15.5.8"
+  
+  react-inputs-validation@^1.0.1:
+    version "1.0.1"
+    resolved "https://registry.yarnpkg.com/react-inputs-validation/-/react-inputs-validation-1.0.1.tgz#a46623678ea87eb1b5b7cf91a28c55bb3c52d720"
+    dependencies:
+      validator "^8.0.0"
+  
   react-key-index@^0.1.1:
     version "0.1.1"
     resolved "https://registry.yarnpkg.com/react-key-index/-/react-key-index-0.1.1.tgz#8319e4f0961ae44a8eb0a4f76e4c210ef6d39cda"
     dependencies:
       hashids "^1.1.1"
+  
+  react-lifecycles-compat@^3.0.0:
+    version "3.0.4"
+    resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+  
+  react-modal@^3.4.5:
+    version "3.4.5"
+    resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.4.5.tgz#75a7eefb8f4c8247278d5ce1c41249d7785d9f69"
+    dependencies:
+      exenv "^1.2.0"
+      prop-types "^15.5.10"
+      react-lifecycles-compat "^3.0.0"
+      warning "^3.0.0"
+  
+  react-responsive-mixin@^0.3.5:
+    version "0.3.5"
+    resolved "https://registry.yarnpkg.com/react-responsive-mixin/-/react-responsive-mixin-0.3.5.tgz#29fe2327dfb4d63ce351391bca29f739fe65b766"
+    dependencies:
+      can-use-dom "^0.1.0"
+      enquire.js "^2.1.1"
+      json2mq "^0.2.0"
   
   react-router-dom@^4.2.2:
     version "4.3.1"
@@ -6746,7 +6816,33 @@ Lockfile:
     optionalDependencies:
       fsevents "^1.1.3"
   
-  react-transition-group@^2.2.1:
+  react-scroll-to-element@^0.2.0:
+    version "0.2.0"
+    resolved "https://registry.yarnpkg.com/react-scroll-to-element/-/react-scroll-to-element-0.2.0.tgz#33f3f85211d4e2a0881c9deccf42e57799c4e000"
+    dependencies:
+      prop-types "^15.6.0"
+      react "^16.1.1"
+      smoothscroll-polyfill "^0.4.0"
+  
+  react-select@^1.2.1:
+    version "1.2.1"
+    resolved "https://registry.yarnpkg.com/react-select/-/react-select-1.2.1.tgz#a2fe58a569eb14dcaa6543816260b97e538120d1"
+    dependencies:
+      classnames "^2.2.4"
+      prop-types "^15.5.8"
+      react-input-autosize "^2.1.2"
+  
+  react-slick-vertical@^0.11.1:
+    version "0.11.1"
+    resolved "https://registry.yarnpkg.com/react-slick-vertical/-/react-slick-vertical-0.11.1.tgz#0f36c694d7ed11ea7ddf8e846ee75c2b2dbe6158"
+    dependencies:
+      classnames "^2.1.1"
+      json2mq "^0.2.0"
+      object-assign "^2.0.0"
+      react-responsive-mixin "^0.3.5"
+      slick-carousel "^1.5.5"
+  
+  react-transition-group@^2.3.1:
     version "2.3.1"
     resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.3.1.tgz#31d611b33e143a5e0f2d94c348e026a0f3b474b6"
     dependencies:
@@ -6764,7 +6860,7 @@ Lockfile:
       object-assign "^4.1.0"
       prop-types "^15.5.10"
   
-  react@^16.3.0-alpha.1:
+  react@^16.1.1, react@^16.3.0-alpha.1:
     version "16.4.1"
     resolved "https://registry.yarnpkg.com/react/-/react-16.4.1.tgz#de51ba5764b5dbcd1f9079037b862bd26b82fe32"
     dependencies:
@@ -7410,6 +7506,14 @@ Lockfile:
     dependencies:
       is-fullwidth-code-point "^2.0.0"
   
+  slick-carousel@^1.5.5:
+    version "1.8.1"
+    resolved "https://registry.yarnpkg.com/slick-carousel/-/slick-carousel-1.8.1.tgz#a4bfb29014887bb66ce528b90bd0cda262cc8f8d"
+  
+  smoothscroll-polyfill@^0.4.0:
+    version "0.4.3"
+    resolved "https://registry.yarnpkg.com/smoothscroll-polyfill/-/smoothscroll-polyfill-0.4.3.tgz#94e5f2d604efcceb53f23ff0380d7ea7280d4bff"
+  
   snapdragon-node@^2.0.1:
     version "2.1.1"
     resolved "https://registry.yarnpkg.com/snapdragon-node/-/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"
@@ -7647,6 +7751,10 @@ Lockfile:
   strict-uri-encode@^1.0.0:
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
+  
+  string-convert@^0.2.0:
+    version "0.2.1"
+    resolved "https://registry.yarnpkg.com/string-convert/-/string-convert-0.2.1.tgz#6982cc3049fbb4cd85f8b24568b9d9bf39eeff97"
   
   string-length@^1.0.1:
     version "1.0.1"
@@ -8258,6 +8366,10 @@ Lockfile:
     version "10.3.0"
     resolved "https://registry.yarnpkg.com/validator/-/validator-10.3.0.tgz#157a8c0981858cff381f59aabcdb8f83b57317cc"
   
+  validator@^8.0.0:
+    version "8.2.0"
+    resolved "https://registry.yarnpkg.com/validator/-/validator-8.2.0.tgz#3c1237290e37092355344fef78c231249dab77b9"
+  
   value-equal@^0.4.0:
     version "0.4.0"
     resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-0.4.0.tgz#c5bdd2f54ee093c04839d71ce2e4758a6890abc7"
@@ -8747,14 +8859,14 @@ Lockfile:
       toposort "^2.0.2"
 
 Trace: 
-  Error: Found incompatible module
+  Error: Missing list of packages to add to your project.
       at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
-      at Object.checkOne (/usr/local/lib/node_modules/yarn/lib/cli.js:62444:11)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:22773:75
+      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:40587:13)
       at Generator.next (<anonymous>)
       at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
       at /usr/local/lib/node_modules/yarn/lib/cli.js:116:14
       at new Promise (<anonymous>)
       at new F (/usr/local/lib/node_modules/yarn/lib/cli.js:23451:28)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:95:12
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:22777:27
+      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:95:12)
+      at Object.run (/usr/local/lib/node_modules/yarn/lib/cli.js:40599:19)
+      at run (/usr/local/lib/node_modules/yarn/lib/cli.js:89113:20)

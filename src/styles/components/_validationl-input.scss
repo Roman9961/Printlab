@@ -1,0 +1,13 @@
+.validation_input{
+    border: none !important;
+    font-size: 2rem !important;
+    padding: 0 !important;
+    border-bottom: solid 0.2rem #ABC6D8 !important;
+    width: 50rem !important;
+    transition: all .3s ease-in-out;
+    background-color: transparent !important;
+    &--deliver{
+        width: 60rem !important;
+    }
+}
+

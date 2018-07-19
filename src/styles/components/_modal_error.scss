@@ -1,0 +1,19 @@
+.modal-error-overlay{
+ display: flex;
+  justify-content: center;
+  align-items:center;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+.modal-error{
+  position: absolute;
+  height:200px;
+  width:200px;
+  background-color: white;
+  border-radius:5px;
+  box-shadow: 0 3px 3px rgba(0,0,0,.1);
+}

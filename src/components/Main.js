@@ -55,18 +55,18 @@ class Main extends React.Component{
         el.classList.remove('sticky-hide');
         if(window.scrollY>100){
             stickyMenu =true;
-
         }
+
         this.setState(state=>({
             ...state,
             stickyMenu
         }));
-        clearTimeout(timeout);
-        timeout = setTimeout(()=>{
-            el.classList.add('sticky-hide');
-        },delay);
 
-
+        // clearTimeout(timeout);
+        //
+        // timeout = setTimeout(()=>{
+        //     el.classList.add('sticky-hide');
+        // },delay);
     }
 
     render(){

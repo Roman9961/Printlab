@@ -1,0 +1,24 @@
+.carousel.carousel-slider{
+    position: absolute;
+    z-index:2;
+}
+
+.slider{
+    transform: translate3d(0px, 0%, 0px) !important;
+    .slide.selected {
+        transform:translate3d(0px, -40px, 0px);
+        position: absolute !important;
+        opacity: 1;
+        transition: all .8s ease-in-out;
+    }
+    .slide {
+        position: absolute !important;
+        opacity: 0;
+        transition: all .8s ease-in-out;
+        background: none;
+      img{
+        width: inherit;
+      }
+    }
+}
+

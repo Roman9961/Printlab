@@ -40,12 +40,13 @@ module.exports = (env) => {
                                 sourceMap: true,
                             }
                         },
+                        'resolve-url-loader',
                         {
                             loader: 'sass-loader',
                             options:{
                                 sourceMap: true,
                             }
-                        }
+                        },
 
                     ]
                 }
@@ -79,7 +80,9 @@ module.exports = (env) => {
                 'process.env.FIREBASE_DATABASE_URL': JSON.stringify(process.env.FIREBASE_DATABASE_URL),
                 'process.env.FIREBASE_PROGECT_ID': JSON.stringify(process.env.FIREBASE_PROGECT_ID),
                 'process.env.FIREBASE_STORAGE_BUCKET': JSON.stringify(process.env.FIREBASE_STORAGE_BUCKET),
-                'process.env.FIREBASE_MESSAGING_SENDER_ID': JSON.stringify(process.env.FIREBASE_MESSAGING_SENDER_ID)
+                'process.env.FIREBASE_MESSAGING_SENDER_ID': JSON.stringify(process.env.FIREBASE_MESSAGING_SENDER_ID),
+                'process.env.LIQPAY_PUBLIC_KEY': JSON.stringify(process.env.LIQPAY_PUBLIC_KEY),
+                'process.env.LIQPAY_PRIVATE_KEY': JSON.stringify(process.env.LIQPAY_PRIVATE_KEY)
             })
         ],
         devtool: isProduction? 'source-map' : 'inline-source-map',

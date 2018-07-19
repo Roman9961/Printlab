@@ -33,6 +33,7 @@ class ModalCalculator extends React.Component{
                 contentLabel="Error"
                 closeTimeoutMS={200}
                 className="modal-calculator"
+                overlayClassName = "modal-calculator-overlay"
             >
                <ModalHeader handleModal={this.props.handleModal} bookmarks = {this.state} handleBookmark={handleBookmark}/>
                 {/*<ModalBlockInfo/>*/}
