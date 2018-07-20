@@ -70,11 +70,19 @@ class Main extends React.Component{
     }
 
     render(){
-        const handleModal = (prop={})=>{
+        const handleModal = (prop={},isOpen=false)=>{
+            if(!this.state.modal){
+                document.getElementsByClassName('bod')[0].setAttribute("style", "position:fixed");
+            }else{
+                document.getElementsByClassName('bod')[0].removeAttribute('style');
+            }
+            if(isOpen){
+                document.getElementsByClassName('bod')[0].removeAttribute('style');
+            }
             this.setState(()=>({
-                modal:!this.state.modal,
+                modal: isOpen?false:!this.state.modal,
                 calcProp:prop
-            }))
+            }));
         }
             return Object.keys(this.state.stickers).length>0?(
                 <React.Fragment>

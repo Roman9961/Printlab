@@ -2,13 +2,14 @@ import React from 'react';
 import Modal from 'react-modal';
 import {Transition} from 'react-transition-group'
 import InputRange from 'react-input-range';
+import moment from 'moment';
 import { Textbox } from 'react-inputs-validation';
-import { Base64 } from 'js-base64';
 import Select from 'react-select';
 import base from '../base';
 import calc from './calculator';
 import jQuery from 'jquery';
 import 'blueimp-file-upload';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 class Section1 extends React.Component{
     constructor() {
@@ -21,88 +22,96 @@ class Section1 extends React.Component{
     }
 
     validateForm (e){
-        e.preventDefault();
-        this.toggleValidating(true);
-        const {
-            hasNameError,
-            hasPhoneError,
-            hasEmailError,
-            deliveryNameError,
-            deliveryPhoneError
-        } = this.state;
-
-        const validate = !hasNameError&&!hasPhoneError&&!hasEmailError&&!deliveryNameError&&!deliveryPhoneError;
-        if (validate) {
-            alert('All validated!');
-        }
-        if(validate) {
-            let data = {
-                calcProp: this.state.calcProp,
-                delivery:{
-                    ...this.state.delivery
-                },
-                status: 'wait',
-                files: this.state.files,
-                user:this.state.user
-            };
-            if(data.delivery.method == 'np'){
-                data = {
-                    ...data,
-                    delivery:{
-                        ...data.delivery,
-                        ...this.state.np
+            if(e) {
+                e.preventDefault();
+            }
+            this.toggleValidating(true);
+            const {
+                hasNameError,
+                hasPhoneError,
+                hasEmailError,
+                deliveryNameError,
+                deliveryPhoneError
+            } = this.state;
+            const handleModal =this.props.handleModal;
+            const validate = !hasNameError && !hasPhoneError && !hasEmailError && !deliveryNameError && !deliveryPhoneError;
+            if (validate && this.state.recaptcha) {
+                alert('All validated!');
+            }
+            if (validate && this.state.recaptcha) {
+                let data = {
+                    calcProp: this.state.calcProp,
+                    delivery: {
+                        ...this.state.delivery
+                    },
+                    status: 'wait',
+                    files: this.state.files,
+                    dateCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
+                    user: this.state.user
+                };
+                if (data.delivery.method == 'np') {
+                    data = {
+                        ...data,
+                        delivery: {
+                            ...data.delivery,
+                            ...this.state.np
+                        }
                     }
                 }
-            }
+                console.log(this.state.captcha);
+                const immediatelyAvailableReference = base.push('orders', {
+                    data: data,
+                }).then(newLocation => {
+                    if (data.user.payment_method == 'liq-pay') {
+                        const generatedKey = newLocation.key;
+                        const data1 = {
+                            'public_key': process.env.LIQPAY_PUBLIC_KEY,
+                            'action': 'pay',
+                            'amount': 1,
+                            'currency': 'UAH',
+                            'description': 'description text',
+                            'order_id': `${generatedKey}`,
+                            'server_url': 'http://printlab.amdev.pro/server/firebase/index.php',
+                            'sandbox': '1',
+                            'version': '3'
+                        };
 
-            const immediatelyAvailableReference = base.push('orders', {
-                data: data,
-            }).then(newLocation => {
-                if(data.user.payment_method == 'liq-pay') {
-                    const generatedKey = newLocation.key;
-                    const data1 = {
-                        'public_key': process.env.LIQPAY_PUBLIC_KEY,
-                        'action': 'pay',
-                        'amount': data.calcProp.price,
-                        'currency': 'UAH',
-                        'description': 'description text',
-                        'order_id': `${generatedKey}`,
-                        'sandbox': '1',
-                        'version': '3'
-                    };
+                        const dataL = JSON.stringify(data1);
 
-                    const dataL = JSON.stringify(data1);
+                        const crypto = require('crypto');
+                        let str = crypto.createHash('sha1').update(process.env.LIQPAY_PRIVATE_KEY + dataL + process.env.LIQPAY_PRIVATE_KEY);
 
-                    const crypto = require('crypto');
-                    let str = crypto.createHash('sha1').update(process.env.LIQPAY_PRIVATE_KEY + dataL + process.env.LIQPAY_PRIVATE_KEY);
+                        const signature = str.digest('base64');
+                        window.LiqPayCheckoutCallback = function () {
+                            LiqPayCheckout.init({
+                                data: dataL,
+                                embedTo: "#liqpay_checkout",
+                                signature: signature,
+                                mode: "popup" // embed || popup,
+                            }).on("liqpay.callback", function (data) {
+                                console.log(data.status);
+                                console.log(data);
+                                // base.update(`orders/${data.order_id}`, {
+                                //     data: {status: data.status, dateUpdate:moment().format("YYYY-MM-DD HH:mm:ss")}
+                                // });
 
-                    const signature = str.digest('base64');
-                    window.LiqPayCheckoutCallback = function () {
-                        LiqPayCheckout.init({
-                            data: dataL,
-                            embedTo: "#liqpay_checkout",
-                            signature: signature,
-                            mode: "popup" // embed || popup,
-                        }).on("liqpay.callback", function (data) {
-                            console.log(data.status);
-                            console.log(data);
-                            base.update(`orders/${data.order_id}`, {
-                                data: {status: data.status}
+                            }).on("liqpay.ready", function (data) {
+                                // ready
+                            }).on("liqpay.close", function (data) {
+                                console.log(data);
+                                handleModal({}, true);
                             });
-                        }).on("liqpay.ready", function (data) {
-                            // ready
-                        }).on("liqpay.close", function (data) {
-                            // close
-                        });
-                    }();
-                }
-            }).catch(err => {
-                //handle error
-            });
-            //available immediately, you don't have to wait for the callback to be called
-        }else{
-            this.handleModal();
-        }
+                        }();
+                    }
+                }).catch(err => {
+                    //handle error
+                });
+                //available immediately, you don't have to wait for the callback to be called
+            } else if(!validate) {
+                this.handleModal();
+            }else{
+                this.state.captcha.execute();
+            }
     }
     state = {
         tooltip:false,
@@ -152,7 +161,8 @@ class Section1 extends React.Component{
         deliveryNameError:true,
         deliveryPhoneError:true,
         modal:false,
-        validate:false
+        validate:false,
+        captcha:''
     };
     componentDidMount(){
         this.ref = base.fetch('Stickers/calculator',{
@@ -1378,6 +1388,20 @@ class Section1 extends React.Component{
                                 </div>
                             </div>
                         </div>
+                        <ReCAPTCHA
+                            ref={(el) => { this.state.captcha = el; }}
+                            sitekey="6LdDDWAUAAAAAOetFWeJr_MYOKAJGxcEXk6QoqxO"
+                            size="invisible"
+                            onChange={
+                                (response) => {
+                                    this.setState( state=>({
+                                        ...state,
+                                        recaptcha:response
+                                    }));
+                                    this.validateForm()
+                                }
+                            }
+                        />
 
                     </div>
                 </form>
