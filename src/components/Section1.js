@@ -67,7 +67,7 @@ class Section1 extends React.Component{
                         const data1 = {
                             'public_key': process.env.LIQPAY_PUBLIC_KEY,
                             'action': 'pay',
-                            'amount': 1,
+                            'amount': this.state.calcProp.price,
                             'currency': 'UAH',
                             'description': 'description text',
                             'order_id': `${generatedKey}`,
