@@ -16,6 +16,7 @@ class SectionDesign extends React.Component{
                                    infiniteLoop
                                    transitionTime={1000}
                                    centerMode
+                                   autoPlay={true}
                                    showIndicators={false}
                                    showThumbs={false}
                                    showArrows={false}
