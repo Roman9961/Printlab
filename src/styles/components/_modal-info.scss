@@ -1,8 +1,10 @@
 .container--modal-info, .container--modal-input{
+  @media (max-width: 767px){
+    flex-direction: column;
+  }
   display: flex;
   font-size: 3.2rem;
   justify-content: space-between;
-  flex-direction: column;
   padding: 0 2rem;
   font-family: "PT Serif";
   &:before,

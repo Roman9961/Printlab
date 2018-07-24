@@ -9,7 +9,22 @@
   bottom: 0px;
   background-color: rgba(0,0,0,.6);
 }
-
+.modal-load-overlay{
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(255,255,255,.6);
+}
+.modal-load{
+  &:focus{
+    outline: 0;
+  }
+}
 .modal-error{
   position: absolute;
   height:200px;

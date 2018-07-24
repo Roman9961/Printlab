@@ -25,7 +25,7 @@ class Section1 extends React.Component{
             if(e) {
                 e.preventDefault();
             }
-            this.toggleValidating(true);
+
             const {
                 hasNameError,
                 hasPhoneError,
@@ -33,13 +33,19 @@ class Section1 extends React.Component{
                 deliveryNameError,
                 deliveryPhoneError
             } = this.state;
-            const handleModal =this.props.handleModal;
-
+            const handleModal =this.handleModal;
+            const setOrder = order=>{
+                this.setState(state=>({
+                    ...state,
+                    order
+                }));
+            }
             const price = !!this.state.calcProp.price;
 
             const validate = !hasNameError && !hasPhoneError && !hasEmailError && !deliveryNameError && !deliveryPhoneError && price;
 
             if (validate && this.state.recaptcha) {
+
                 let data = {
                     calcProp: this.state.calcProp,
                     delivery: {
@@ -59,11 +65,13 @@ class Section1 extends React.Component{
                         }
                     }
                 }
-                console.log(this.state.captcha);
+                this.toggleValidating(true);
+                this.handleModal();
                 const immediatelyAvailableReference = base.push('orders', {
                     data: data,
                 }).then(newLocation => {
                     if (data.user.payment_method == 'liq-pay') {
+                        this.handleModal();
                         const generatedKey = newLocation.key;
                         const data1 = {
                             'public_key': process.env.LIQPAY_PUBLIC_KEY,
@@ -99,23 +107,34 @@ class Section1 extends React.Component{
                             }).on("liqpay.ready", function (data) {
                                 // ready
                             }).on("liqpay.close", function (data) {
-                                console.log(data);
-                                handleModal({}, true);
+                                setOrder(true);
+                                handleModal();
                             });
                         }();
+                    }else{
+                        handleModal();
+                        setOrder(true);
+                        handleModal();
                     }
+
                 }).catch(err => {
                     //handle error
                 });
                 //available immediately, you don't have to wait for the callback to be called
             } else if(!validate) {
+                this.setState(state=>({
+                    ...state,
+                    errorMessage:'Заполните необходимые поля'
+                }));
+                console.log(price);
                 if(!price){
                     this.setState(state=>({
                         ...state,
                         errorMessage:'Вы ничего не выбрали'
                     }));
                 }
-                this.handleModal();
+                this.toggleValidating(false);
+                handleModal();
             }else{
                 this.state.captcha.execute();
             }
@@ -171,7 +190,8 @@ class Section1 extends React.Component{
         modal:false,
         errorMessage:'Заполните необходимые поля',
         validate:false,
-        captcha:''
+        captcha:'',
+        order: false
     };
     componentDidMount(){
         this.ref = base.fetch('Stickers/calculator',{
@@ -1006,7 +1026,7 @@ class Section1 extends React.Component{
                                                 tabIndex="0"
                                                 validate={this.state.validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
                                                 validationCallback={(res) =>
-                                                    this.setState({ hasNameError: res, validate:false})}
+                                                    this.setState({ hasNameError: res, validate:!res})}
                                                 value={this.state.user.name}
                                                 onBlur={()=>{}}
                                                 onChange={(name)=> {this.setState(state=>({user: {...state.user,name}}))}
@@ -1033,7 +1053,7 @@ class Section1 extends React.Component{
                                                 tabIndex="0"
                                                 validate={this.state.validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
                                                 validationCallback={(res) =>
-                                                    this.setState({ hasPhoneError: res, validate:false})}
+                                                    this.setState({ hasPhoneError: res, validate:!res})}
                                                 value={this.state.user.phone}
                                                 onBlur={()=>{}}
                                                 onChange={phone=> {
@@ -1072,7 +1092,7 @@ class Section1 extends React.Component{
                                                 tabIndex="0"
                                                 validate={this.state.validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
                                                 validationCallback={(res) =>
-                                                    this.setState({ hasEmailError: res, validate:false})}
+                                                    this.setState({ hasEmailError: res, validate:!res})}
                                                 value={this.state.user.email}
                                                 onBlur={()=>{}}
                                                 onChange={email=>this.setState(state=>({user:{...state.user,email}}))}
@@ -1267,7 +1287,7 @@ class Section1 extends React.Component{
                                                 tabIndex="0"
                                                 validate={this.state.validate}
                                                 validationCallback={(res) =>
-                                                    this.setState({ deliveryNameError: res, validate:false})}
+                                                    this.setState({ deliveryNameError: res, validate:!res})}
                                                 value={this.state.delivery.name}
                                                 onBlur={()=>{}}
                                                 onChange={(name)=> {this.setState(state=>({delivery: {...state.delivery,name}}))}}
@@ -1293,7 +1313,7 @@ class Section1 extends React.Component{
                                                 tabIndex="0"
                                                 validate={this.state.validate}
                                                 validationCallback={(res) =>
-                                                    this.setState({ deliveryPhoneError: res, validate:false})}
+                                                    this.setState({ deliveryPhoneError: res, validate:!res})}
                                                 value={this.state.delivery.phone}
                                                 onBlur={()=>{}}
                                                 onChange={phone=> {
@@ -1437,19 +1457,56 @@ class Section1 extends React.Component{
 
 </div>
         <Transition in={this.state.modal} timeout={300}>
-            {status=>(
-                <Modal
-                    isOpen={this.state.modal}
-                    onRequestClose={this.handleModal}
-                    contentLabel="Error"
-                    closeTimeoutMS={300}
-                    className={`modal-error ${status}`}
-                    overlayClassName = "modal-error-overlay"
-                >
-                    <div className="modal-error__close" onClick={this.handleModal}></div>
-                   <div className="modal-error__message">{this.state.errorMessage}</div>
-                </Modal>
-                )}
+            {status=>{
+                    if(!this.state.validate) {
+                        return (
+                            <Modal
+                                isOpen={this.state.modal}
+                                onRequestClose={this.handleModal}
+                                contentLabel="Error"
+                                closeTimeoutMS={300}
+                                className={`modal-error ${status}`}
+                                overlayClassName="modal-error-overlay"
+                            >
+                                <div className="modal-error__close" onClick={this.handleModal}></div>
+                                <div className="modal-error__message">{this.state.errorMessage}</div>
+                            </Modal>
+                        )
+                    }else if(this.state.validate&&!this.state.order){
+                        return(
+                            <Modal
+                                isOpen={this.state.modal}
+                                contentLabel="Error"
+                                closeTimeoutMS={300}
+                                className={`modal-load ${status}`}
+                                overlayClassName="modal-load-overlay"
+                            >
+                                <img src="images/spinner.gif" alt="spinner"/>
+                            </Modal>
+                        )
+                    }else if(this.state.order){
+                        return (
+                            <Modal
+                                isOpen={this.state.modal}
+                                onRequestClose={()=>{
+                                    this.handleModal();
+                                    this.props.handleModal({},true)
+                                }}
+                                contentLabel="Error"
+                                closeTimeoutMS={300}
+                                className={`modal-error ${status}`}
+                                overlayClassName="modal-error-overlay"
+                            >
+                                <div className="modal-error__close" onClick={()=>{
+                                    this.handleModal();
+                                    this.props.handleModal({},true)
+                                }}></div>
+                                <div className="modal-error__message">Заказ принят</div>
+                            </Modal>
+                        )
+                    }
+                }
+            }
         </Transition>
 </section>
         )
