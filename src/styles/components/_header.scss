@@ -2,8 +2,14 @@
   display: flex;
   justify-content: space-between;
   align-items:center;
+  .menu-icon{
+    display: none;
+  }
   @media (max-width: 767px){
     position: relative;
+    .menu-icon{
+      display: block;
+    }
   }
 }
 .header__logo {
