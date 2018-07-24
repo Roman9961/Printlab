@@ -9,12 +9,21 @@
 .section-block__container--design{
   margin-top: 28rem;
   z-index:0;
+  @media (max-width: 767px){
+    width: 100%;
+    margin-top: 20rem;
+  }
 }
 .section-block--design{
   box-shadow: none;
   background-color: #F5F7F9;
   padding: 6rem;
   z-index:4;
+  @media (max-width: 767px){
+    max-width: 320px;
+    margin:0;
+    padding: 2rem 2rem 5rem;
+  }
 }
 .section-block__title--design{
   font-size: 6rem;
@@ -51,5 +60,7 @@
   z-index: 1;
   left:inherit;
   right: 0;
-  margin: 8rem -4rem 0 0;
+  margin: -1rem -2rem 0 0;
+  height: 54vw;
+  width: auto;
 }

@@ -1,16 +1,30 @@
 .quality-container{
   align-items: flex-start;
+  @media (max-width: 767px){
+    .section-block__container{
+      flex-direction: column-reverse;
+    }
+  }
+
 }
 
 .quality-block{
   max-width: 100%;
  box-shadow: none;
+  @media (max-width: 767px){
+    padding:1.2rem;
+    margin:1.2rem;
+  }
 }
 .quality-block__header{
   flex-direction: column;
 }
 .quality__title{
   padding-left: 15px;
+  @media (max-width: 767px){
+    padding-bottom:2rem;
+    margin-top: 0;
+  }
 }
 .quality__subtitle{
   padding-left: 15px;

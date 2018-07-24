@@ -22,10 +22,17 @@ section{
 .section-block__container{
   display: flex;
   align-items: center;
+  @media (max-width: 767px){
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 .section__title{
   font-size: 6rem;
   font-family: "PT Serif";
+  @media (max-width: 767px){
+    text-align: center;
+  }
 }
 .section__subtitle{
   font-size: 2.2rem;

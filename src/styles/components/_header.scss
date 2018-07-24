@@ -2,6 +2,9 @@
   display: flex;
   justify-content: space-between;
   align-items:center;
+  @media (max-width: 767px){
+    position: relative;
+  }
 }
 .header__logo {
   width:15rem;
@@ -19,14 +22,24 @@
   font-size: 9rem;
   font-family: "PT Serif";
   margin-top: 10rem;
+  @media (max-width: 767px){
+    font-size: 6rem;
+    text-align: center;
+  }
 }
 .header__subtitle{
   font-family: "PT Serif";
+  @media (max-width: 767px){
+    font-size: 2.8rem;
+  }
 }
 .header__menu{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media (max-width: 767px){
+    display: none;
+  }
 }
 
 .header__menu div > *{
@@ -43,6 +56,9 @@
   a{
     text-decoration: none;
     color: inherit;
+  }
+  @media (max-width: 767px){
+    display: none;
   }
 }
 .header__contacts__phone{
@@ -91,6 +107,9 @@
   & .logo img{
     width:15rem;
   }
+  @media (max-width: 767px){
+    display: none;
+  }
 }
 .sticky-header--menu{
   width: 300%;
@@ -117,6 +136,9 @@
   right: 10px;
   cursor: pointer;
 
+  &+.menu{
+    display: none;
+  }
   &.open+.sticky-header--menu {
     height: auto;
     max-height: 200vh;
@@ -133,6 +155,30 @@
   &.open i:after {
     margin-top: 0;
     transform: rotate(45deg)
+  }
+  @media (max-width: 767px){
+    height: 42px;
+
+    &.open+.menu {
+      transition: all .3s ease-in-out;
+      transform:translate3d(0px, 95px, 0px);
+    }
+    &+.menu{
+      display: block;
+      height: auto;
+      max-height: 200vh;
+      background: #f9fbfc;
+      width: 100%;
+      z-index:1;
+      position: absolute;
+      transition: all .3s ease-in-out;
+      transform:translate3d(0px, -170px, 0px);
+      .header__menu__item{
+        border-bottom: 1px solid black;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+      }
+    }
   }
 }
 

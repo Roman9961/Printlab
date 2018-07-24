@@ -32,6 +32,16 @@ const Header = (props) => (
                         </div>
                         <a href="mailto:zakaz@okprint.com.ua">zakaz@okprint.com.ua</a>
                     </div>
+                    <div className="menu-icon" onClick={(e)=>{
+                        e.currentTarget.classList.toggle('open');
+                    }}><i></i>
+                    </div>
+                    <div className="menu">
+                        <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
+                        <Scroll type="class" element="requairements"><div className="header__menu__item">Требования к макетам</div></Scroll>
+                        <Scroll type="class" element="design"><div className="header__menu__item">Дизайн</div></Scroll>
+                        <Scroll type="class" element="delivery__top"><div className="header__menu__item">Оплата и доставка</div></Scroll>
+                    </div>
                 </div>
             </div>
             <div className="side-img side-img--right">

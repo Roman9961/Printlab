@@ -1,8 +1,18 @@
 .section-container--layout-props{
   align-items: flex-start;
+  @media (max-width: 767px){
+    .section__title{
+      font-size: 5rem;
+    }
+  }
 }
 .section-block__container--layout-props{
   align-items: flex-start;
+  @media (max-width: 767px){
+    align-items: center;
+    width: 100%;
+    text-align: center;
+  }
 }
 .section-block--layout-props {
   margin: $l-size 0 0 0;
@@ -16,6 +26,9 @@
     min-width: 29rem;
     padding-left: 0;
   }
+  @media (max-width: 767px){
+    padding:0 0;
+  }
 }
 
 .delivery__top{
@@ -28,6 +41,11 @@
 .layout-props__side-content{
   display: flex;
   flex-direction:column;
+  @media (max-width: 767px){
+    .section-block__item{
+      padding-left: 9rem;
+    }
+  }
 }
 .layout-props__side-content>*{
   margin-bottom: $m-size;
@@ -47,8 +65,16 @@
   border-radius: $s-size;
   padding: $l-size $l-size $l-size 12rem;
   margin: $l-size;
+  @media (max-width: 767px){
+    padding: $l-size;
+    flex-direction: column;
+  }
 }
 .layout-props__block__icon{
+  @media (max-width: 767px){
+    position: relative;
+    margin:0;
+  }
   position: absolute;
   margin:-5rem -16rem;
   img{
@@ -56,6 +82,9 @@
   }
 }
 .layout-props__block__icon--cmyk{
+  @media (max-width: 767px){
+    margin:0;
+  }
   margin:-4rem -15rem;
   img{
     width:11rem;

@@ -17,6 +17,7 @@
   &:hover, &:visited, &:focus {
     color: white;
     text-decoration: none;
+    outline:0;
   }
 }
 .button--design{
@@ -55,6 +56,9 @@
 
 .button--modal{
   width: 430px;
+  @media (max-width: 767px){
+    width: 100%;
+  }
 }
 
 .button--pdf{

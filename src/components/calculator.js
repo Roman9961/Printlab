@@ -71,6 +71,8 @@ const calc = function (state) {
 
             }
             if(isNaN(totalpricehrncom) || totalpricehrncom === Number.POSITIVE_INFINITY || totalpricehrncom === Number.NEGATIVE_INFINITY) totalpricehrncom = 0;
+                if(calcProp.delivery && totalpricehrncom>0)
+                    totalpricehrncom += 50;
                 return totalpricehrncom.toFixed(2);
         }
 

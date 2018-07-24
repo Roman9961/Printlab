@@ -1,5 +1,10 @@
 .postprint__top{
   padding: 50px 0;
+  @media (max-width: 767px){
+    .section__title{
+      font-size: 5rem;
+    }
+  }
   .postprint__bg{
     height:100%;
   }

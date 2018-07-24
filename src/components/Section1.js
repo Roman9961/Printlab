@@ -34,10 +34,11 @@ class Section1 extends React.Component{
                 deliveryPhoneError
             } = this.state;
             const handleModal =this.props.handleModal;
-            const validate = !hasNameError && !hasPhoneError && !hasEmailError && !deliveryNameError && !deliveryPhoneError;
-            if (validate && this.state.recaptcha) {
-                alert('All validated!');
-            }
+
+            const price = !!this.state.calcProp.price;
+
+            const validate = !hasNameError && !hasPhoneError && !hasEmailError && !deliveryNameError && !deliveryPhoneError && !price;
+
             if (validate && this.state.recaptcha) {
                 let data = {
                     calcProp: this.state.calcProp,
@@ -71,7 +72,7 @@ class Section1 extends React.Component{
                             'currency': 'UAH',
                             'description': 'description text',
                             'order_id': `${generatedKey}`,
-                            'server_url': 'http://printlab.amdev.pro/server/firebase/index.php',
+                            'server_url': 'http://printlab.amdev.pro/server/firebase',
                             'sandbox': '1',
                             'version': '3'
                         };
@@ -108,6 +109,12 @@ class Section1 extends React.Component{
                 });
                 //available immediately, you don't have to wait for the callback to be called
             } else if(!validate) {
+                if(!price){
+                    this.setState(state=>({
+                        ...state,
+                        errorMessage:'Вы ничего не выбрали'
+                    }));
+                }
                 this.handleModal();
             }else{
                 this.state.captcha.execute();
@@ -138,6 +145,7 @@ class Section1 extends React.Component{
             "width" : "",
             "margin":4,
             "outline":'',
+            "delivery":false,
             "price":0
         },
         user:{
@@ -161,6 +169,7 @@ class Section1 extends React.Component{
         deliveryNameError:true,
         deliveryPhoneError:true,
         modal:false,
+        errorMessage:'Заполните необходимые поля',
         validate:false,
         captcha:''
     };
@@ -452,7 +461,7 @@ class Section1 extends React.Component{
         </div>
             <div className="wrapper-container wrapper-container--modal">
                 <div className="container container--modal-info">
-                    <div>Укажите, на что хотите печатать наклейки:</div>
+                    <div className="modal-info__title">Укажите, на что хотите печатать наклейки:</div>
                     <div><input className="modal-info__field" type="text" placeholder="на банки"/></div>
                 </div>
             </div>
@@ -804,13 +813,15 @@ class Section1 extends React.Component{
                                             <div className="modal-block__content modal-block__content--design">
                                                 <div className="modal-block__content_item">
                                                     <label htmlFor="field_profile-21" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.design=='design-all'?'active':''}`}>
-                                                        <input className="radio-input" type="radio" name="design" id="field_profile-21" value="design-all" onClick={this.handleChange}/>
-                                                        <Transition in={this.state.calcProp.design=='design-all'} timeout={200}>
-                                                            {status=>(
-                                                                <div className={`modal__check-icon--form ${status}`}></div>
-                                                            )}
-                                                        </Transition>
-                                                        <span>У меня есть макет и контур порезки</span>
+                                                        <div className="file-upload-header">
+                                                            <input className="radio-input" type="radio" name="design" id="field_profile-21" value="design-all" onClick={this.handleChange}/>
+                                                            <Transition in={this.state.calcProp.design=='design-all'} timeout={200}>
+                                                                {status=>(
+                                                                    <div className={`modal__check-icon--form ${status}`}></div>
+                                                                )}
+                                                            </Transition>
+                                                            <span>У меня есть макет и контур порезки</span>
+                                                        </div>
                                                         <Transition in={this.state.calcProp.design=='design-all'} timeout={200}>
                                                             {status=>(
                                                             <div className={`file-upload-container ${status}`}>
@@ -834,13 +845,15 @@ class Section1 extends React.Component{
 
                                                 <div className="modal-block__content_item">
                                                     <label htmlFor="field_profile-22" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.design=='design-outline'?'active':''}`}>
-                                                        <input className="radio-input" type="radio" name="design" id="field_profile-22" value="design-outline" onClick={this.handleChange}/>
-                                                        <Transition in={this.state.calcProp.design=='design-outline'} timeout={200}>
-                                                            {status=>(
-                                                                <div className={`modal__check-icon--form ${status}`}></div>
-                                                            )}
-                                                        </Transition>
-                                                        <span>У меня есть макет, но мне нужен контур порезки</span>
+                                                        <div className="file-upload-header">
+                                                            <input className="radio-input" type="radio" name="design" id="field_profile-22" value="design-outline" onClick={this.handleChange}/>
+                                                            <Transition in={this.state.calcProp.design=='design-outline'} timeout={200}>
+                                                                {status=>(
+                                                                    <div className={`modal__check-icon--form ${status}`}></div>
+                                                                )}
+                                                            </Transition>
+                                                            <span>У меня есть макет, но мне нужен контур порезки</span>
+                                                        </div>
                                                         <Transition in={this.state.calcProp.design=='design-outline'} timeout={200}>
                                                             {status=>(
                                                                 <div className={`file-upload-container ${status}`}>
@@ -917,13 +930,15 @@ class Section1 extends React.Component{
 
                                                 <div className="modal-block__content_item">
                                                     <label htmlFor="field_profile-23" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.design=='design-none'?'active':''}`}>
-                                                        <input className="radio-input" type="radio" name="design" id="field_profile-23" value="design-none" onClick={this.handleChange}/>
-                                                        <Transition in={this.state.calcProp.design=='design-none'} timeout={200}>
-                                                            {status=>(
-                                                                <div className={`modal__check-icon--form ${status}`}></div>
-                                                            )}
-                                                        </Transition>
-                                                        <span>У меня нет макета, мне нужен дизайн</span>
+                                                        <div className="file-upload-header">
+                                                            <input className="radio-input" type="radio" name="design" id="field_profile-23" value="design-none" onClick={this.handleChange}/>
+                                                            <Transition in={this.state.calcProp.design=='design-none'} timeout={200}>
+                                                                {status=>(
+                                                                    <div className={`modal__check-icon--form ${status}`}></div>
+                                                                )}
+                                                            </Transition>
+                                                            <span>У меня нет макета, мне нужен дизайн</span>
+                                                        </div>
                                                         <Transition in={this.state.calcProp.design=='design-none'} timeout={200}>
                                                             {status=>(
                                                                 <div className={`file-upload-container ${status}`}>
@@ -1153,6 +1168,10 @@ class Section1 extends React.Component{
                                                                (state)=>(
                                                                {
                                                                    ...state,
+                                                                   calcProp:{
+                                                                       ...state.calcProp,
+                                                                       delivery:false
+                                                                   },
                                                                    delivery:{
                                                                        ...state.delivery,
                                                                        method:'np'
@@ -1177,6 +1196,10 @@ class Section1 extends React.Component{
                                                                (state)=>(
                                                                {
                                                                    ...state,
+                                                                   calcProp:{
+                                                                       ...state.calcProp,
+                                                                       delivery:true
+                                                                   },
                                                                    delivery:{
                                                                        ...state.delivery,
                                                                        method:'kiev'
@@ -1202,6 +1225,10 @@ class Section1 extends React.Component{
                                                                (state)=>(
                                                                         {
                                                                             ...state,
+                                                                            calcProp:{
+                                                                                ...state.calcProp,
+                                                                                delivery:false
+                                                                            },
                                                                             delivery:{
                                                                                 ...state.delivery,
                                                                                 method:'self'
@@ -1409,16 +1436,21 @@ class Section1 extends React.Component{
         </div>
 
 </div>
-        <Modal
-            isOpen={this.state.modal}
-            onRequestClose={this.handleModal}
-            contentLabel="Error"
-            closeTimeoutMS={200}
-            className="modal-error"
-            overlayClassName = "modal-error-overlay"
-        >
-           <div>Заполните необходимые поля</div>
-        </Modal>
+        <Transition in={this.state.modal} timeout={300}>
+            {status=>(
+                <Modal
+                    isOpen={this.state.modal}
+                    onRequestClose={this.handleModal}
+                    contentLabel="Error"
+                    closeTimeoutMS={300}
+                    className={`modal-error ${status}`}
+                    overlayClassName = "modal-error-overlay"
+                >
+                    <div className="modal-error__close" onClick={this.handleModal}></div>
+                   <div className="modal-error__message">{this.state.errorMessage}</div>
+                </Modal>
+                )}
+        </Transition>
 </section>
         )
     }

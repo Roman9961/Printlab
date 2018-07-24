@@ -10,6 +10,10 @@
   padding: $l-size;
   margin: $l-size;
   max-width: 450px;
+  @media (max-width: 767px){
+    max-width: 320px;
+    padding:2.5rem;
+  }
 }
 .express-calculator__title{
   color: #3A3834;
@@ -28,6 +32,9 @@
 
 .express-calculator__item >*{
   margin: 0.5rem $l-size;
+  @media (max-width: 767px){
+    margin: 0.5rem 0;
+  }
 }
 .express-calculator__item--header{
   margin-bottom: 1.8rem;
@@ -46,6 +53,9 @@
 .express-calculator__item--icon{
   position: absolute;
   margin: 0 -9.5rem;
+  @media (max-width: 767px){
+    margin: 0 -6.5rem;
+  }
 }
 .info{
   cursor:pointer;

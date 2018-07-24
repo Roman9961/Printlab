@@ -14,6 +14,12 @@ button{
 button:disabled{
     cursor: default;
 }
+.bod{
+    @media (max-width: 767px){
+        position: relative;
+        overflow: hidden;
+    }
+}
 
 .is-active{
     font-weight: bold;

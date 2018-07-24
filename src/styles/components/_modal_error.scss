@@ -7,6 +7,7 @@
   left: 0px;
   right: 0px;
   bottom: 0px;
+  background-color: rgba(0,0,0,.6);
 }
 
 .modal-error{
@@ -16,4 +17,49 @@
   background-color: white;
   border-radius:5px;
   box-shadow: 0 3px 3px rgba(0,0,0,.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  &:focus{
+    outline: 0;
+  }
+  &.entering,&.exiting{
+    transform: scale(0.5);
+    opacity:0;
+    transition: all .3s ease-in-out;
+  }
+  &.exited{
+    transform: scale(0.5);
+    transition: all .3s ease-in-out;
+  }
+  &.entered{
+    transition: all .3s ease-in-out;
+  }
+}
+.modal-error__close{
+  position: absolute;
+  height: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  top: 12px;
+  right: 6px;
+  &:before, &:after{
+    content: "";
+    position: absolute;
+    background-color: black;
+    border-radius: 0.2rem;
+    width: 8%;
+    display: block;
+    transform: rotate(45deg);
+    height: 3px;
+  }
+  &:before{
+    transform: rotate(135deg);
+  }
+}
+.modal-error__message{
+  text-align: center;
 }

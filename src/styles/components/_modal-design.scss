@@ -5,6 +5,9 @@
 .modal-block__content.modal-block__content--design{
   justify-content: center;
   font-family: Montserrat, Helvetica, Arial, sans-serif;
+  @media (max-width: 767px){
+    width: 100%;
+  }
 }
 .modal-block__content_item .modal-block__content_item__label--design{
   width:67rem;
@@ -22,6 +25,17 @@
   margin-top: 4rem;
   &--outline{
     margin-top: 0;
+  }
+}
+.file-upload-header{
+  display: flex;
+  .modal__check-icon--form{
+    &.entering,&.exiting{
+      @media (max-width: 767px){
+        margin-left: 1.5em;
+        margin-right:1rem;
+      }
+    }
   }
 }
 .file-upload-container{

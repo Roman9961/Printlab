@@ -2,12 +2,19 @@
   box-shadow: none;
   max-width: 100%;
 }
-
+.section-block__container--feedback{
+  @media (max-width: 767px){
+    width: 100%;
+  }
+}
 .feedback-form{
   display: flex;
   flex-direction: column;
 }
 .feedback-form__label{
+  @media (max-width: 767px){
+    margin-right: 0;
+  }
   font-family: 'PT Serif';
   font-size: 2rem;
   font-weight:500;
@@ -45,6 +52,14 @@
   }
 }
 .feedback-form__input-block{
+  @media (max-width: 767px){
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    width: 100%;
+  }
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;

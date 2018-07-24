@@ -1,4 +1,12 @@
+.validation_wrapper{
+    @media (max-width: 767px){
+        width: 100% !important;;
+    }
+}
 .validation_input{
+    @media (max-width: 767px){
+        width: 100% !important;
+    }
     border: none !important;
     font-size: 2rem !important;
     padding: 0 !important;
@@ -8,6 +16,9 @@
     background-color: transparent !important;
     &--deliver{
         width: 60rem !important;
+        @media (max-width: 767px){
+            width: 100% !important;
+        }
     }
 }
 

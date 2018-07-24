@@ -14,7 +14,16 @@
 }
 .wrapper-container.wrapper-container--modal{
   padding: $xl-size 0;
+  @media (max-width: 767px){
+    padding: $l-size 0;
+  }
 }
+.wrapper-container.wrapper-container--modal-header{
+  @media (max-width: 767px){
+    padding: 24px 10px;
+  }
+}
+
 .wrapper-container.wrapper-container--modal-grey{
   background: linear-gradient(270deg, #FBFCFD 0%, #F4F7F9 100%);
   padding: $xl-size 0;
@@ -29,6 +38,7 @@
     font-family: 'Montserrat';
     font-weight: normal;
     margin: 0 0 0 2rem;
+    word-break: break-word;
   }
 }
 .modal-block__title{
@@ -46,6 +56,10 @@
   display: none;
 }
 .price-wrapper{
+  @media (max-width: 767px){
+    bottom:5rem;
+    padding: 1rem 1rem 0.8rem;
+  }
   position: fixed;
   display: flex;
   color: white;
@@ -69,18 +83,28 @@
   flex-wrap: wrap;
 }
 .modal-block__content--order{
+  @media (max-width: 767px){
+    padding: 0;
+  }
   justify-content: flex-end;
   padding: 0 200px;
+
 }
 .modal-block__content--deliver{
   justify-content: flex-end;
   padding: 0 100px;
+  @media (max-width: 767px){
+    padding:0;
+  }
 }
 .modal-block__content--button{
   justify-content:flex-end;
 }
 .modal-block__content--input{
   margin-right: $l-size;
+  @media (max-width: 767px){
+    flex-wrap: nowrap;
+  }
 }
 .modal-block__content--input--range{
   align-items: center;
@@ -96,6 +120,9 @@
 
 .modal-block__content_item{
   margin-bottom: 2rem;
+  @media (max-width: 767px){
+    width: 100%;
+  }
 }
 .modal-block__content_item--input{
   display: flex;
@@ -106,6 +133,9 @@
     font-size: $m-size;
     color: $light-blue;
     font-weight:bold;
+  }
+  @media (max-width: 767px){
+    width: initial;
   }
 }
 
@@ -122,6 +152,9 @@
   display: none;
 }
 .number-input{
+  @media (max-width: 767px){
+    width:35vw;
+  }
   width:19rem;
   border: 4px solid $light-blue;
   border-radius: 1rem;
@@ -188,12 +221,28 @@
     transition: all .3s ease-in-out;
     font-weight: bold;
   }
+  @media (max-width: 767px){
+    .modal-block__content_item__icon{
+      padding: 1.5rem;
+      height: initial;
+      &.modal-block__content_item__icon--liq-pay{
+        padding: 2.5rem;
+      }
+    }
+  }
 
 }
 .modal-block__content_item label>*{
+  @media (max-width: 767px){
+    margin-left: 0;
+    margin-right: 15px;
+  }
   margin: 2rem;
 }
 .modal-block__content_item__checkbox-container{
+  @media (max-width: 767px){
+    width: 100%;
+  }
   width: 530px;
   display:flex;
   flex-direction:column;
@@ -206,6 +255,9 @@
   display: flex;
   align-items: center;
   .modal-block__content_item__checkbox{
+    @media (max-width: 767px){
+      padding:1.4rem;
+    }
     transition: all .3s ease-in-out;
     width: 2.8rem;
     height:2.8rem;
@@ -254,6 +306,9 @@
     .modal-checkbox{
       &:before,
       &:after {
+        @media (max-width: 767px){
+          left: 0;
+        }
         visibility: visible;
         background-color: $orange;
         left: 10px;
@@ -281,6 +336,9 @@
   margin: $l-size 0;
   width: 80%;
   border: 2px solid #ABC6D8;
+  @media (max-width: 767px){
+    width: 100%;
+  }
 }
 
 .modal-block__content_item__checkbox-container__checkboxes{
@@ -299,6 +357,11 @@
 }
 
 .modal__check-icon, .modal__check-icon--form{
+  @media (max-width: 767px){
+    width: 14px;
+    height: 14px;
+    padding:9px;
+  }
   width: 29px;
   height: 29px;
   border-radius: 50%;
@@ -307,6 +370,9 @@
   padding:10px;
   transition: all .3s ease-in-out;
   &.entering,&.exiting{
+    @media (max-width: 767px){
+      margin-right:3.1rem;
+    }
     width:0px;
     height: 0px;
     padding:0px;
@@ -320,17 +386,22 @@
   }
   &.exited{
     transition: all .2s ease-in-out;
+    @media (max-width: 767px){
+      padding:8px;
+    }
   }
   &.entered, &.active{
     background: url("/images/checkmark.svg") no-repeat center center;
-    width:29px;
-    height: 29px;
     transition: all .2s ease-in-out;
     border: transparent;
   }
 }
 .modal__check-icon--form{
   &.entering,&.exiting{
+    @media (max-width: 767px){
+      margin-left: 1.5em;
+      margin-right:0.6rem;
+    }
     margin-left: 2.1em;
     margin-right:3.2rem;
   }

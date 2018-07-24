@@ -3,6 +3,12 @@
 }
 
 .section-block--question{
+  @media (max-width: 767px){
+    max-width: 320px;
+    .section-block__title{
+      font-size: 2.4rem;
+    }
+  }
   display: flex;
   flex-direction: column;
   max-width: 73rem;

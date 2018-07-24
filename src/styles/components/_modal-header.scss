@@ -1,6 +1,9 @@
 .wrapper-container--modal-header{
   background-color: #333333;
   margin-bottom: 10rem;
+  @media (max-width: 767px){
+    margin-bottom:0;
+  }
 }
 .modal-header__close{
   position: relative;
@@ -33,6 +36,9 @@
   justify-content: space-between;
   padding: 2rem;
   width:100%;
+  @media (max-width: 767px){
+    padding: 2rem 0;
+  }
 }
 .modal-header__bookmarks__item{
   align-items: center;
@@ -46,21 +52,33 @@
   border-radius: 0.5rem;
   padding: $l-size;
   width:35rem;
+  @media (max-width: 767px){
+    padding: 1.5rem 0.5rem;
+    margin-right: 0.7rem;
+    margin-top: 0.5rem;
+  }
 
 }
 
 .modal-header__bookmarks__item__title{
+  @media (max-width: 767px){
+    margin: 0 0 0 2.6rem;
+    font-size: 13px;
+  }
   position: absolute;
   margin: 0 45px;
   &.entering,&.exiting{
     margin: 5px 45px;
     transform: scale(1, 0);
     transition: all .2s ease-in-out;
+    @media (max-width: 767px){
+      margin: 0 15px;
+    }
   }
   &.exited{
     transition: all .2s ease-in-out;
   }
-  &.entered{
+  &.entered, &.active{
     font-weight: bold;
     color: $orange;
     transition: all .2s ease-in-out;
