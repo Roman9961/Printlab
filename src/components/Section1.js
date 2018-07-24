@@ -37,7 +37,7 @@ class Section1 extends React.Component{
 
             const price = !!this.state.calcProp.price;
 
-            const validate = !hasNameError && !hasPhoneError && !hasEmailError && !deliveryNameError && !deliveryPhoneError && !price;
+            const validate = !hasNameError && !hasPhoneError && !hasEmailError && !deliveryNameError && !deliveryPhoneError && price;
 
             if (validate && this.state.recaptcha) {
                 let data = {
