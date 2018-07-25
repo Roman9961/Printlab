@@ -16,7 +16,7 @@ class SectionQuestions extends React.Component{
            return (
                <section className="section-top postprint__top">
                    <div className="container">
-                       <div className="section-container">
+                       <div className="section-container section-container--question">
                            <h1 className="section__title">Часто задаваемые вопросы</h1>
                            <div className="section-block__container section-block__container__question">
                                <div className={`section-block section-block--question ${this.state.open===1?'open':'closed'}`}>

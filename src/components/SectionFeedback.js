@@ -20,7 +20,7 @@ const SectionFeedback = ({
     return (
         <section>
             <div className="container">
-                <div className="section-container">
+                <div className="section-container section-container--feedback">
                     <h1 className="section__title">Обратная связь</h1>
                     <div className="section-block__container section-block__container--feedback">
                         <div className="section-block section-block--feedback">

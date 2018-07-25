@@ -1,3 +1,8 @@
+.section-container--feedback{
+  @media (max-width: 767px){
+    padding: 0 1.2rem;
+  }
+}
 .section-block--feedback{
   box-shadow: none;
   max-width: 100%;
