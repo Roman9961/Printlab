@@ -11,7 +11,7 @@
   margin: $l-size;
   max-width: 450px;
   @media (max-width: 767px){
-    max-width: 320px;
+    max-width: 90vw;
     padding:2.5rem;
   }
 }
@@ -73,6 +73,7 @@
 }
 .custom-sizes-container{
   margin-left: 0;
+  display: flex;
 }
 .custom-sizes-description{
   margin-right:0;

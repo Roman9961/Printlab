@@ -2,7 +2,7 @@
   padding: 50px 0;
   @media (max-width: 767px){
     .section__title{
-      font-size: 5rem;
+      font-size: 4rem;
     }
   }
   .postprint__bg{
@@ -10,7 +10,10 @@
   }
 }
 .section-block__title__postprint{
-  align-items: flex-start;
+  align-items: center;
+  @media (max-width: 767px){
+    font-size: 2.4rem;
+  }
 }
 .section-block__header__postprint{
   align-items: center;
@@ -21,4 +24,8 @@
 }
 .section-block__postprint{
   min-width: 340px;
+  @media (max-width: 767px){
+    width: 90vw;
+    min-width: initial;
+  }
 }

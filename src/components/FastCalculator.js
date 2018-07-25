@@ -1,7 +1,7 @@
 import React from 'react';
 import base from '../base';
 import calc from './calculator';
-import {updateTooltip} from '../tooltip';
+import ReactTooltip from 'react-tooltip';
 
 class FastCalculator extends React.Component{
     state = {
@@ -60,8 +60,6 @@ class FastCalculator extends React.Component{
     }
 
     componentDidUpdate(){
-        updateTooltip(this.props.form);
-
             const price = calc(this.state);
 
             if(price!=this.state.calcProp.price){
@@ -151,15 +149,45 @@ class FastCalculator extends React.Component{
                 </div>
                 <div className="express-calculator__item">
                     <div className="express-calculator__title express-calculator__item--header">{this.state.title[this.props.form]}</div>
-                    <div
-                        className={`info info--${this.props.form}`}
-                        data-description="sfglskflksd"
-                        data-sizes={`${this.state.calcProp.width}мм x ${this.state.calcProp.height}мм`}
-                        data-basis={`${this.state.calcProp.basis}`}
-                        data-amount={`${this.state.calcProp.quantity} шт.`}
-                        title=""
-                    >
-                    </div>
+                    <a className={`info info--${this.props.form}`} data-for={this.props.form} data-tip />
+                    <ReactTooltip className="tooltip_custom" id={this.props.form} type="light" >
+                        <div className="tooltip__container">
+                            <div className="tooltip__description">
+                                {this.props.form=='rectangle'&&(
+                                    <React.Fragment>
+                                    <div>Прямоугольная наклейка, размером более 40 х 40 мм. Эти наклейки режутся на гильотине, отдаются в пачке, каждая наклейка будет отдельно. Основа может быть бумажной или синтетической (пленка)</div>
+                                    <div>Из преимуществ стоит отметить низкую стоимость и оперативную скорость изготовления, как правило это 24 часа с момента подачи макета</div>
+                                    </React.Fragment>
+                                )
+                                }
+                                {this.props.form=='simple'&&(
+                                    <React.Fragment>
+                                        Наклейки могут иметь простую геометрическую форму: круг, овал, треугольник, ромб. Этот тип наклеек мы режем на плоттере. По вашему желанию мы можем отдать наклейки на листе SRA3 (32х45 см) или высечь каждую наклейку отдельно.
+                                    </React.Fragment>
+                                )
+                                }
+                                {this.props.form=='hard'&&(
+                                    <React.Fragment>
+                                        Наклейки могут иметь сложную форму: буквы, стрелочки, сердечки, звездочки. Этот тип наклеек мы тоже режем на плоттере. По вашему желанию мы можем отдать наклейки на листе SRA3 (32х45 см) или высечь каждую наклейку отдельно (необходимо предварительно проконсультироваться с менеджером).
+                                    </React.Fragment>
+                                )
+                                }
+                                {this.props.form=='roll'&&(
+                                    <React.Fragment>
+                                        <div>Наклейки печатаются на цифровой рулонной машине, ширина полотна 330 мм.</div>
+                                        <div>Из преимуществ стоит отметить:</div>
+                                        <div>Более 3500 сертифицированных материалов для печати</div>
+                                        <div>Полноцветная печать, использование белил и пантонов</div>
+                                        <div>Тиснение, выборочная лакировка, ламинация, высечка без изготовления штампа</div>
+                                        <div>Отсутствие приладок, как это требуется во флексопечати</div>
+                                        <div>Возможность использования в этикетировочных машинах</div>
+                                    </React.Fragment>
+                                )
+                                }
+                            </div>
+                        </div>
+                    </ReactTooltip>
+                    
                 </div>
                 <div className="express-calculator__item">
                     <span className="description top">Размеры</span>

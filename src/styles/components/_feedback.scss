@@ -32,6 +32,9 @@
   width:50rem;
   transition: all .3s ease-in-out;
   background-color: transparent;
+  @media (max-width: 767px){
+    width: 100%;
+  }
   &.error{
     border-bottom: solid 0.2rem red;
   }
@@ -85,4 +88,7 @@
 }
 .feedback-form__button{
   margin-top: 6rem;
+  @media (max-width: 767px){
+    justify-content: center;
+  }
 }

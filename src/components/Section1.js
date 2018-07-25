@@ -18,14 +18,13 @@ class Section1 extends React.Component{
     }
 
     toggleValidating(validate) {
-        this.setState({ validate });
+        this.setState((state)=>({...state, validate }));
     }
 
     validateForm (e){
             if(e) {
                 e.preventDefault();
             }
-
             const {
                 hasNameError,
                 hasPhoneError,
@@ -33,6 +32,7 @@ class Section1 extends React.Component{
                 deliveryNameError,
                 deliveryPhoneError
             } = this.state;
+
             const handleModal =this.handleModal;
             const setOrder = order=>{
                 this.setState(state=>({
@@ -133,8 +133,10 @@ class Section1 extends React.Component{
                         errorMessage:'Вы ничего не выбрали'
                     }));
                 }
+
                 this.toggleValidating(false);
                 handleModal();
+                this.toggleValidating(true);
             }else{
                 this.state.captcha.execute();
             }
@@ -191,7 +193,8 @@ class Section1 extends React.Component{
         errorMessage:'Заполните необходимые поля',
         validate:false,
         captcha:'',
-        order: false
+        order: false,
+        sameDelivery:true
     };
     componentDidMount(){
         this.ref = base.fetch('Stickers/calculator',{
@@ -1029,7 +1032,9 @@ class Section1 extends React.Component{
                                                     this.setState({ hasNameError: res, validate:!res})}
                                                 value={this.state.user.name}
                                                 onBlur={()=>{}}
-                                                onChange={(name)=> {this.setState(state=>({user: {...state.user,name}}))}
+                                                onChange={(name)=> {
+                                                        this.setState(state=>({user: {...state.user,name},delivery: {...state.delivery,name}}))
+                                                }
                                                 }
                                                 validationOption={{
                                                     type:"string",
@@ -1058,14 +1063,14 @@ class Section1 extends React.Component{
                                                 onBlur={()=>{}}
                                                 onChange={phone=> {
                                                     if (!phone||!phone.match(/\+/)){
-                                                        this.setState(state=>({user: {...state.user,phone:'+380'}}))
+                                                        this.setState(state=>({user: {...state.user,phone:'+380'},delivery: {...state.delivery,phone:'+380'}}))
                                                     }
                                                     else if(!phone.match(/^\+[0-9]*$/)){;
                                                     }
                                                     else if (phone.match(/^\+380[0-9]{0,9}$/)) {
-                                                        this.setState(state=>({user: {...state.user,phone}}))
+                                                        this.setState(state=>({user: {...state.user,phone},delivery: {...state.delivery,phone}}))
                                                     }else if(phone.length<4){
-                                                        this.setState(state=>({user: {...state.user,phone:'+380'}}))
+                                                        this.setState(state=>({user: {...state.user,phone:'+380'},delivery: {...state.delivery,phone:'+380'}}))
                                                     }
                                                 }
                                                 }
@@ -1195,7 +1200,9 @@ class Section1 extends React.Component{
                                                                    delivery:{
                                                                        ...state.delivery,
                                                                        method:'np'
-                                                                   }
+                                                                   },
+                                                                   deliveryNameError:true,
+                                                                   deliveryPhoneError:true
                                                                }
                                                                )
                                                            )
@@ -1223,7 +1230,9 @@ class Section1 extends React.Component{
                                                                    delivery:{
                                                                        ...state.delivery,
                                                                        method:'kiev'
-                                                                   }
+                                                                   },
+                                                                   deliveryNameError:true,
+                                                                   deliveryPhoneError:true
                                                                }
                                                                )
                                                            )
@@ -1252,7 +1261,9 @@ class Section1 extends React.Component{
                                                                             delivery:{
                                                                                 ...state.delivery,
                                                                                 method:'self'
-                                                                            }
+                                                                            },
+                                                                            deliveryNameError:false,
+                                                                            deliveryPhoneError:false
                                                                         }
                                                                     )
                                                            )
@@ -1275,71 +1286,75 @@ class Section1 extends React.Component{
                             <div className="container container--modal-info">
                                 <div className="modal-block modal-block">
                                     <div className="modal-block__content modal-block__content--deliver">
-                                        <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="delivery_name">ФИО получателя:</label>
-                                            <Textbox
-                                                classNameInput="validation_input validation_input--deliver"
-                                                classNameWrapper="validation_wrapper"
-                                                classNameContainer="validation_container"
-                                                id="delivery_name"
-                                                name="delivery_name"
-                                                type="text"
-                                                tabIndex="0"
-                                                validate={this.state.validate}
-                                                validationCallback={(res) =>
-                                                    this.setState({ deliveryNameError: res, validate:!res})}
-                                                value={this.state.delivery.name}
-                                                onBlur={()=>{}}
-                                                onChange={(name)=> {this.setState(state=>({delivery: {...state.delivery,name}}))}}
-                                                validationOption={{
-                                                    type:"string",
-                                                    showMsg:true,
-                                                    msgOnError:'Введите ФИО получателя',
-                                                    check: true,
-                                                    required: true
-                                                }}
-                                            />
-                                        </div>
+                                        {this.state.delivery.method!='self'&&(
+                                            <React.Fragment>
+                                                <div className="feedback-form__input-block">
+                                                    <label className="feedback-form__label" htmlFor="delivery_name">ФИО получателя:</label>
+                                                    <Textbox
+                                                        classNameInput="validation_input validation_input--deliver"
+                                                        classNameWrapper="validation_wrapper"
+                                                        classNameContainer="validation_container"
+                                                        id="delivery_name"
+                                                        name="delivery_name"
+                                                        type="text"
+                                                        tabIndex="0"
+                                                        validate={this.state.validate}
+                                                        validationCallback={(res) =>
+                                                            this.setState({ deliveryNameError: res, validate:!res})}
+                                                        value={this.state.delivery.name}
+                                                        onBlur={()=>{}}
+                                                        onChange={(name)=> {this.setState(state=>({delivery: {...state.delivery,name}}))}}
+                                                        validationOption={{
+                                                            type:"string",
+                                                            showMsg:true,
+                                                            msgOnError:'Введите ФИО получателя',
+                                                            check: true,
+                                                            required: true
+                                                        }}
+                                                    />
+                                                </div>
 
-                                        <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="delivery_phone">Ваш телефон:</label>
-                                            <Textbox
-                                                classNameInput="validation_input validation_input--deliver"
-                                                classNameWrapper="validation_wrapper"
-                                                classNameContainer="validation_container"
-                                                id="delivery_phone"
-                                                name="delivery_phone"
-                                                type="phone"
-                                                tabIndex="0"
-                                                validate={this.state.validate}
-                                                validationCallback={(res) =>
-                                                    this.setState({ deliveryPhoneError: res, validate:!res})}
-                                                value={this.state.delivery.phone}
-                                                onBlur={()=>{}}
-                                                onChange={phone=> {
-                                                    if (!phone||!phone.match(/\+/)){
-                                                        this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
-                                                    }
-                                                    else if(!phone.match(/^\+[0-9]*$/)){;
-                                                    }
-                                                    else if (phone.match(/^\+380[0-9]{0,9}$/)) {
-                                                        this.setState(state=>({delivery: {...state.delivery,phone}}))
-                                                    }else if(phone.length<4){
-                                                        this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
-                                                    }
-                                                }
-                                                }
-                                                validationOption={{
-                                                    type:"string",
-                                                    reg:/\+380[0-9]{9}/,
-                                                    regMsg:'Некорректный телефон',
-                                                    showMsg:true,
-                                                    msgOnError:'Некорректный телефон',
-                                                    check: true,
-                                                    required: true
-                                                }}
-                                            />
-                                        </div>
+                                                <div className="feedback-form__input-block">
+                                                    <label className="feedback-form__label" htmlFor="delivery_phone">Телефон получателя:</label>
+                                                    <Textbox
+                                                        classNameInput="validation_input validation_input--deliver"
+                                                        classNameWrapper="validation_wrapper"
+                                                        classNameContainer="validation_container"
+                                                        id="delivery_phone"
+                                                        name="delivery_phone"
+                                                        type="phone"
+                                                        tabIndex="0"
+                                                        validate={this.state.validate}
+                                                        validationCallback={(res) =>
+                                                            this.setState({ deliveryPhoneError: res, validate:!res})}
+                                                        value={this.state.delivery.phone}
+                                                        onBlur={()=>{}}
+                                                        onChange={phone=> {
+                                                                if (!phone||!phone.match(/\+/)){
+                                                                    this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
+                                                                }
+                                                                else if(!phone.match(/^\+[0-9]*$/)){;
+                                                                }
+                                                                else if (phone.match(/^\+380[0-9]{0,9}$/)) {
+                                                                    this.setState(state=>({delivery: {...state.delivery,phone}}))
+                                                                }else if(phone.length<4){
+                                                                    this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
+                                                                }
+                                                            }
+                                                        }
+                                                        validationOption={{
+                                                            type:"string",
+                                                            reg:/\+380[0-9]{9}/,
+                                                            regMsg:'Некорректный телефон',
+                                                            showMsg:true,
+                                                            msgOnError:'Некорректный телефон',
+                                                            check: true,
+                                                            required: true
+                                                        }}
+                                                    />
+                                                </div>
+                                            </React.Fragment>
+                                        )}
                                         {this.state.delivery.method=='np'&&(
                                             <React.Fragment>
                                                 <div className="feedback-form__input-block">
@@ -1445,7 +1460,7 @@ class Section1 extends React.Component{
                                         ...state,
                                         recaptcha:response
                                     }));
-                                    this.validateForm()
+                                    this.validateForm();
                                 }
                             }
                         />

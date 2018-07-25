@@ -16,9 +16,9 @@ const Header = (props) => (
                     <div className="header__logo">
                     </div>
                     <div className="header__menu">
-                        <Scroll type="class" element="prices"><div className="header__menu__item"><a href="javascript:;">Цены</a></div></Scroll>
-                        <Scroll type="class" element="requairements"><div className="header__menu__item"><a href="javascript:;" >Требования к макетам <br className="hidden-xs"/></a></div></Scroll>
-                        <Scroll type="class" element="delivery__top"><div className="header__menu__item"><a href="javascript:;" >Оплата и доставка</a></div></Scroll>
+                        <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
+                        <Scroll type="class" element="requairements"><div className="header__menu__item">Требования к макетам <br className="hidden-xs"/></div></Scroll>
+                        <Scroll type="class" element="delivery__top"><div className="header__menu__item">Оплата и доставка</div></Scroll>
                     </div>
                     <div className="header__contacts">
                         <div className="header__contacts__phone">

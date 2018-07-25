@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn build:prod
+  /usr/local/bin/node /usr/local/bin/yarn dev-server
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
@@ -68,6 +68,7 @@ npm manifest:
       "react-router-dom": "^4.2.2",
       "react-scroll-to-element": "^0.2.0",
       "react-select": "^1.2.1",
+      "react-tooltip": "^3.6.1",
       "react-transition-group": "^2.3.1",
       "resolve-url-loader": "^2.3.0",
       "sass-loader": "6.0.6",
@@ -82,8 +83,7 @@ npm manifest:
     "scripts": {
       "build:dev": "webpack",
       "build:prod": "webpack -p --env=prod",
-      "dev-server": "webpack-dev-server",
-      "postbuild:prod": "composer install"
+      "dev-server": "webpack-dev-server"
     }
   }
 
@@ -6977,6 +6977,13 @@ Lockfile:
       prop-types "^15.5.8"
       react-input-autosize "^2.1.2"
   
+  react-tooltip@^3.6.1:
+    version "3.6.1"
+    resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-3.6.1.tgz#2ca993baa50d7e0271b8d13c6024445a883842eb"
+    dependencies:
+      classnames "^2.2.5"
+      prop-types "^15.6.0"
+  
   react-transition-group@^2.3.1:
     version "2.3.1"
     resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.3.1.tgz#31d611b33e143a5e0f2d94c348e026a0f3b474b6"
@@ -9023,9 +9030,9 @@ Lockfile:
 
 Trace: 
   Error: Command failed.
-  Exit code: 255
+  Exit signal: SIGTERM
   Command: sh
-  Arguments: -c composer install
+  Arguments: -c webpack-dev-server
   Directory: /home/webintern/websites/St
   Output:
   

@@ -1,18 +1,9 @@
 import React from 'react';
-import {updateTooltip} from '../tooltip';
+import ReactTooltip from 'react-tooltip';
 
 class SectionBase extends React.Component{
     state = {
     };
-    handleToolTip(selector) {
-
-        if(this.state.selector!==selector) {
-            updateTooltip(selector);
-            this.setState(()=> ({
-                selector
-            }));
-        }
-    }
     render() {
        if(Object.keys(this.props.state.SectionBase).length>0) {
            return (
@@ -30,19 +21,20 @@ class SectionBase extends React.Component{
 
                                {
                                    Object.keys(this.props.state.SectionBase).map((Section, key)=>(
-                                       <div className="section-block" key={key} onMouseEnter={()=>{this.handleToolTip(Section.toLowerCase())}}>
+                                       <div className="section-block" key={key} >
                                            <div className="section-block__header">
                                                <div className="section-block__title">
                                                    <img src={`images/base-${Section.toLowerCase()}.svg`} alt=""/>
                                                    <div>{this.props.state.SectionBase[Section].title}</div>
                                                </div>
 
-                                               <div
-                                                   className={`info info--${Section.toLowerCase()}`}
-                                                   data-description={this.props.state.SectionBase[Section].description}
-                                                   title=""
-                                               >
-                                               </div>
+                                               <a className={`info info--${Section.toLowerCase()}`} data-for={Section.toLowerCase()} data-tip />
+                                               <ReactTooltip className="tooltip_custom" id={Section.toLowerCase()} type="light" >
+                                                   <div className="tooltip__container">
+                                                       <div className="tooltip__description">{this.props.state.SectionBase[Section].description}</div>
+                                                   </div>
+                                               </ReactTooltip>
+
                                            </div>
                                            <div className="section-block__content">
                                                {

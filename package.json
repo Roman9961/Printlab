@@ -52,6 +52,7 @@
     "react-router-dom": "^4.2.2",
     "react-scroll-to-element": "^0.2.0",
     "react-select": "^1.2.1",
+    "react-tooltip": "^3.6.1",
     "react-transition-group": "^2.3.1",
     "resolve-url-loader": "^2.3.0",
     "sass-loader": "6.0.6",
@@ -60,7 +61,6 @@
     "style-loader": "0.18.2",
     "stylus": "0.54.5",
     "webpack": "3.1.0",
-    "webpack-jquery-ui": "^1.0.0",
     "yup": "^0.25.1"
   },
   "scripts": {

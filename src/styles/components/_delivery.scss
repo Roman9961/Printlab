@@ -8,6 +8,9 @@
 }
 .delivery-block__container{
   flex-direction: column;
+  @media (max-width: 767px){
+    width: 100%;
+  }
 }
 .delivery__top{
   padding-top: 50px;

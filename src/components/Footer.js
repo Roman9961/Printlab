@@ -1,4 +1,5 @@
 import React from 'react';
+import Scroll from 'react-scroll-to-element';
 
 const Footer = e => (
     <footer>
@@ -8,9 +9,9 @@ const Footer = e => (
                     <div className="header__logo footer__logo">
                     </div>
                     <div className="header__menu">
-                        <div className="header__menu__item"><a className="footer__link" href="javascript:;" data-scrollto=".menu-example">Цены</a></div>
-                        <div className="header__menu__item"><a className="footer__link" href="javascript:;" data-scrollto=".menu-print">Требования к макетам <br className="hidden-xs"/></a></div>
-                        <div className="header__menu__item"><a className="footer__link" href="javascript:;" data-scrollto=".row-with-us">Оплата и доставка</a></div>
+                        <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
+                        <Scroll type="class" element="requairements"><div className="header__menu__item">Требования к макетам</div></Scroll>
+                        <Scroll type="class" element="delivery__top"><div className="header__menu__item">Оплата и доставка</div></Scroll>
                     </div>
                     <div className="header__contacts">
                         <div className="header__contacts__phone">

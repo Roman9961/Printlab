@@ -68,6 +68,7 @@
   @media (max-width: 767px){
     padding: $l-size;
     flex-direction: column;
+    margin: $l-size 0;
   }
 }
 .layout-props__block__icon{
