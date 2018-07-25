@@ -10,7 +10,11 @@
     padding: 15px 0;
   }
 }
-
+.mobile-hidden{
+  @media (max-width: 767px) {
+    display: none !important;
+  }
+}
 .container {
   width: 100%;
   @media (min-width:992px) {
@@ -18,11 +22,6 @@
   }
   @media (min-width:1200px) {
       width: 1140px
-  }
-  .mobile-hidden{
-    @media (max-width: 767px) {
-      display: none;
-    }
   }
 }
 .container__express-calculator{
