@@ -10,7 +10,8 @@
   right: 0px;
   bottom: 0px;
   background-color: white;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .wrapper-container.wrapper-container--modal{
   padding: $xl-size 0;

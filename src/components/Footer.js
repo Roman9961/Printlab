@@ -8,6 +8,11 @@ const Footer = e => (
                 <div  className="header">
                     <div className="header__logo footer__logo">
                     </div>
+                    <div className="mobile-contacts">
+                        <div className="header__contacts__phone__icon">
+                            <a href="tel:+380678283212"> <img alt="Наклейки" title="Наклейки" src="images/call.svg"/> </a>
+                        </div>
+                    </div>
                     <div className="header__menu">
                         <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
                         <Scroll type="class" element="requairements"><div className="header__menu__item">Требования к макетам</div></Scroll>

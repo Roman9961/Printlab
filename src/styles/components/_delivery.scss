@@ -5,6 +5,9 @@
 .delivery-block{
   margin: $l-size 0 0 0;
   max-width: 64rem;
+  @media (max-width: 767px){
+    margin: $s-size $l-size;
+  }
 }
 .delivery-block__container{
   flex-direction: column;

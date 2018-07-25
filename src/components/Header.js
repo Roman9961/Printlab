@@ -15,6 +15,11 @@ const Header = (props) => (
                 <div  className="header">
                     <div className="header__logo">
                     </div>
+                    <div className="mobile-contacts">
+                        <div className="header__contacts__phone__icon">
+                            <a href="tel:+380678283212"> <img alt="Наклейки" title="Наклейки" src="images/call.svg"/> </a>
+                        </div>
+                    </div>
                     <div className="header__menu">
                         <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
                         <Scroll type="class" element="requairements"><div className="header__menu__item">Требования к макетам <br className="hidden-xs"/></div></Scroll>
@@ -44,7 +49,7 @@ const Header = (props) => (
                     </div>
                 </div>
             </div>
-            <div className="side-img side-img--right">
+            <div className="side-img side-img--right mobile-hidden">
                 <img alt="Наклейки" title="Наклейки" src="images/side-image-1.svg"/>
             </div>
 

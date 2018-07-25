@@ -12,6 +12,12 @@
     }
   }
 }
+.mobile-contacts{
+  display: none;
+  @media (max-width: 767px){
+    display: flex;
+  }
+}
 .header__logo {
   width:15rem;
   height: 2.4rem;
@@ -30,7 +36,7 @@
   margin-top: 10rem;
   @media (max-width: 767px){
     font-size: 6rem;
-    text-align: center;
+    margin-top: 4rem;
   }
 }
 .header__subtitle{
@@ -135,6 +141,9 @@
 }
 
 .menu-icon {
+  @media (max-width: 767px){
+    position: relative;
+  }
   display: block;
   position: absolute;
   z-index: 15;

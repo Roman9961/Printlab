@@ -1,6 +1,9 @@
 .section-block--feedback{
   box-shadow: none;
   max-width: 100%;
+  @media (max-width: 767px){
+    padding: 0 $s-size;
+  }
 }
 .section-block__container--feedback{
   @media (max-width: 767px){
@@ -90,5 +93,6 @@
   margin-top: 6rem;
   @media (max-width: 767px){
     justify-content: center;
+    margin-top: 0;
   }
 }

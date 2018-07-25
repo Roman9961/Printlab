@@ -7,7 +7,7 @@ const SectionQuality = ()=>{
                 <div className="section-container quality-container">
 
                     <div className="section-block__container">
-                        <div className="section-block quality-block">
+                        <div className="section-block quality-block mobile-hidden">
                             <img src="images/recommended.svg" alt=""/>
                         </div>
                         <div className="section-block quality-block">

@@ -52,6 +52,9 @@
   margin-top: 10rem;
   width: 100%;
   padding:3.8rem;
+  @media (max-width: 767px){
+    margin-top: 4rem;
+  }
 }
 
 .button--modal{

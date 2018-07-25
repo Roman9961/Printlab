@@ -58,13 +58,11 @@ class Section1 extends React.Component{
                 }
                 this.toggleValidating(true);
                 handleModal();
-                console.log('mod');
                 const immediatelyAvailableReference = base.push('orders', {
                     data: data,
                 }).then(newLocation => {
                     if (data.user.payment_method == 'liq-pay') {
                         handleModal();
-                        console.log('mod');
                         const generatedKey = newLocation.key;
                         const data1 = {
                             'public_key': process.env.LIQPAY_PUBLIC_KEY,
@@ -91,11 +89,9 @@ class Section1 extends React.Component{
                                 signature: signature,
                                 mode: "popup" // embed || popup,
                             }).on("liqpay.callback", function (data) {
-                                console.log(data.status);
-                                console.log(data);
-                                // base.update(`orders/${data.order_id}`, {
-                                //     data: {status: data.status, dateUpdate:moment().format("YYYY-MM-DD HH:mm:ss")}
-                                // });
+                                base.update(`orders/${data.order_id}`, {
+                                    data: {status: data.status, dateUpdate:moment().format("YYYY-MM-DD HH:mm:ss")}
+                                });
 
                             }).on("liqpay.ready", function (data) {
                                 // ready
@@ -119,7 +115,6 @@ class Section1 extends React.Component{
                     ...state,
                     errorMessage:'Заполните необходимые поля'
                 }));
-                console.log(price);
                 if(!price){
                     this.setState(state=>({
                         ...state,
@@ -457,7 +452,6 @@ class Section1 extends React.Component{
     };
 
     handleModal = ()=>{
-        console.log('handle');
     this.setState(state=>({
         ...state,
         modal:!state.modal

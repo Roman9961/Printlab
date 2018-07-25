@@ -8,7 +8,7 @@ class SectionBase extends React.Component{
        if(Object.keys(this.props.state.SectionBase).length>0) {
            return (
                <section>
-                   <div className="side-img side-img--left side-img--left--base">
+                   <div className="side-img side-img--left side-img--left--base mobile-hidden">
                        <img alt="Наклейки" title="Наклейки" src="images/side-image-base-left.svg"/>
                    </div>
                    <div className="side-img side-img--right side-img--right--base">

@@ -25,13 +25,15 @@ section{
   @media (max-width: 767px){
     flex-wrap: wrap;
     justify-content: center;
+    width:100%;
   }
 }
 .section__title{
   font-size: 6rem;
   font-family: "PT Serif";
   @media (max-width: 767px){
-    text-align: center;
+    margin: 0 $s-size;
+    font-size: 5rem;
   }
 }
 .section__subtitle{
@@ -47,6 +49,10 @@ section{
   padding: $l-size;
   margin: $l-size;
   max-width: 450px;
+  @media (max-width: 767px){
+    margin: $s-size;
+    width: 100%;
+  }
 }
 
 .section-block__header{

@@ -6,7 +6,9 @@
 
 .wrapper-container{
   padding: 24px 0;
-
+  @media (max-width: 767px) {
+    padding: 15px 0;
+  }
 }
 
 .container {
@@ -16,6 +18,11 @@
   }
   @media (min-width:1200px) {
       width: 1140px
+  }
+  .mobile-hidden{
+    @media (max-width: 767px) {
+      display: none;
+    }
   }
 }
 .container__express-calculator{

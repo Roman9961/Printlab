@@ -1,6 +1,7 @@
 .section-container--layout-props{
   align-items: flex-start;
   @media (max-width: 767px){
+    padding:0 $s-size;
     .section__title{
       font-size: 5rem;
     }
@@ -11,7 +12,7 @@
   @media (max-width: 767px){
     align-items: center;
     width: 100%;
-    text-align: center;
+    padding:0 $s-size;
   }
 }
 .section-block--layout-props {
@@ -25,9 +26,14 @@
     max-width: 32rem;
     min-width: 29rem;
     padding-left: 0;
+    @media (max-width: 767px){
+      padding: $s-size 0;
+      min-width: initial;
+    }
   }
   @media (max-width: 767px){
-    padding:0 0;
+     padding:0;
+    margin: $s-size 0 0 0;
   }
 }
 
@@ -41,11 +47,6 @@
 .layout-props__side-content{
   display: flex;
   flex-direction:column;
-  @media (max-width: 767px){
-    .section-block__item{
-      padding-left: 9rem;
-    }
-  }
 }
 .layout-props__side-content>*{
   margin-bottom: $m-size;
@@ -68,7 +69,7 @@
   @media (max-width: 767px){
     padding: $l-size;
     flex-direction: column;
-    margin: $l-size 0;
+    margin: $s-size 0;
   }
 }
 .layout-props__block__icon{

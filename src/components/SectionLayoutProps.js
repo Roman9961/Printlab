@@ -54,7 +54,7 @@ const SectionLayoutProps = ()=>{
                                        </div>
                                        <div className="layout-props__block__content">
                                            <div className="layout-props__block__content__title">Разрешение макета – 300 dpi</div>
-                                           <div className="layout-props__block__content__description">Для качественной печати разрешение вашего макета должно быть 300 dpi. Чем меньше точек на дюйм, тем более размытое изображение получается. Корректируйте ваш макет, используйте файлы с достаточным разрешением, если не хотите размытую белочку.</div>
+                                           <div className="layout-props__block__content__description">Для качественной печати разрешение вашего макета должно быть 300 dpi. Чем меньше точек на дюйм, тем более размытое изображение получается. Корректируйте ваш макет, используйте файлы с достаточным разрешением, если не хотите размытого попугайчика.</div>
                                        </div>
                                    </div>
                                    <div className="layout-props__block">
