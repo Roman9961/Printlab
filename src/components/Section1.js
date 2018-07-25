@@ -25,13 +25,6 @@ class Section1 extends React.Component{
             if(e) {
                 e.preventDefault();
             }
-            const {
-                hasNameError,
-                hasPhoneError,
-                hasEmailError,
-                deliveryNameError,
-                deliveryPhoneError
-            } = this.state;
 
             const handleModal =this.handleModal;
             const setOrder = order=>{
@@ -42,9 +35,7 @@ class Section1 extends React.Component{
             }
             const price = !!this.state.calcProp.price;
 
-            const validate = !hasNameError && !hasPhoneError && !hasEmailError && !deliveryNameError && !deliveryPhoneError && price;
-
-            if (validate && this.state.recaptcha) {
+            if (this.state.validate && this.state.recaptcha && price) {
 
                 let data = {
                     calcProp: this.state.calcProp,
@@ -66,12 +57,14 @@ class Section1 extends React.Component{
                     }
                 }
                 this.toggleValidating(true);
-                this.handleModal();
+                handleModal();
+                console.log('mod');
                 const immediatelyAvailableReference = base.push('orders', {
                     data: data,
                 }).then(newLocation => {
                     if (data.user.payment_method == 'liq-pay') {
-                        this.handleModal();
+                        handleModal();
+                        console.log('mod');
                         const generatedKey = newLocation.key;
                         const data1 = {
                             'public_key': process.env.LIQPAY_PUBLIC_KEY,
@@ -121,7 +114,7 @@ class Section1 extends React.Component{
                     //handle error
                 });
                 //available immediately, you don't have to wait for the callback to be called
-            } else if(!validate) {
+            } else if(!this.state.validate|| !price) {
                 this.setState(state=>({
                     ...state,
                     errorMessage:'Заполните необходимые поля'
@@ -464,6 +457,7 @@ class Section1 extends React.Component{
     };
 
     handleModal = ()=>{
+        console.log('handle');
     this.setState(state=>({
         ...state,
         modal:!state.modal
@@ -1027,7 +1021,7 @@ class Section1 extends React.Component{
                                                 name="name"
                                                 type="text"
                                                 tabIndex="0"
-                                                validate={this.state.validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                                                validate={this.state.validate}
                                                 validationCallback={(res) =>
                                                     this.setState({ hasNameError: res, validate:!res})}
                                                 value={this.state.user.name}
@@ -1056,7 +1050,7 @@ class Section1 extends React.Component{
                                                 name="phone"
                                                 type="phone"
                                                 tabIndex="0"
-                                                validate={this.state.validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                                                validate={this.state.validate}
                                                 validationCallback={(res) =>
                                                     this.setState({ hasPhoneError: res, validate:!res})}
                                                 value={this.state.user.phone}
@@ -1095,7 +1089,7 @@ class Section1 extends React.Component{
                                                 name="email"
                                                 type="text"
                                                 tabIndex="0"
-                                                validate={this.state.validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                                                validate={this.state.validate}
                                                 validationCallback={(res) =>
                                                     this.setState({ hasEmailError: res, validate:!res})}
                                                 value={this.state.user.email}
