@@ -4,8 +4,9 @@ import ReactTooltip from 'react-tooltip';
 class SectionPostPrint extends React.Component{
     state = {
     };
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
     render() {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
            return (
                <section className="section-top postprint__top">
                    <div className="container">
