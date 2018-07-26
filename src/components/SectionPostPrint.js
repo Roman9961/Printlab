@@ -21,7 +21,7 @@ class SectionPostPrint extends React.Component{
                                            <div>Ламинация</div>
                                        </div>
                                        <a className="info info--lamination info--postprint" data-for="lamination" data-tip />
-                                       <ReactTooltip className="tooltip_custom" id="lamination" type="light" globalEventOff={ isMobile ? 'click' : undefined }>
+                                       <ReactTooltip className="tooltip_custom" id="lamination" type="light" globalEventOff={ isMobile ? 'touchstart' : undefined }>
                                            <div className="tooltip__container">
                                                <div className="tooltip__description">Ламинация – это покрытие листа тонким слоем прозрачной пленки, он соединяется с отпечатанной основой при помощи температуры и давления (горячая ламинация).</div>
                                            </div>
@@ -40,7 +40,7 @@ class SectionPostPrint extends React.Component{
                                            <div>УФ-лак</div>
                                        </div>
                                        <a className="info info--uv info--postprint" data-for="uv" data-tip />
-                                       <ReactTooltip className="tooltip_custom" id="uv" type="light" globalEventOff={ isMobile ? 'click' : undefined }>
+                                       <ReactTooltip className="tooltip_custom" id="uv" type="light" globalEventOff={ isMobile ? 'touchstart' : undefined }>
                                            <div className="tooltip__container">
                                                <div className="tooltip__description">По технологии изготовления – это нанесение специального лака с целью придание печатной продукции глянца. Он выполняет одновременно защитную и декоративную функцию.</div>
                                            </div>
@@ -59,7 +59,7 @@ class SectionPostPrint extends React.Component{
                                            <div>Тиснение</div>
                                        </div>
                                        <a className="info info--emboss info--postprint" data-for="emboss" data-tip />
-                                       <ReactTooltip className="tooltip_custom" id="emboss" type="light" globalEventOff={ isMobile ? 'click' : undefined }>
+                                       <ReactTooltip className="tooltip_custom" id="emboss" type="light" globalEventOff={ isMobile ? 'touchstart' : undefined }>
                                            <div className="tooltip__container">
                                                <div className="tooltip__description">Тиснение фольгой – это нанесение блестящей металлической фольги в виде отдельных букв, рисунка или подложкие. Представляет собой процесс переноса на поверхность материала слоя металлической фольги путем штамповки.</div>
                                            </div>

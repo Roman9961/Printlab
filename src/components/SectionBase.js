@@ -30,7 +30,7 @@ class SectionBase extends React.Component{
                                                </div>
 
                                                <a className={`info info--${Section.toLowerCase()}`} data-for={Section.toLowerCase()} data-tip />
-                                               <ReactTooltip className="tooltip_custom" id={Section.toLowerCase()} type="light" globalEventOff={ isMobile ? 'click' : undefined }>
+                                               <ReactTooltip className="tooltip_custom" id={Section.toLowerCase()} type="light" globalEventOff={ isMobile ? 'touchstart' : undefined }>
                                                    <div className="tooltip__container">
                                                        <div className="tooltip__description">{this.props.state.SectionBase[Section].description}</div>
                                                    </div>

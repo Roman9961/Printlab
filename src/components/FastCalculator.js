@@ -152,7 +152,7 @@ class FastCalculator extends React.Component{
                 <div className="express-calculator__item">
                     <div className="express-calculator__title express-calculator__item--header">{this.state.title[this.props.form]}</div>
                     <a className={`info info--${this.props.form}`} data-for={this.props.form} data-tip />
-                    <ReactTooltip className="tooltip_custom" id={this.props.form} type="light"  globalEventOff={ isMobile ? 'click' : undefined } >
+                    <ReactTooltip className="tooltip_custom" id={this.props.form} type="light"  globalEventOff={ isMobile ? 'touchstart' : undefined } >
                         <div className="tooltip__container">
                             <div className="tooltip__description">
                                 {this.props.form=='rectangle'&&(
