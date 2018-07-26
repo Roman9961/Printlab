@@ -5,6 +5,7 @@ class SectionBase extends React.Component{
     state = {
     };
     render() {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
        if(Object.keys(this.props.state.SectionBase).length>0) {
            return (
                <section>
@@ -29,7 +30,7 @@ class SectionBase extends React.Component{
                                                </div>
 
                                                <a className={`info info--${Section.toLowerCase()}`} data-for={Section.toLowerCase()} data-tip />
-                                               <ReactTooltip className="tooltip_custom" id={Section.toLowerCase()} type="light" >
+                                               <ReactTooltip className="tooltip_custom" id={Section.toLowerCase()} type="light" globalEventOff={ isMobile ? 'click' : undefined }>
                                                    <div className="tooltip__container">
                                                        <div className="tooltip__description">{this.props.state.SectionBase[Section].description}</div>
                                                    </div>

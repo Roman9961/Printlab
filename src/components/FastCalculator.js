@@ -38,6 +38,7 @@ class FastCalculator extends React.Component{
         }
     };
     componentDidMount(){
+
         this.setState((state)=>({
             ...state,
             calculator: this.props.calculator
@@ -142,6 +143,7 @@ class FastCalculator extends React.Component{
         }
     };
     render(){
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         return (
             <div className="express-calculator">
                 <div className="express-calculator__item express-calculator__item--icon">
@@ -150,7 +152,7 @@ class FastCalculator extends React.Component{
                 <div className="express-calculator__item">
                     <div className="express-calculator__title express-calculator__item--header">{this.state.title[this.props.form]}</div>
                     <a className={`info info--${this.props.form}`} data-for={this.props.form} data-tip />
-                    <ReactTooltip className="tooltip_custom" id={this.props.form} type="light" >
+                    <ReactTooltip className="tooltip_custom" id={this.props.form} type="light"  globalEventOff={ isMobile ? 'click' : undefined } >
                         <div className="tooltip__container">
                             <div className="tooltip__description">
                                 {this.props.form=='rectangle'&&(
