@@ -77,7 +77,6 @@ npm manifest:
       "style-loader": "0.18.2",
       "stylus": "0.54.5",
       "webpack": "3.1.0",
-      "webpack-jquery-ui": "^1.0.0",
       "yup": "^0.25.1"
     },
     "scripts": {
@@ -9030,7 +9029,7 @@ Lockfile:
 
 Trace: 
   Error: Command failed.
-  Exit signal: SIGTERM
+  Exit signal: SIGHUP
   Command: sh
   Arguments: -c webpack-dev-server
   Directory: /home/webintern/websites/St

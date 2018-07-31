@@ -27,6 +27,7 @@ class Section1 extends React.Component{
             }
 
             const handleModal =this.handleModal;
+            const handleBookmark =this.props.handleBookmark;
             const setOrder = order=>{
                 this.setState(state=>({
                     ...state,
@@ -98,12 +99,22 @@ class Section1 extends React.Component{
                             }).on("liqpay.close", function (data) {
                                 setOrder(true);
                                 handleModal();
+                                handleBookmark({
+                                    print:true,
+                                    design:false,
+                                    deliver:false
+                                })
                             });
                         }();
                     }else{
                         handleModal();
                         setOrder(true);
                         handleModal();
+                        handleBookmark({
+                            print:true,
+                            design:false,
+                            deliver:false
+                        })
                     }
 
                 }).catch(err => {
@@ -1231,11 +1242,11 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <span>Доставка по Киеву</span>
-                                                <div className="modal-block__content_item__description">+30-50 грн в зависимости от Вашего района</div>
+                                                <div className="modal-block__content_item__description">+50 грн в любую точку города</div>
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-28" className= {`${this.state.delivery.method=='self'?'active':''}`}>
+                                            <label htmlFor="field_profile-28" className= {`modal-block__content_item__label ${this.state.delivery.method=='self'?'active':''}`}>
                                                 <input className="radio-input" type="radio" name="user_delivery" id="field_profile-28" value="self"
                                                        onClick={
                                                            (method)=>this.setState(
@@ -1262,6 +1273,7 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <span>Самовывоз</span>
+                                                <div className="modal-block__content_item__description">г. Киев, ул. Патриарха Мстислава Скрипника 40</div>
                                             </label>
                                         </div>
                                     </div>

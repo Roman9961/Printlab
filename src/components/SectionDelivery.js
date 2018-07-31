@@ -32,7 +32,7 @@ const SectionDelivery = ()=>{
                                        </div>
                                    </div>
                                    <div className="section-block__content">
-                                           <div className="section-block__item">по Киеву курьером 40 грн</div>
+                                           <div className="section-block__item">по Киеву курьером 50 грн</div>
                                            <div className="section-block__item">при заказе от 1000 грн – доставка бесплатная</div>
                                            <div className="section-block__item">по Украине курьерской службой «Новая Почта»</div>
                                    </div>

@@ -27,6 +27,11 @@ class Admin extends React.Component{
             _stampingprice : 'Цена за тиснение', //
             _varnishprice : 'Цена покрытия уф-лаком', //
             _laminationprice : 'Цена ламинации за лист', //
+            _materialPrice : 'Цена материалов', //
+            digit:"Цифровая печать",
+            roll:"Рулонная печать",
+            paper : 'Цена за лист бумаги', //
+            plastic : 'Цена за лист пластика', //
             _paperlist : 'Цена за лист бумаги', //
             _plasticlist : 'Цена за лист пластика', //
             _delivery : 'Доставка', //
@@ -127,6 +132,7 @@ class Admin extends React.Component{
             )
         }
         else if(this.state.uid && this.state.admin && this.state.admin.includes(this.state.uid)) {
+         console.log();
             return (
 
                 <div>
@@ -146,9 +152,9 @@ class Admin extends React.Component{
 
                                     {
 
-                                        (typeof this.state.calculator[col][0] === 'object')?
+                                        (typeof this.state.calculator[col] === 'object'&&typeof this.state.calculator[col][Object.keys(this.state.calculator[col])[0]] === 'object')?
                                             <tr>
-                                                {(Object.keys(this.state.calculator[col][0]).map((key, index) =>
+                                                {(Object.keys(this.state.calculator[col][Object.keys(this.state.calculator[col])[0]]).map((key, index) =>
                                                 <td key={index}>{this.state.trans[key]}</td>
                                             ))}</tr>:
                                             (typeof this.state.calculator[col] !== 'object')?false:
@@ -161,14 +167,13 @@ class Admin extends React.Component{
                                 <tbody>
                                 {
 
-                                    (typeof this.state.calculator[col][0] === 'object')?
+                                        (typeof this.state.calculator[col][Object.keys(this.state.calculator[col])[0]] === 'object')?
                                         (Object.keys(this.state.calculator[col]).map((key, index) =>
                                            <tr key={index}>
                                                {
                                                    Object.keys(this.state.calculator[col][key]).map((col2, index) =>
-
                                                        <td key={index}><input type="number" value={this.state.calculator[col][key][col2]}
-                                                                              onChange={(event)=>this.updateTable2(col, key,col2, event)} /></td>
+                                                                              onChange={(event)=>this.updateTable2(col, key,col2, event)} />{this.state.trans[key]}</td>
                                                    )
 
                                                }

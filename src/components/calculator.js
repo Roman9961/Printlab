@@ -19,6 +19,8 @@ const calc = function (state) {
         _varnishprice = state.calculator._varnishprice,                // Цена покрытия уф-лаком
         _laminationprice = state.calculator._laminationprice,                // Цена ламинации за лист
         _paperlist = state.calculator._paperlist,                // Цена за лист бумаги
+        _materialPrice = state.calculator._materialPrice,
+        rollparams = state.calculator.rollparams,
         _plasticlist = state.calculator._plasticlist,                // Цена за лист пластика
         _delivery =  parseInt( state.calculator._delivery),                // Доставка
         _postprint = parseInt(state.calculator._postprint),                // Постпечатная подгодовка
@@ -159,7 +161,7 @@ const calc = function (state) {
                 }
             }
         }else if(calcProp.print_type === 'Рулонная'){
-            calcProp.rulonAmount = calculateFigures(rulonWith, calcProp)/1000;
+            calcProp.stickersonlist = calculateFigures(rollparams, calcProp);
         }
     }
 
@@ -170,7 +172,9 @@ const calc = function (state) {
             printpricelist = 0;
         if(calcProp.print_type === 'Листовая') {
             calcProp.numberoflist = Math.ceil(parseInt(calcProp.quantity) / calcProp.stickersonlist);
-
+        }else if (calcProp.print_type === 'Рулонная'){
+                calcProp.numberoflist = Math.ceil(parseInt(calcProp.quantity) / calcProp.stickersonlist)+16;
+            }
 
             //добавим ещё дополнительные листы на брак
             for (let i = 0; i < _defectiveSheets.length; i++) {
@@ -191,6 +195,9 @@ const calc = function (state) {
                         break;
                     }
                 }
+                if(calcProp.print_type === 'Рулонная') {
+                    printpricelist = calcProp.numberoflist * rollparams.colorprint;
+                }
 
             }
             else if (calcProp.type === 'Черно-белая') {
@@ -201,14 +208,12 @@ const calc = function (state) {
                         break;
                     }
                 }
+                if(calcProp.print_type === 'Рулонная') {
+                    printpricelist = calcProp.numberoflist * rollparams.monochromeprint;
+                }
 
             }
             printtotal = calcProp.numberoflist * printpricelist;
-        }else if (calcProp.print_type === 'Рулонная'){
-            if(calcProp.type) {
-                printtotal = calcProp.rulonAmount * rulonPrintPrice;
-            }
-        }
 
         return printtotal;
     }
@@ -278,13 +283,7 @@ const calc = function (state) {
                 }
             }
         }else if (calcProp.print_type === 'Рулонная'){
-            for (let i = 0; i < _cutpriceRulon.length; i++) {
-                let obj = _cutpriceRulon[i];
-                if (calcProp.quantity >= obj.min && calcProp.quantity <= obj.max) {
-                    return calcProp.quantity * obj.price;
-                    break;
-                }
-            }
+            return calcProp.numberoflist * 5/37;
         }
     }
 
@@ -294,21 +293,17 @@ const calc = function (state) {
         switch (calcProp.basis) {
             case 'Бумажная':
                 if (calcProp.print_type === 'Листовая') {
-                    priceBasis = calcProp.numberoflist * _paperlist;
+                    priceBasis = calcProp.numberoflist * _materialPrice.digit.paper;
                 }else{
-                    priceBasis = calcProp.rulonAmount * rulonPrintPrice
+                    priceBasis = calcProp.numberoflist * _materialPrice.roll.paper
                 }
                 return priceBasis;
                 break;
             case 'Пластиковая':
                 if (calcProp.print_type === 'Листовая') {
-                    priceBasis = calcProp.numberoflist * _plasticlist;
+                    priceBasis = calcProp.numberoflist * _materialPrice.digit.plastic;
                 }else{
-                    var square =  calcProp.rulonAmount + 0.15;
-                    if(lamination){
-                        square+=1;
-                    }
-                    priceBasis = square * rulonPrintPrice
+                    priceBasis = calcProp.numberoflist * _materialPrice.roll.plastic
                 }
                 return priceBasis;
                 break;
@@ -378,25 +373,14 @@ const calc = function (state) {
         }else if(calcProp.print_type === 'Рулонная'){
             var amount = 0;
             var amount1 =0;
-            if(FigureA>list.width){
-                total1 = Math.floor(FigureA/(parseInt(list.width)+list.margin/2))
-            }
-            if(FigureA>list.height){
-                total2 = Math.floor(FigureA/(parseInt(list.height)+list.margin/2))
-            }
-            if(total1>total2){
-             amount = (Math.ceil(calcProp.quantity/total1) * parseInt(list.height) * FigureA)/1000;
-                amount1 =  (Math.ceil(calcProp.quantity/total2) * parseInt(list.width) * FigureA)/1000;
-            }
-            else if (total1===total2){
-                amount = (Math.ceil(calcProp.quantity/total2) *  Math.min((parseInt(list.width)+list.margin/2), (parseInt(list.height)+list.margin/2)) * FigureA)/1000;
-                amount1 =  (Math.ceil(calcProp.quantity/total1) * Math.min((parseInt(list.width)+list.margin/2), (parseInt(list.height)+list.margin/2)) * FigureA)/1000;
-            }
-            else{
-                amount = (Math.ceil(calcProp.quantity/total2) * (list.width+list.margin/2) * (FigureA+list.margin/2))/1000;
-                amount1 =  (Math.ceil(calcProp.quantity/total1) * (list.height+list.margin/2) * (FigureA+list.margin/2))/1000;
-            }
-            return Math.min(amount, amount1);
+
+                total1 = Math.floor(FigureA.width/(parseInt(parseInt(list.width))+parseInt(list.margin)/2));
+
+
+                total2 = Math.floor(FigureA.height/(parseInt(list.height)+parseInt(list.margin)/2));
+
+             amount = Math.ceil(total1*total2);
+            return amount;
         }
     }
 
