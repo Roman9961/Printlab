@@ -92,7 +92,6 @@ const calc = function (state) {
     }
     // Функция добавления наценки
     function addProfit(price, profitarray) {
-
         if(price){
             price = parseFloat(price.toFixed(2));
         }
@@ -177,12 +176,14 @@ const calc = function (state) {
             }
 
             //добавим ещё дополнительные листы на брак
-            for (let i = 0; i < _defectiveSheets.length; i++) {
-                let obj = _defectiveSheets[i];
-                if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
-                    calcProp.numberoflist += obj.add;
-                    $('#deffective').html('Брак составил: ' + obj.add + ' листов');
-                    break;
+            if(calcProp.print_type === 'Листовая') {
+                for (let i = 0; i < _defectiveSheets.length; i++) {
+                    let obj = _defectiveSheets[i];
+                    if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                        calcProp.numberoflist += obj.add;
+                        $('#deffective').html('Брак составил: ' + obj.add + ' листов');
+                        break;
+                    }
                 }
             }
 
@@ -196,7 +197,10 @@ const calc = function (state) {
                     }
                 }
                 if(calcProp.print_type === 'Рулонная') {
-                    printpricelist = calcProp.numberoflist * rollparams.colorprint;
+                    printpricelist = rollparams.colorprint;
+                    if(calcProp.basis_param==='transparent'){
+                        printpricelist = rollparams.colorprintwhite;
+                    }
                 }
 
             }
@@ -209,12 +213,12 @@ const calc = function (state) {
                     }
                 }
                 if(calcProp.print_type === 'Рулонная') {
-                    printpricelist = calcProp.numberoflist * rollparams.monochromeprint;
+                    printpricelist = rollparams.monochromeprint;
                 }
 
             }
-            printtotal = calcProp.numberoflist * printpricelist;
 
+            printtotal = calcProp.numberoflist * printpricelist;
         return printtotal;
     }
 
