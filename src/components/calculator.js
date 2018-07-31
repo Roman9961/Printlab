@@ -48,9 +48,14 @@ const calc = function (state) {
      */
 
     function calculateTotal() {
-        var totalprice, totalpricehrn, totalpriceprofit, totalpricehrncom, totalpriceonesticker, pricewithlamination;
-        totalprice = calculatePrint() + calculateCut() + calculateBasis() + _delivery + _postprint;
+        var totalprice, totalpricehrn, totalpriceprofit, totalpricehrncom, totalpriceonesticker, pricewithlamination, print, base;
+        print = calculatePrint();
+        base = calculateBasis();
+        totalprice = print + calculateCut() + base + _delivery + _postprint;
         totalprice = totalprice+calculateLamination();
+        if(calcProp.print_type === 'Рулонная'){
+            totalprice = totalprice+(print+base)*0.1;
+        }
         totalprice = printUrgency(totalprice);
         totalpricehrn = totalprice * _exchangeRate;
         totalpriceprofit = addProfit(totalpricehrn, _profit);
