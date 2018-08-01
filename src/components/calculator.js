@@ -48,10 +48,11 @@ const calc = function (state) {
      */
 
     function calculateTotal() {
-        var totalprice, totalpricehrn, totalpriceprofit, totalpricehrncom, totalpriceonesticker, pricewithlamination, print, base;
+        var totalprice, totalpricehrn, totalpriceprofit, totalpricehrncom, totalpriceonesticker, pricewithlamination, print, adjustment, base;
         print = calculatePrint();
+        adjustment = printAdjustment();
         base = calculateBasis();
-        totalprice = print + calculateCut() + base + _delivery + _postprint;
+        totalprice = print + calculateCut() +adjustment+ base + _delivery + _postprint;
         totalprice = totalprice+calculateLamination();
         if(calcProp.print_type === 'Рулонная'){
             totalprice = totalprice+(print+base)*0.1;
@@ -84,6 +85,26 @@ const calc = function (state) {
         }
 
         return printResults();
+    }
+
+    //Функция добавления стоимости на приладку
+
+    function printAdjustment(){
+        var price = 0;
+        if(calcProp.print_type === 'Рулонная'){
+            var basis =_materialPrice.roll.paper;
+            switch (calcProp.basis) {
+                case 'Бумажная':
+                        basis = calcProp.numberoflist * _materialPrice.roll.paper
+                    break;
+                case 'Пластиковая':
+                        basis = calcProp.numberoflist * _materialPrice.roll.plastic
+                    break;
+            }
+            price = 2.4+basis/calcProp.numberoflist*6;
+
+        }
+        return price;
     }
 
     //Функция добавления стоимости за срочность заказа
@@ -177,7 +198,7 @@ const calc = function (state) {
         if(calcProp.print_type === 'Листовая') {
             calcProp.numberoflist = Math.ceil(parseInt(calcProp.quantity) / calcProp.stickersonlist);
         }else if (calcProp.print_type === 'Рулонная'){
-                calcProp.numberoflist = Math.ceil(parseInt(calcProp.quantity) / calcProp.stickersonlist)+16;
+                calcProp.numberoflist = Math.ceil(parseInt(calcProp.quantity) / calcProp.stickersonlist);
             }
 
             //добавим ещё дополнительные листы на брак
