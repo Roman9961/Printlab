@@ -12,7 +12,7 @@ class FastCalculator extends React.Component{
             "basis" : "Пластиковая",
             "basis_param":"white",
             "print_type" : "Листовая",
-            "cut_form" : "",
+            "cut_form" : "simple",
             "design" : "",
             "form" : "Прямоугольная",
             "height" : 40,
@@ -246,6 +246,18 @@ class FastCalculator extends React.Component{
                         </select>
                     </div>
                 </div>
+                {this.props.form=='roll'&&(
+                        <div className="express-calculator__item">
+                            <span className="description top">Форма</span>
+                            <div className="custom-select">
+                                <select name="cut_form" onChange={this.handleChange}>
+                                    <option value="simple">Простая</option>
+                                    <option value="hard">Сложная</option>
+                                </select>
+                            </div>
+                        </div>
+                )
+                }
                 <div className="express-calculator__item express-calculator__item--final">
                     <input type="hidden" name="print_type" id="field_profile-117" value="Листовая"/>
                     <div>

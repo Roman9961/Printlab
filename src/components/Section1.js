@@ -150,7 +150,7 @@ class Section1 extends React.Component{
             "basis" : "Пластиковая",
             "basis_param":"white",
             "print_type" : "",
-            "cut_form" : "",
+            "cut_form" : "simple",
             "design" : "",
             "form" : "",
             "height" : "",
@@ -579,6 +579,7 @@ class Section1 extends React.Component{
                                         </div>
                                     </div>
                                     {this.state.calcProp.print_type==='Рулонная'&&(
+                                        <React.Fragment>
                                     <div className="container container--modal-input">
                                         <div className="modal-block">
                                             <div className="modal-block__title modal-block__title--range">Расстояние между наклейками:</div>
@@ -607,6 +608,34 @@ class Section1 extends React.Component{
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="container container--modal-input">
+                                    <div className="modal-block__content_item">
+                                        <div className="modal-block__title modal-block__title--range">Форма наклеек:</div>
+                                        <div className="modal-block__content_item__checkbox-container">
+                                        <div className="modal-block__content_item__checkbox-container__checkboxes">
+                                        <label htmlFor="field_cut_form1">
+                                        <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.cut_form=='simple'?'active':''}`}>
+                                        <div className="modal-checkbox"></div>
+                                        </div>
+                                        <input type="checkbox" name="cut_form" id="field_cut_form1" value="simple" defaultChecked ={this.state.calcProp.cut_form=='simple'}  onClick={this.handleChange}/>
+                                        <div className="modal-checkbox__title">Простая</div>
+                                        </label>
+                                        <label htmlFor="field_cut_form2">
+                                        <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.cut_form=='hard'?'active':''}`}>
+                                        <div className="modal-checkbox"></div>
+                                        </div>
+                                        <input type="checkbox" name="cut_form" id="field_cut_form2" value="hard" defaultChecked ={this.state.calcProp.cut_form=='hard'} onClick={this.handleChange}/>
+                                        <div className="modal-checkbox__title">Сложная</div>
+                                        </label>
+                                        </div>
+                                        <hr/>
+                                        <div className="modal-block__content_item__description">
+                                        Советуем ламинировать наклейки для часто используемых поверхностей (ноутбук, телефон, флакон, чемодан).
+                                        </div>
+                                        </div>
+                                        </div>
+                                        </div>
+                                            </React.Fragment>
                                     )}
 
                                 </div>

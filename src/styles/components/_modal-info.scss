@@ -1,6 +1,7 @@
 .container--modal-info, .container--modal-input{
   @media (max-width: 767px){
     flex-direction: column;
+    margin-bottom: 2rem;
   }
   display: flex;
   font-size: 3.2rem;
@@ -15,6 +16,9 @@
 .container--modal-input{
   justify-content: flex-start;
   margin-bottom: 4rem;
+  @media (max-width: 767px){
+    margin-bottom: 2rem;
+  }
 }
 .modal-info__field {
   border: none;

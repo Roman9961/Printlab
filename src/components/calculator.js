@@ -292,7 +292,12 @@ const calc = function (state) {
                 }
             }
         }else if (calcProp.print_type === 'Рулонная'){
-            return calcProp.numberoflist * 5/37;
+            if (calcProp.cut_form ==='hard' || calcProp.width < 20 && calcProp.height < 20){
+                return calcProp.numberoflist * 7/34;
+            }else{
+                return calcProp.numberoflist * 5/37;
+            }
+
         }
     }
 

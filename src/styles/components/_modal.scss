@@ -47,6 +47,9 @@
 }
 .modal-block__title--range{
   margin-bottom:7rem;
+  @media (max-width: 767px){
+    margin-bottom:3rem;
+  }
 }
 .modal-block__content__item{
   border: 2px solid #ABC6D8;
@@ -105,10 +108,26 @@
   margin-right: $l-size;
   @media (max-width: 767px){
     flex-wrap: nowrap;
+   &.modal-block__content--input--range {
+     flex-direction: column;
+     .modal-block__content_item--input {
+       align-items: flex-end;
+       margin: 0;
+       width: 100%;
+       .range-tooltip {
+         max-width: 100%;
+         padding: 0 0 40px 35px;
+         .input-range {
+           max-width: 100%;
+         }
+       }
+     }
+   }
   }
 }
 .modal-block__content--input--range{
   align-items: center;
+
 }
 
 .modal-block__content--input>*{
