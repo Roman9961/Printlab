@@ -14,22 +14,17 @@ const calc = function (state) {
         _cutpriceRect = state.calculator._cutpriceRect,                //Цена за порезку прямоугольных наклеек
         _cutpriceSimplecircuit = state.calculator._cutpriceSimplecircuit,                //Цена за порезку наклеек простой формы
         _cutpriceHardcircuit = state.calculator._cutpriceHardcircuit,                //Цена за порезку наклеек сложной формы
-        _cutpriceRulon = state.calculator._cutpriceRulon,
         _stampingprice = state.calculator._stampingprice,                // Цена за тиснение
         _varnishprice = state.calculator._varnishprice,                // Цена покрытия уф-лаком
         _laminationprice = state.calculator._laminationprice,                // Цена ламинации за лист
-        _paperlist = state.calculator._paperlist,                // Цена за лист бумаги
         _materialPrice = state.calculator._materialPrice,
         rollparams = state.calculator.rollparams,
-        _plasticlist = state.calculator._plasticlist,                // Цена за лист пластика
         _delivery =  parseInt( state.calculator._delivery),                // Доставка
         _postprint = parseInt(state.calculator._postprint),                // Постпечатная подгодовка
         _profit = state.calculator._profit,                // Навар :)
         calcProp = state.calcProp,
         rectlistparams = state.calculator.rectlistparams,
         circuitlistparams = state.calculator.circuitlistparams,
-        rulonWith = state.calculator.rulonWith,
-        rulonPrintPrice = state.calculator.rulonPrintPrice,
         colorfularr = state.calculator.colorfularr, //Price for print in colors
         monochromearr = state.calculator.monochromearr; // Price for print in monochrome
 
@@ -55,7 +50,7 @@ const calc = function (state) {
         totalprice = print + calculateCut() +adjustment+ base + _delivery + _postprint;
         totalprice = totalprice+calculateLamination();
         if(calcProp.print_type === 'Рулонная'){
-            totalprice = totalprice+(print+base)*0.1;
+            totalprice = totalprice+(print+base+adjustment)*0.1;
         }
         totalprice = printUrgency(totalprice);
         totalpricehrn = totalprice * _exchangeRate;
@@ -101,12 +96,14 @@ const calc = function (state) {
                         basis = calcProp.numberoflist * _materialPrice.roll.plastic
                     break;
             }
-            price = 2.4+basis/calcProp.numberoflist*6;
+            price = 2.4+basis/calcProp.numberoflist*numberAdjustment();
 
         }
         return price;
     }
-
+    function numberAdjustment(){
+        return 6;
+    }
     //Функция добавления стоимости за срочность заказа
 
     function printUrgency(price){
@@ -223,9 +220,9 @@ const calc = function (state) {
                     }
                 }
                 if(calcProp.print_type === 'Рулонная') {
-                    printpricelist = rollparams.colorprint;
+                    printpricelist = rollparams.colorprint+rollparams.clear;
                     if(calcProp.basis_param==='transparent'){
-                        printpricelist = rollparams.colorprintwhite;
+                        printpricelist = rollparams.colorprintwhite+rollparams.clear;
                     }
                 }
 
@@ -239,12 +236,13 @@ const calc = function (state) {
                     }
                 }
                 if(calcProp.print_type === 'Рулонная') {
-                    printpricelist = rollparams.monochromeprint;
+                    printpricelist = rollparams.monochromeprint+rollparams.clear;
                 }
 
             }
 
             printtotal = calcProp.numberoflist * printpricelist;
+
         return printtotal;
     }
 
@@ -314,9 +312,9 @@ const calc = function (state) {
             }
         }else if (calcProp.print_type === 'Рулонная'){
             if (calcProp.cut_form ==='hard' || calcProp.width < 20 && calcProp.height < 20){
-                return calcProp.numberoflist * 7/34;
+                return ((calcProp.numberoflist+numberAdjustment()) * 7 +33)/29;
             }else{
-                return calcProp.numberoflist * 5/37;
+                return ((calcProp.numberoflist+numberAdjustment()) * 1.25 +33)/29;
             }
 
         }
