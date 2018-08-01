@@ -405,13 +405,14 @@ const calc = function (state) {
             return Math.max(total1, total2);
         }else if(calcProp.print_type === 'Рулонная'){
             var amount = 0;
-            var amount1 =0;
+            var amount1 = 0;
+            var marginWidth = Math.floor(FigureA.width/parseInt(list.width))===1?0:parseInt(list.margin);
+            var marginHeight = Math.floor(FigureA.height/parseInt(list.height))===1?0:parseInt(list.margin);
+                total1 = Math.floor(FigureA.width/(parseInt(parseInt(list.width))+marginWidth));
 
-                total1 = Math.floor(FigureA.width/(parseInt(parseInt(list.width))+parseInt(list.margin)/2));
 
-
-                total2 = Math.floor(FigureA.height/(parseInt(list.height)+parseInt(list.margin)/2));
-
+                total2 = Math.floor(FigureA.height/(parseInt(list.height)+marginHeight));
+            // console.log(total1, total2);
              amount = Math.ceil(total1*total2);
             return amount;
         }

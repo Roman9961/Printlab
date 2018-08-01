@@ -81,7 +81,13 @@ class FastCalculator extends React.Component{
         
         calcProp[key] = value;
         if(calcProp.form === 'Рулонная'){
-            calcProp.print_type = 'Рулонная'
+            calcProp.print_type = 'Рулонная';
+            if( calcProp.width>980){
+                calcProp.width =980;
+            }
+            if( calcProp.height>316){
+                calcProp.height =316;
+            }
         }else{
             calcProp.print_type = 'Листовая';
             if( calcProp.width>378){
