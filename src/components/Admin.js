@@ -41,6 +41,13 @@ class Admin extends React.Component{
             circuitlistparams : 'Размеры листа под плоттерную порезку',
             colorfularr : 'Price for print in colors', //
             monochromearr : 'Price for print in monochrome',
+            rollparams: 'Параметры рулонной печати',
+            clear: 'Стоимость лака',
+            colorprint:'Стоимость 4+0',
+            colorprintwhite:'Стоимость 5+0',
+            monochromeprint:'Стоимость 2+0',
+            width:'Ширина рапорта',
+            height:'Высота рапорта',
             min : 'min',
             max : 'max',
             price : 'price',
@@ -69,6 +76,10 @@ class Admin extends React.Component{
                 if (user) {
                     this.setState({
                         uid: user.phoneNumber,
+                    })
+                }else{
+                    this.setState({
+                        uid:false,
                     })
                 }
             }
@@ -132,7 +143,6 @@ class Admin extends React.Component{
             )
         }
         else if(this.state.uid && this.state.admin && this.state.admin.includes(this.state.uid)) {
-         console.log();
             return (
 
                 <div>
@@ -142,10 +152,10 @@ class Admin extends React.Component{
                     {
 
                         Object.keys(this.state.calculator).map((col, index) =>
-                            <table className="table table-striped" key={index}>
+                            <table className="table table-striped" key={index} style={{direction:'rtl'}}>
                                 <thead>
                                 <tr>
-                                    <td>
+                                    <td align="left">
                                         {this.state.trans[col]}
                                     </td>
                                 </tr>
@@ -155,11 +165,11 @@ class Admin extends React.Component{
                                         (typeof this.state.calculator[col] === 'object'&&typeof this.state.calculator[col][Object.keys(this.state.calculator[col])[0]] === 'object')?
                                             <tr>
                                                 {(Object.keys(this.state.calculator[col][Object.keys(this.state.calculator[col])[0]]).map((key, index) =>
-                                                <td key={index}>{this.state.trans[key]}</td>
+                                                <td align="left" key={index}>{this.state.trans[key]}</td>
                                             ))}</tr>:
                                             (typeof this.state.calculator[col] !== 'object')?false:
                                                 <tr>{(Object.keys(this.state.calculator[col]).map((key, index) =>
-                                                    <td key={index}>{this.state.trans[key]}</td>
+                                                    <td align="left" key={index}>{this.state.trans[key]}</td>
                                                 ))}</tr>
                                     }
 
@@ -172,7 +182,7 @@ class Admin extends React.Component{
                                            <tr key={index}>
                                                {
                                                    Object.keys(this.state.calculator[col][key]).map((col2, index) =>
-                                                       <td key={index}><input type="number" value={this.state.calculator[col][key][col2]}
+                                                       <td align="left" key={index}><input type="number" value={this.state.calculator[col][key][col2]}
                                                                               onChange={(event)=>this.updateTable2(col, key,col2, event)} />{this.state.trans[key]}</td>
                                                    )
 
@@ -180,13 +190,13 @@ class Admin extends React.Component{
                                            </tr>
                                         )):
                                         (typeof this.state.calculator[col] !== 'object')?
-                                            <tr><td key={index}><input name={col} type="number" value={this.state.calculator[col]}
+                                            <tr><td align="left" key={index}><input name={col} type="number" value={this.state.calculator[col]}
                                                                    onChange={this.updateTable} /></td></tr>:
                                             <tr>
                                                 {
                                                 (Object.keys(this.state.calculator[col]).map((key, index) =>
 
-                                                        <td key={index}><input type="number" value={this.state.calculator[col][key]}
+                                                        <td align="left" key={index}><input type="number" value={this.state.calculator[col][key]}
                                                                                onChange={(event)=>this.updateTable3(col, key, event)} /></td>
 
                                                 ))
@@ -201,7 +211,7 @@ class Admin extends React.Component{
                 </div>
             );
         }
-        else if (!this.state.uid) {
+        else if (this.state.uid===false) {
             return (
                 <div>
                     <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
