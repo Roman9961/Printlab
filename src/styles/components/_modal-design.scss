@@ -78,12 +78,29 @@
   margin-right: $xl-size;
   margin-bottom: $xl-size;
   text-align: center;
+  &.active{
+    transition: all .3s ease-in-out;
+    .outline-icon-draw{
+      &--star{
+        background: url('/images/outline-star_hovered.svg') no-repeat center center;
+      }
+      &--cloud{
+        background: url('/images/outline-cloud_hovered.svg') no-repeat center center;
+      }
+      &--chopped{
+        background: url('/images/outline-chopped_hovered.svg') no-repeat center center;
+      }
+      &--accent{
+        background: url('/images/outline-accent_hovered.svg') no-repeat center center;
+      }
+    }
+  }
   .outline-icon-draw{
     width: 13rem;
-    height:7rem;
+    height:8rem;
     margin-top: -0.7rem;
     background-size: contain;
-
+    transition: all .3s ease-in-out;
     &--star{
       background: url('/images/outline-star.svg') no-repeat center center;
     }

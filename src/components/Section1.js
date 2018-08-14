@@ -59,67 +59,94 @@ class Section1 extends React.Component{
                 }
                 this.toggleValidating(true);
                 handleModal();
-                const immediatelyAvailableReference = base.push('orders', {
-                    data: data,
-                }).then(newLocation => {
-                    if (data.user.payment_method == 'liq-pay') {
-                        handleModal();
-                        const generatedKey = newLocation.key;
-                        const data1 = {
-                            'public_key': process.env.LIQPAY_PUBLIC_KEY,
-                            'action': 'pay',
-                            'amount': this.state.calcProp.price,
-                            'currency': 'UAH',
-                            'description': 'description text',
-                            'order_id': `${generatedKey}`,
-                            'server_url': 'http://printlab.amdev.pro/server/firebase',
-                            'sandbox': '1',
-                            'version': '3'
-                        };
-
-                        const dataL = JSON.stringify(data1);
-
-                        const crypto = require('crypto');
-                        let str = crypto.createHash('sha1').update(process.env.LIQPAY_PRIVATE_KEY + dataL + process.env.LIQPAY_PRIVATE_KEY);
-
-                        const signature = str.digest('base64');
-                        window.LiqPayCheckoutCallback = function () {
-                            LiqPayCheckout.init({
-                                data: dataL,
-                                embedTo: "#liqpay_checkout",
-                                signature: signature,
-                                mode: "popup" // embed || popup,
-                            }).on("liqpay.callback", function (data) {
-                                base.update(`orders/${data.order_id}`, {
-                                    data: {status: data.status, dateUpdate:moment().format("YYYY-MM-DD HH:mm:ss")}
-                                });
-
-                            }).on("liqpay.ready", function (data) {
-                                // ready
-                            }).on("liqpay.close", function (data) {
-                                setOrder(true);
-                                handleModal();
-                                handleBookmark({
-                                    print:true,
-                                    design:false,
-                                    deliver:false
-                                })
-                            });
-                        }();
-                    }else{
-                        handleModal();
-                        setOrder(true);
-                        handleModal();
-                        handleBookmark({
-                            print:true,
-                            design:false,
-                            deliver:false
-                        })
+                base.fetch('orders', {
+                    context: this,
+                    asArray: true
+                }).then(orders => {
+                   var orderId =orders[orders.length-1].orderId?(orders[orders.length-1].orderId+1):1;
+                    data = {
+                        ...data,
+                        orderId
                     }
+                    const immediatelyAvailableReference = base.push('orders', {
+                        data: data,
+                    }).then(newLocation => {
+                        if (data.user.payment_method == 'liq-pay') {
+                            handleModal();
+                            const generatedKey = newLocation.key;
+                            const data1 = {
+                                'public_key': process.env.LIQPAY_PUBLIC_KEY,
+                                'action': 'pay',
+                                'amount': this.state.calcProp.price,
+                                'currency': 'UAH',
+                                'description': 'description text',
+                                'order_id': `${generatedKey}`,
+                                'server_url': 'http://printlab.amdev.pro/server/firebase',
+                                'sandbox': '1',
+                                'version': '3'
+                            };
 
-                }).catch(err => {
+                            const dataL = JSON.stringify(data1);
+
+                            const crypto = require('crypto');
+                            let str = crypto.createHash('sha1').update(process.env.LIQPAY_PRIVATE_KEY + dataL + process.env.LIQPAY_PRIVATE_KEY);
+
+                            const signature = str.digest('base64');
+                            window.LiqPayCheckoutCallback = function () {
+                                LiqPayCheckout.init({
+                                    data: dataL,
+                                    embedTo: "#liqpay_checkout",
+                                    signature: signature,
+                                    mode: "popup" // embed || popup,
+                                }).on("liqpay.callback", function (data) {
+                                    base.update(`orders/${data.order_id}`, {
+                                        data: {status: data.status, dateUpdate:moment().format("YYYY-MM-DD HH:mm:ss")}
+                                    });
+
+                                }).on("liqpay.ready", function (data) {
+                                    // ready
+                                }).on("liqpay.close", function (data) {
+                                    setOrder(true);
+                                    handleModal();
+                                    handleBookmark({
+                                        print:true,
+                                        design:false,
+                                        deliver:false
+                                    })
+                                });
+                            }();
+                        }else{
+                            handleModal();
+                            setOrder(true);
+                            handleModal();
+                            handleBookmark({
+                                print:true,
+                                design:false,
+                                deliver:false
+                            });
+
+                            const xhr = new XMLHttpRequest();
+                            xhr.open("POST", 'http://127.0.0.1:8083/server/Firebase', true);
+
+//Передает правильный заголовок в запросе
+                            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                            xhr.onreadystatechange = function(data) {//Вызывает функцию при смене состояния.
+                                if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                                    console.log(data);
+                                }
+                            }
+                            xhr.send(`order_id=${newLocation.key}&moneyTransfer=true`);
+
+                        }
+
+                    }).catch(err => {
+                        //handle error
+                    });
+                }).catch(error => {
                     //handle error
-                });
+                })
+
                 //available immediately, you don't have to wait for the callback to be called
             } else if(!this.state.validate|| !price) {
                 this.setState(state=>({
@@ -160,7 +187,7 @@ class Section1 extends React.Component{
             "quantity" : "",
             "stamping" : "",
             "stickersonlist" : "",
-            "type" : "",
+            "type" : "Цветная",
             "varnish" : "",
             "width" : "",
             "margin":4,

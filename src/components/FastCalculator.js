@@ -23,7 +23,7 @@ class FastCalculator extends React.Component{
             "quantity" : "100",
             "stamping" : "",
             "stickersonlist" : "",
-            "type" : "",
+            "type" : "Цветная",
             "varnish" : "",
             "margin":4,
             "price":0,

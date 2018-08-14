@@ -5,5 +5,7 @@
 /node_modules/
 /vendor/
 /public/dist
+/public/mail_template.html
+/public/style.css
 .env.test
 .env.development
