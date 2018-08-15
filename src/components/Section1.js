@@ -210,6 +210,7 @@ class Section1 extends React.Component{
             phone:'+380'
         },
         files:[],
+        fileError:false,
         hasNameError:true,
         hasPhoneError:true,
         hasEmailError:true,
@@ -455,6 +456,14 @@ class Section1 extends React.Component{
     };
 
     handleFileupload = (e, data)=>{
+        data.result.files.map(file=>{
+            let fileError = file.error !== undefined;
+                this.setState(state=>({
+                    ...state,
+                    fileError
+                }));
+
+        });
         this.setState(state=>({
             ...state,
             files:data.result.files
@@ -476,15 +485,41 @@ class Section1 extends React.Component{
     };
 
     handleFiles = (e)=>{
+        const setState = (errorMessage)=> {
+            this.setState(state=>({
+                ...state,
+                errorMessage
+            }))
+        };
+        const handleModal = this.handleModal;
         jQuery(e.currentTarget).fileupload({
+            context:this,
+            add: function(e, data) {
+                var uploadErrors = [];
+                let totalSize=0;
+                const errorMessage ='Размер файла(ов) слишком большой, попробуйте уменьшить размер или загрузить файл(ы) на файлообменник и приложить ссылку в комментарии к заказу';
+                data.originalFiles.map(file=>{
+                    totalSize += file['size'];
+                    if(file['size'] > 2000000) {
+                        uploadErrors.push('Filesize is too big');
+                    }
+                });
+
+                if(uploadErrors.length > 0 || totalSize>2000) {
+                    console.log(totalSize)
+                    setState(errorMessage);
+                    handleModal();
+                } else {
+                    data.submit();
+                }
+            },
             url: 'server/php/index.php',
             singleFileUploads: false,
-            maxFileSize: 5,
             dataType: 'json',
             beforeSend:this.handleFileSend,
             done: this.handleFileupload,
-            error: function(info){
-                console.log(info);
+            error: function(e, data){
+                console.log(e, data);
             }
         })
     };
@@ -906,8 +941,8 @@ class Section1 extends React.Component{
                                                             {status=>(
                                                             <div className={`file-upload-container ${status}`}>
                                                                 <div className="modal-block__content_item__description">
-                                                                    Если ваш макет соответствует требованиям к макету , то
-                                                                    загрузите его:
+                                                                    {this.state.files.length===0&&!this.state.fileError&&(<span>Если ваш макет соответствует требованиям к макету , то загрузите его:</span>)}
+                                                                    {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
                                                                 </div>
                                                                 <label htmlFor="upload1" className="file-upload">
                                                                     <div className="fileform">
@@ -994,6 +1029,9 @@ class Section1 extends React.Component{
                                                                             </label>
                                                                         </div>
                                                                     </div>
+                                                                    <div className="modal-block__content_item__description">
+                                                                        {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
+                                                                    </div>
                                                                     <label htmlFor="upload2" className="file-upload">
                                                                         <div className="fileform fileform--outline">
                                                                             <div className="button button--design">
@@ -1023,7 +1061,8 @@ class Section1 extends React.Component{
                                                             {status=>(
                                                                 <div className={`file-upload-container ${status}`}>
                                                                     <div className="modal-block__content_item__description">
-                                                                        Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна.
+                                                                        {this.state.files.length===0&&!this.state.fileError&&(<span>Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна.</span>)}
+                                                                        {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
                                                                     </div>
                                                                     <label htmlFor="upload3" className="file-upload">
                                                                         <div className="fileform">

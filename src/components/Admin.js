@@ -4,8 +4,11 @@ import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { Redirect } from 'react-router-dom';
 import base from '../base';
+import AdminTable from './AdminTable';
+import AdminTableMaterial from './AdminTableMaterial';
 
 class Admin extends React.Component{
+
     state = {
         stickers : {
             Section_ul : [],
@@ -59,7 +62,7 @@ class Admin extends React.Component{
     componentDidMount(){
         this.ref = base.syncState('Stickers/calculator',{
             context: this,
-            state: 'calculator',
+            state: 'calculator'
         });
         this.ref = base.syncState('Stickers/admin',{
             context: this,
@@ -102,7 +105,7 @@ class Admin extends React.Component{
 
     updateTable2 = (col, position,col2, event) =>{
         const calculator = {...this.state.calculator};
-        calculator[col][position][col2] = event.currentTarget.value;
+        calculator[col][position][col2] = parseFloat(event.currentTarget.value);
         this.setState({calculator});
     }
     updateTable3 = (col, col2, event) =>{
@@ -111,6 +114,21 @@ class Admin extends React.Component{
         this.setState({calculator});
     }
 
+    addNew = (table) =>{
+        const count = this.state.calculator[table].length;
+        base.post(`Stickers/calculator/${table}/${count}`, {
+            data: {
+                min:0,
+                max:0,
+                price:0
+            },
+        })
+    }
+    remoweRow = (row, key)=>{
+        const calculator = {...this.state.calculator};
+        calculator[row][key] = null;
+        this.setState({calculator});
+    }
     // Configure FirebaseUI.
     uiConfig = {
         // Popup signin flow rather than redirect flow.
@@ -145,69 +163,26 @@ class Admin extends React.Component{
         else if(this.state.uid && this.state.admin && this.state.admin.includes(this.state.uid)) {
             return (
 
-                <div>
+                <div style={{padding:20+'px'}}>
                     <h2>Admin</h2>
                     {logOut}
 
-                    {
+                    <div>
+                        <span>Курс доллара</span>
+                        <div>
+                            <input name={'_exchangeRate'} type="number" value={this.state.calculator._exchangeRate}
+                                   onChange={this.updateTable} />
+                        </div>
+                    </div>
 
-                        Object.keys(this.state.calculator).map((col, index) =>
-                            <table className="table table-striped" key={index} style={{direction:'rtl'}}>
-                                <thead>
-                                <tr>
-                                    <td align="left">
-                                        {this.state.trans[col]}
-                                    </td>
-                                </tr>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._cutpriceRect} tableName='_cutpriceRect' updateTable = {this.updateTable2}/>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._cutpriceSimplecircuit} tableName='_cutpriceSimplecircuit' updateTable = {this.updateTable2}/>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._cutpriceHardcircuit} tableName='_cutpriceHardcircuit' updateTable = {this.updateTable2}/>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._profit} tableName='_profit' updateTable = {this.updateTable2}/>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.colorfularr} tableName='colorfularr' updateTable = {this.updateTable2}/>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.monochromearr} tableName='monochromearr' updateTable = {this.updateTable2}/>
+                    <AdminTableMaterial table={this.state.calculator._materialPrice} tableName='_materialPrice' updateTable = {this.updateTable2}/>
 
-                                    {
-
-                                        (typeof this.state.calculator[col] === 'object'&&typeof this.state.calculator[col][Object.keys(this.state.calculator[col])[0]] === 'object')?
-                                            <tr>
-                                                {(Object.keys(this.state.calculator[col][Object.keys(this.state.calculator[col])[0]]).map((key, index) =>
-                                                <td align="left" key={index}>{this.state.trans[key]}</td>
-                                            ))}</tr>:
-                                            (typeof this.state.calculator[col] !== 'object')?false:
-                                                <tr>{(Object.keys(this.state.calculator[col]).map((key, index) =>
-                                                    <td align="left" key={index}>{this.state.trans[key]}</td>
-                                                ))}</tr>
-                                    }
-
-                                </thead>
-                                <tbody>
-                                {
-
-                                        (typeof this.state.calculator[col][Object.keys(this.state.calculator[col])[0]] === 'object')?
-                                        (Object.keys(this.state.calculator[col]).map((key, index) =>
-                                           <tr key={index}>
-                                               {
-                                                   Object.keys(this.state.calculator[col][key]).map((col2, index) =>
-                                                       <td align="left" key={index}><input type="number" value={this.state.calculator[col][key][col2]}
-                                                                              onChange={(event)=>this.updateTable2(col, key,col2, event)} />{this.state.trans[key]}</td>
-                                                   )
-
-                                               }
-                                           </tr>
-                                        )):
-                                        (typeof this.state.calculator[col] !== 'object')?
-                                            <tr><td align="left" key={index}><input name={col} type="number" value={this.state.calculator[col]}
-                                                                   onChange={this.updateTable} /></td></tr>:
-                                            <tr>
-                                                {
-                                                (Object.keys(this.state.calculator[col]).map((key, index) =>
-
-                                                        <td align="left" key={index}><input type="number" value={this.state.calculator[col][key]}
-                                                                               onChange={(event)=>this.updateTable3(col, key, event)} /></td>
-
-                                                ))
-                                                }
-                                            </tr>
-                                }
-                                </tbody>
-                            </table>
-                        )
-
-                        }
                 </div>
             );
         }
