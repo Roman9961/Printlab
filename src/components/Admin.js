@@ -64,12 +64,13 @@ class Admin extends React.Component{
             context: this,
             state: 'calculator'
         });
-        this.ref = base.syncState('Stickers/admin',{
+        this.ref = base.listenTo('Stickers/admin',{
             context: this,
-            state: 'admin',
-            then () {
+            asArray: true,
+            then (admin) {
+                console.log(admin);
                 this.setState({
-                    admin: this.state.admin,
+                    admin,
                 })
             }
         });
