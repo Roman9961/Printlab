@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn build:prod
+  /usr/local/bin/node /usr/local/bin/yarn add
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
@@ -59,6 +59,8 @@ npm manifest:
       "prop-types": "^15.6.0",
       "re-base": "3.2.2",
       "react": "^16.3.0-alpha.1",
+      "react-bootstrap-table-next": "^1.1.1",
+      "react-bootstrap-table2-editor": "^1.0.0",
       "react-dom": "^16.3.0-alpha.1",
       "react-firebaseui": "^1.2.3",
       "react-google-recaptcha": "^0.12.0",
@@ -70,7 +72,6 @@ npm manifest:
       "react-router-dom": "^4.2.2",
       "react-scroll-to-element": "^0.2.0",
       "react-select": "^1.2.1",
-      "react-table": "^6.8.6",
       "react-tooltip": "^3.6.1",
       "react-transition-group": "^2.3.1",
       "resolve-url-loader": "^2.3.0",
@@ -1933,6 +1934,10 @@ Lockfile:
       define-property "^0.2.5"
       isobject "^3.0.0"
       static-extend "^0.1.1"
+  
+  classnames@2.2.5:
+    version "2.2.5"
+    resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
   
   classnames@^2.2.4, classnames@^2.2.5:
     version "2.2.6"
@@ -6768,6 +6773,17 @@ Lockfile:
     dependencies:
       prop-types ">=15.5.0"
   
+  react-bootstrap-table-next@^1.1.1:
+    version "1.1.1"
+    resolved "https://registry.yarnpkg.com/react-bootstrap-table-next/-/react-bootstrap-table-next-1.1.1.tgz#eb4d91d29ad8d706eb8303a94bb266bbd1a1dd29"
+    dependencies:
+      classnames "2.2.5"
+      underscore "1.9.1"
+  
+  react-bootstrap-table2-editor@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/react-bootstrap-table2-editor/-/react-bootstrap-table2-editor-1.0.0.tgz#22eab3ae736e7a5e0fb691117088d93a8f8edb4f"
+  
   react-dev-utils@^5.0.0:
     version "5.0.1"
     resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-5.0.1.tgz#1f396e161fe44b595db1b186a40067289bf06613"
@@ -6959,12 +6975,6 @@ Lockfile:
       classnames "^2.2.4"
       prop-types "^15.5.8"
       react-input-autosize "^2.1.2"
-  
-  react-table@^6.8.6:
-    version "6.8.6"
-    resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.8.6.tgz#a0ad8b4839319052d5befc012603fb161e52ede3"
-    dependencies:
-      classnames "^2.2.5"
   
   react-tooltip@^3.6.1:
     version "3.6.1"
@@ -8349,6 +8359,10 @@ Lockfile:
     version "0.0.6"
     resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
   
+  underscore@1.9.1:
+    version "1.9.1"
+    resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
+  
   union-value@^1.0.0:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/union-value/-/union-value-1.0.0.tgz#5c71c34cb5bad5dcebe3ea0cd08207ba5aa1aea4"
@@ -8982,16 +8996,14 @@ Lockfile:
       toposort "^2.0.2"
 
 Trace: 
-  Error: Command failed.
-  Exit code: 2
-  Command: sh
-  Arguments: -c webpack -p --env=prod
-  Directory: /home/webintern/websites/St
-  Output:
-  
-      at ProcessTermError.MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
-      at new ProcessTermError (/usr/local/lib/node_modules/yarn/lib/cli.js:226:113)
-      at ChildProcess.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:30281:17)
-      at ChildProcess.emit (events.js:159:13)
-      at maybeClose (internal/child_process.js:943:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:220:5)
+  Error: Missing list of packages to add to your project.
+      at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
+      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:40587:13)
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:116:14
+      at new Promise (<anonymous>)
+      at new F (/usr/local/lib/node_modules/yarn/lib/cli.js:23451:28)
+      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:95:12)
+      at Object.run (/usr/local/lib/node_modules/yarn/lib/cli.js:40599:19)
+      at run (/usr/local/lib/node_modules/yarn/lib/cli.js:89113:20)

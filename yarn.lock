@@ -1839,6 +1839,10 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+classnames@2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
+
 classnames@^2.2.4, classnames@^2.2.5:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
@@ -3423,7 +3427,7 @@ follow-redirects@^1.0.0:
   dependencies:
     debug "^3.1.0"
 
-font-awesome@^4.7.0:
+font-awesome@^4.3.0, font-awesome@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
 
@@ -6673,6 +6677,21 @@ react-async-script@>=0.9.1:
   dependencies:
     prop-types ">=15.5.0"
 
+react-bootstrap-table-next@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-table-next/-/react-bootstrap-table-next-1.1.1.tgz#eb4d91d29ad8d706eb8303a94bb266bbd1a1dd29"
+  dependencies:
+    classnames "2.2.5"
+    underscore "1.9.1"
+
+react-bootstrap-table2-editor@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-table2-editor/-/react-bootstrap-table2-editor-1.0.0.tgz#22eab3ae736e7a5e0fb691117088d93a8f8edb4f"
+
+react-bootstrap-table2-paginator@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-table2-paginator/-/react-bootstrap-table2-paginator-1.0.1.tgz#2b90b8a4e791fb4afb9c61af3dbb41085c206860"
+
 react-dev-utils@^5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-5.0.1.tgz#1f396e161fe44b595db1b186a40067289bf06613"
@@ -6714,6 +6733,13 @@ react-easy-swipe@^0.0.16:
 react-error-overlay@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
+
+react-fa@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-fa/-/react-fa-5.0.0.tgz#d571732856c6cb2c155c46daef018ba67a75b973"
+  dependencies:
+    font-awesome "^4.3.0"
+    prop-types "^15.5.8"
 
 react-firebaseui@^1.2.3:
   version "1.2.3"
@@ -6864,12 +6890,6 @@ react-select@^1.2.1:
     classnames "^2.2.4"
     prop-types "^15.5.8"
     react-input-autosize "^2.1.2"
-
-react-table@^6.8.6:
-  version "6.8.6"
-  resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.8.6.tgz#a0ad8b4839319052d5befc012603fb161e52ede3"
-  dependencies:
-    classnames "^2.2.5"
 
 react-tooltip@^3.6.1:
   version "3.6.1"
@@ -8253,6 +8273,10 @@ uglifyjs-webpack-plugin@^0.4.6:
 uid-number@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
+
+underscore@1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
 
 union-value@^1.0.0:
   version "1.0.0"
