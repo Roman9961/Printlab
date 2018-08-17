@@ -1,7 +1,7 @@
 .box-layout{
   align-items: center;
-  background: url('/images/bg.jpg');
-  background-size: cover;
+  background: url('/images/side-image-1.svg')no-repeat center center;
+  background-size: contain;
   display: flex;
   justify-content: center;
   height: 100vh;

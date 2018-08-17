@@ -1,0 +1,19 @@
+.file-container{
+  display: flex;
+}
+.file-self{
+  display: flex;
+  height:59px;
+  align-items: center;
+}
+
+.file-delete{
+  align-self:end;
+  color: red;
+  transition: all 0.3s ease-out;
+  cursor: pointer;
+  &:hover{
+    transform: scale(1.1);
+    transition: all 0.3s ease-out;
+  }
+}

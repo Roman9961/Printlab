@@ -9,12 +9,16 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { Redirect } from 'react-router-dom';
 import base from '../base';
-
+const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
 class AdminOrders extends React.Component{
 
     state = {
         orders : {
+        },
+        files:{
+            files:null,
+            path:null
         },
         trans:{
             wait: 'Ожидает оплаты',
@@ -52,11 +56,13 @@ class AdminOrders extends React.Component{
             cashless:'Безналичный расчет'
         },
         uid: null,
-        admin: null
+        admin: null,
+        users: null
 
     };
 
     componentDidMount(){
+
        base.listenTo('orders',{
             context: this,
             asArray: true,
@@ -64,23 +70,33 @@ class AdminOrders extends React.Component{
                this.setState({orders});
            }
         });
-        this.ref = base.listenTo('Stickers/admin',{
+
+       base.listenTo('users',{
+            context: this,
+            asArray: true,
+            then (users) {
+                this.setState({
+                    users,
+                })
+            }
+        });
+
+        base.listenTo('Stickers/admin',{
             context: this,
             asArray: true,
             then (admin) {
-                console.log(admin);
                 this.setState({
                     admin,
                 })
             }
         });
-
         this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
 
             (user) => {
                 if (user) {
+                    const uid = user.email?user.email:user.phoneNumber;
                     this.setState({
-                        uid: user.phoneNumber,
+                        uid,
                     })
                 }else{
                     this.setState({
@@ -91,46 +107,78 @@ class AdminOrders extends React.Component{
         );
     }
 
-
-
     logOut = async () =>{
         await  firebase.auth().signOut();
-        this.setState({uid:null});
+        this.setState({uid:false});
+        this.forceUpdate();
     }
 
 
-    // Configure FirebaseUI.
-    uiConfig = {
-        // Popup signin flow rather than redirect flow.
-        signInFlow: 'popup',
 
-        // We will display Google and Facebook as auth providers.
-        signInOptions: [{
-            provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-            defaultCountry: 'UA'
-        }
-        ],
-        callbacks: {
-            // Avoid redirects after sign-in.
-            signInSuccess: () => false
-        }
-    };
-
-
-
-    // Make sure we un-register Firebase observers when the component unmounts.
     componentWillUnmount() {
         this.unregisterAuthObserver();
     }
 
+    handleFileupload = (e, data)=>{
+        let files = this.state.files.files
+        data.result.files.map((file, k)=>{
+            files.push(file);
+        });
+        base.post(this.state.files.path, {
+            data: {...files},
+        });
+    };
+
+    handleFiles = (e)=>{
+
+        jQuery(e.currentTarget).fileupload({
+            context:this,
+            url: '/server/php/index.php',
+            singleFileUploads: false,
+            dataType: 'json',
+            done: this.handleFileupload,
+            error: function(e, data){
+                console.log(e, data);
+            }
+        })
+    };
+    handleH = (files)=>{
+            this.setState({files});
+    }
+
+
+
     render() {
+        const deleteFile = (params)=>{
+            fetch(
+                params.deleteUrl,
+                {
+                    method: "DELETE"
+                }
+            );
+            base.post(params.path, {
+                data: params.files,
+            });
+        }
         const logOut = <button onClick={this.logOut}>Logout</button>
-     if (this.state.uid && this.state.admin && !this.state.admin.includes(this.state.uid)){
+        const startLogin = ()=>{
+            return  firebase.auth().signInWithPopup(googleAuthProvider);
+        };
+        const isAdmin = this.state.admin!=null &&this.state.admin.includes(this.state.uid);
+        const isUser = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid);
+        const isManager = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid&&e.type==='manager');
+     if (
+         this.state.uid &&
+         ( this.state.admin&&((!isAdmin||!isManager) && this.props.match.id =='orders') ||
+             this.state.users&&(!isUser && this.props.match.params.id =='works') ||
+             this.state.users&&(isUser && !isManager && this.props.match.params.id =='orders')
+         )
+     ){
             return(
                 <Redirect to="/"/>
             )
         }
-        else if(this.state.uid && this.state.admin && this.state.admin.includes(this.state.uid)) {
+        else if(this.state.uid && (isAdmin||isUser)) {
          const columns = [{
              dataField: 'calcProp.print_time',
              text: '',
@@ -186,7 +234,13 @@ class AdminOrders extends React.Component{
          }];
          const expandRow = {
              renderer: row =>{
-                 const files = row.files!==undefined?row.files:[]
+                 const rowFiles = row.files!==undefined?Object.values(row.files):[];
+                 const files = {
+                     files:rowFiles,
+                     path:`orders/${row.key}/files`
+                 };
+
+
                  return(
                      <div>
                          <p><b>Тип печати: </b>{ row.calcProp.print_type }</p>
@@ -199,11 +253,26 @@ class AdminOrders extends React.Component{
                          }</p>
                          <p><b>Тираж: </b>{row.calcProp.quantity }шт.</p>
                          <p><b>Размеры: </b>{  row.calcProp.height }мм/{ row.calcProp.width }мм (высота/ширина) <span style={{color:'red'}}>!важно при рулонной печати</span></p>
-                         <p><b>Прикрепленные файлы: </b> { files.map(function (file, i) {
+                         <div><b>Прикрепленные файлы: </b> <div className="file-container">{ rowFiles.map(function (file, i) {
 
-                             return <a key={i} href={file.url} target="_blank" download><img src={file.thumbnailUrl!==undefined?file.thumbnailUrl:'images/default.png'} style={{width:50+'px'}} alt=""/></a>;
-                         }) }
-                         </p>
+                             return <div className="file-self"  key={i}>
+                                 <div>
+                                 <a href={file.url} target="_blank" download>
+                                     <img src={file.thumbnailUrl!==undefined?file.thumbnailUrl:'/images/default.png'} style={{width:50+'px'}} alt=""/>
+                                 </a>
+                                 </div>
+                                 <Icon size="lg" name="times-circle" className="file-delete" onClick={()=>{delete rowFiles[i]; deleteFile({deleteUrl:file.deleteUrl,path:`orders/${row.key}/files`,files:rowFiles})}}/>
+                                 </div>;
+                         }) }</div>
+                             <label htmlFor="upload1" className="file-upload" onClick={()=>{this.handleH(files)}}>
+                                 <div className="fileform">
+                                     <div className="button button--design">
+                                         <span>Загрузить макет</span>
+                                     </div>
+                                     <input className="upload23"  id="upload1" type="file" name="files[]" multiple onClick={this.handleFiles} />
+                                 </div>
+                             </label>
+                         </div>
                          <p><b>Кол-во листов/раппортов: </b>{  row.calcProp.numberoflist }</p>
                          <p><b>Стоимость: </b>{  row.calcProp.price } грн.</p>
                          <p><b>Способ оплаты: </b>{  trans[row.user.payment_method] }</p>
@@ -231,6 +300,16 @@ class AdminOrders extends React.Component{
              return classes;
          };
          const {trans} = this.state;
+         let data = this.state.orders.sort(function (a,b) {
+             if(a.calcProp.print_time == b.calcProp.print_time){
+                 return (a.dateCreate < b.dateCreate) ? 1 : (a.dateCreate > b.dateCreate) ? -1 : 0;
+             }else {
+                 return a.calcProp.print_time - b.calcProp.print_time
+             }
+         });
+         if(this.props.match.params.id =='works'){
+             // data = data.filter(order=>order.status=='invoice_wait');
+         }
             return (
 
                 <div style={{padding:20+'px'}}>
@@ -245,13 +324,7 @@ class AdminOrders extends React.Component{
 
                     <BootstrapTable
                         keyField='key'
-                        data={ this.state.orders.sort(function (a,b) {
-                            if(a.calcProp.print_time == b.calcProp.print_time){
-                                return (a.dateCreate < b.dateCreate) ? 1 : (a.dateCreate > b.dateCreate) ? -1 : 0;
-                            }else {
-                                return a.calcProp.print_time - b.calcProp.print_time
-                            }
-                        }) }
+                        data={ data }
                         columns={ columns }
                         cellEdit={ cellEditFactory({
                             mode: 'click',
@@ -271,9 +344,13 @@ class AdminOrders extends React.Component{
             );
         }
         else if (this.state.uid===false) {
+
             return (
-                <div>
-                    <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
+                <div className="box-layout">
+                    <div className="box-layout__box">
+                        <h1 className="box-layout__title">Printlab</h1>
+                        <button className="button" onClick={startLogin}>Login with Google</button>
+                    </div>
                 </div>
             );
         }

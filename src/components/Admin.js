@@ -94,7 +94,7 @@ class Admin extends React.Component{
 
     logOut = async () =>{
         await  firebase.auth().signOut();
-        this.setState({uid:null});
+        this.setState({uid:false});
     }
 
 

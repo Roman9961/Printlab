@@ -72,6 +72,6 @@
   "scripts": {
     "build:dev": "webpack",
     "build:prod": "webpack -p --env=prod",
-    "dev-server": "webpack-dev-server"
+    "dev-server": "webpack-dev-server --content-base src --hot --inline"
   }
 }

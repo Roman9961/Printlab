@@ -505,7 +505,7 @@ class Section1 extends React.Component{
                     }
                 });
 
-                if(uploadErrors.length > 0 || totalSize>2000) {
+                if(uploadErrors.length > 0 || totalSize>2000000) {
                     console.log(totalSize)
                     setState(errorMessage);
                     handleModal();
