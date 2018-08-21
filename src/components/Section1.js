@@ -322,6 +322,7 @@ class Section1 extends React.Component{
             let price = calc(this.state);
             if(this.state.calcProp.form === 'Рулонная' && price<750){
                 price = 750.00;
+                price =price.toFixed(2);
             }
             if (price != this.state.calcProp.price) {
                 this.setState((state)=>({
@@ -349,7 +350,7 @@ class Section1 extends React.Component{
             }
         }
         if(calcProp.print_type == 'Листовая'){
-            calcProp.margin=3;
+            calcProp.margin=4;
         }
         this.setState((state)=>({
             ...state,

@@ -260,7 +260,7 @@ const calc = function (state) {
                     case 'Прямоугольная':
                         for (let i = 0; i < _cutpriceSimplecircuit.length; i++) {
                             let obj = _cutpriceSimplecircuit[i];
-                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                            if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
                             }
@@ -269,7 +269,7 @@ const calc = function (state) {
                     case 'Простая форма':
                         for (let i = 0; i < _cutpriceSimplecircuit.length; i++) {
                             let obj = _cutpriceSimplecircuit[i];
-                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                            if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
                             }
@@ -279,7 +279,7 @@ const calc = function (state) {
                         for (let i = 0; i < _cutpriceHardcircuit.length; i++) {
                             console.log(_cutpriceHardcircuit[i])
                             let obj = _cutpriceHardcircuit[i];
-                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                            if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
                             }
@@ -291,7 +291,7 @@ const calc = function (state) {
                     case 'Прямоугольная':
                         for (let i = 0; i < _cutpriceRect.length; i++) {
                             let obj = _cutpriceRect[i];
-                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                            if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
                             }
@@ -300,7 +300,7 @@ const calc = function (state) {
                     case 'Простая форма':
                         for (let i = 0; i < _cutpriceSimplecircuit.length; i++) {
                             let obj = _cutpriceSimplecircuit[i];
-                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                            if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
                             }
@@ -309,7 +309,7 @@ const calc = function (state) {
                     case 'Сложная форма':
                         for (let i = 0; i < _cutpriceHardcircuit.length; i++) {
                             let obj = _cutpriceHardcircuit[i];
-                            if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                            if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
                             }

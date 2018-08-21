@@ -63,7 +63,8 @@ class FastCalculator extends React.Component{
     componentDidUpdate(){
             let price = calc(this.state);
             if(this.state.calcProp.form === 'Рулонная' && price<750){
-                price = 750.00;
+                price = 750;
+                price =price.toFixed(2);
             }
             if(price!=this.state.calcProp.price){
                 this.setState((state)=>({
