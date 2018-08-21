@@ -39,9 +39,13 @@ class Main extends React.Component{
     };
 
     componentDidMount(){
-        this.ref = base.syncState('Stickers/stickers',{
+        this.ref = base.listenTo('Stickers/stickers',{
             context: this,
-            state: 'stickers'
+            then (stickers) {
+                this.setState({
+                    stickers,
+                })
+            }
         });
         window.addEventListener('scroll', this.handleScroll);
 
