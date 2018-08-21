@@ -335,7 +335,29 @@ class Section1 extends React.Component{
         }
     }
 
-     updatecalcProp =  (key, value) =>{
+    updatecalcProp =  (key, value) =>{
+        const calcProp = {...this.state.calcProp};
+        calcProp[key] = value;
+        if(calcProp.form === 'Рулонная') {
+            calcProp.print_type = 'Рулонная';
+        }else{
+            calcProp.print_type = 'Листовая';
+        }
+        if(calcProp.form=='Прямоугольная'){
+            if( calcProp.width<40 || calcProp.height<40){
+                calcProp.form='Простая форма'
+            }
+        }
+        if(calcProp.print_type == 'Листовая'){
+            calcProp.margin=3;
+        }
+        this.setState((state)=>({
+            ...state,
+            calcProp
+        }));
+    };
+
+     updatecalcOnBlurProp =  (key, value) =>{
         const calcProp = {...this.state.calcProp};
 
          calcProp[key] = value;
@@ -431,6 +453,13 @@ class Section1 extends React.Component{
                     event.currentTarget.value);
            const calculator = this.state;
        }
+    };
+
+    handleBlur = async (event) => {
+        if(Object.keys(event).length>0) {
+            await this.updatecalcOnBlurProp(event.currentTarget.name,event.currentTarget.value);
+            // const calculator = this.state;
+        }
     };
 
     toolTipVisible = () => {
@@ -651,12 +680,12 @@ class Section1 extends React.Component{
                                             <div className="modal-block__title">Размер:</div>
                                             <div className="modal-block__content modal-block__content--input">
                                                 <div className="modal-block__content_item modal-block__content_item--input">
-                                                    <input className="number-input"  type="number" name="height" id="field_profile-05" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} placeholder="302"/>
+                                                    <input className="number-input"  type="number" name="height" id="field_profile-05" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} onBlur={this.handleBlur} placeholder="302"/>
                                                     <span>Высота, мм</span>
                                                 </div>
                                                 <div className="x-size"></div>
                                                 <div className="modal-block__content_item modal-block__content_item--input">
-                                                    <input className="number-input" type="number" name="width" id="field_profile-06" value={this.state.calcProp.width} onChange={this.handleChange} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
+                                                    <input className="number-input" type="number" name="width" id="field_profile-06" value={this.state.calcProp.width} onChange={this.handleChange} onBlur={this.handleBlur} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
                                                     <span>Ширина, мм</span>
                                                 </div>
                                             </div>
@@ -665,7 +694,7 @@ class Section1 extends React.Component{
                                             <div className="modal-block__title">Количество:</div>
                                              <div className="modal-block__content modal-block__content--input">
                                                  <div className="modal-block__content_item modal-block__content_item--input">
-                                                     <input className="number-input" type="number" name="quantity" id="field_profile-07" value={this.state.calcProp.quantity} onChange={this.handleChange} min="0" max="99999" step="1" placeholder="21800"/>
+                                                     <input className="number-input" type="number" name="quantity" id="field_profile-07" value={this.state.calcProp.quantity} onChange={this.handleChange} onBlur={this.handleBlur} min="0" max="99999" step="1" placeholder="21800"/>
                                                      <span>Штук</span>
                                                 </div>
                                             </div>

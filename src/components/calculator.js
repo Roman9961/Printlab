@@ -276,7 +276,6 @@ const calc = function (state) {
                         }
                         break;
                     case 'Сложная форма':
-                        console.log(_cutpriceHardcircuit)
                         for (let i = 0; i < _cutpriceHardcircuit.length; i++) {
                             console.log(_cutpriceHardcircuit[i])
                             let obj = _cutpriceHardcircuit[i];
@@ -415,7 +414,7 @@ const calc = function (state) {
             var amount = 0;
             var amount1 = 0;
             var marginWidth = Math.floor(FigureA.width/parseInt(list.width))===1?0:parseInt(list.margin);
-            var marginHeight = Math.floor(FigureA.height/parseInt(list.height))===1?0:parseInt(list.margin);
+            var marginHeight = Math.floor(parseInt(FigureA.height)/(parseInt((list.height)+parseInt(list.margin))))<2?(parseInt(FigureA.height)-parseInt(list.height))/2:parseInt(list.margin);
                 total1 = Math.floor(FigureA.width/(parseInt(parseInt(list.width))+marginWidth));
 
 
