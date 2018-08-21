@@ -61,8 +61,10 @@ class FastCalculator extends React.Component{
     }
 
     componentDidUpdate(){
-            const price = calc(this.state);
-
+            let price = calc(this.state);
+            if(this.state.calcProp.form === 'Рулонная' && price<750){
+                price = 750.00;
+            }
             if(price!=this.state.calcProp.price){
                 this.setState((state)=>({
                             ...state,
@@ -96,7 +98,24 @@ class FastCalculator extends React.Component{
             if( calcProp.height>278){
                 calcProp.height =278;
             }
+            if(calcProp.form=='Прямоугольная'){
+                if( calcProp.width<40){
+                    calcProp.width=40;
+                }
+                if( calcProp.height<40){
+                    calcProp.height=40;
+                }
+            }
 
+        }
+        if( calcProp.width<3 ){
+            calcProp.width=3;
+        }
+        if( calcProp.height<3 ){
+            calcProp.height=3;
+        }
+        if( calcProp.quantity<1 ){
+            calcProp.quantity=1;
         }
          this.setState((state)=>({
              ...state,

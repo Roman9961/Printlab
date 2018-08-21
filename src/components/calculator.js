@@ -43,11 +43,12 @@ const calc = function (state) {
      */
 
     function calculateTotal() {
-        var totalprice, totalpricehrn, totalpriceprofit, totalpricehrncom, totalpriceonesticker, pricewithlamination, print, adjustment, base;
+        var totalprice, totalpricehrn, totalpriceprofit, totalpricehrncom, totalpriceonesticker, pricewithlamination, print, adjustment, base, cut;
         print = calculatePrint();
         adjustment = printAdjustment();
         base = calculateBasis();
-        totalprice = print + calculateCut() +adjustment+ base + _delivery + _postprint;
+        cut = calculateCut();
+        totalprice = print + cut +adjustment+ base + _delivery + _postprint;
         totalprice = totalprice+calculateLamination();
         if(calcProp.print_type === 'Рулонная'){
             totalprice = totalprice+(print+base+adjustment)*0.1;
@@ -65,6 +66,9 @@ const calc = function (state) {
         function printResults() {
             if(DEBUG){
                 console.log('Кол-во наклеек на листе:' + calcProp.stickersonlist);
+                console.log('Стоимость материала в у.е:' + base);
+                console.log('Стоимость печати в у.е:' + print);
+                console.log('Стоимость порезки в у.е:' + cut);
                 console.log('Количество листов в печать:' + calcProp.numberoflist);
                 console.log('Окончательная цена в у.е:' + totalprice.toFixed(2));
                 console.log('Окончательная цена в грн.:' + totalpricehrn.toFixed(2));
@@ -272,7 +276,9 @@ const calc = function (state) {
                         }
                         break;
                     case 'Сложная форма':
+                        console.log(_cutpriceHardcircuit)
                         for (let i = 0; i < _cutpriceHardcircuit.length; i++) {
+                            console.log(_cutpriceHardcircuit[i])
                             let obj = _cutpriceHardcircuit[i];
                             if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;

@@ -180,16 +180,16 @@ class Section1 extends React.Component{
             "cut_form" : "simple",
             "design" : "",
             "form" : "",
-            "height" : "",
+            "height" : 50,
             "lamination" : "",
             "numberoflist" : "",
             "print_time" : 4,
-            "quantity" : "",
+            "quantity" : 100,
             "stamping" : "",
             "stickersonlist" : "",
             "type" : "Цветная",
             "varnish" : "",
-            "width" : "",
+            "width" : 50,
             "margin":4,
             "outline":'',
             "delivery":false,
@@ -229,7 +229,7 @@ class Section1 extends React.Component{
 
         }).then ((calculator)=>{
 
-                this.setState(state=>({
+               this.setState(state=>({
                     ...state,
                     calculator
                 }));
@@ -239,7 +239,6 @@ class Section1 extends React.Component{
                         calcProp:this.props.calcProp
                     }));
                 }
-
         });
 
         (async () => {
@@ -316,12 +315,14 @@ class Section1 extends React.Component{
                 }
             }));
         })();
-
     }
     componentDidUpdate(data){
 
         if(Object.keys(this.state.calculator).length>0 && this.state.calcProp != data.calcProp) {
-            const price = calc(this.state);
+            let price = calc(this.state);
+            if(this.state.calcProp.form === 'Рулонная' && price<750){
+                price = 750.00;
+            }
             if (price != this.state.calcProp.price) {
                 this.setState((state)=>({
                     ...state,
@@ -349,12 +350,42 @@ class Section1 extends React.Component{
             }else{
                  this.state.range=parseInt(calcProp.margin);
              }
+             if( calcProp.width>980){
+                 calcProp.width =980;
+             }
+             if( calcProp.height>316){
+                 calcProp.height =316;
+             }
          }else{
              calcProp.print_type = 'Листовая';
              calcProp.margin = 4;
              this.state.range=4;
+             if( calcProp.width>378){
+                 calcProp.width =378;
+             }
+             if( calcProp.height>278){
+                 calcProp.height =278;
+             }
+             if(calcProp.cut_form=='rectangle'){
+                 if( calcProp.width<40 || calcProp.height<40){
+                     calcProp.cut_form='simple'
+                 }
+             }
+             if(calcProp.form=='Прямоугольная'){
+                 if( calcProp.width<40 || calcProp.height<40){
+                     calcProp.form='Простая форма'
+                 }
+             }
          }
-
+         if( calcProp.width<3 ){
+             calcProp.width=3;
+         }
+         if( calcProp.height<3 ){
+             calcProp.height=3;
+         }
+         if( calcProp.quantity<1 ){
+             calcProp.quantity=1;
+         }
          calcProp.margin = parseInt(calcProp.margin);
 
          this.setState((state)=>({
