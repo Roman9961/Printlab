@@ -30,6 +30,8 @@ class AdminTable extends React.Component{
             colorprint:'Стоимость 4+0',
             colorprintwhite:'Стоимость 5+0',
             monochromeprint:'Стоимость 2+0',
+            laminationGloss:'Глянцевая ламинация',
+            laminationMatt:'Матовая ламинация',
             width:'Ширина рапорта',
             height:'Высота рапорта',
             min : 'min',

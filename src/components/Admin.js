@@ -49,6 +49,8 @@ class Admin extends React.Component{
             colorprint:'Стоимость 4+0',
             colorprintwhite:'Стоимость 5+0',
             monochromeprint:'Стоимость 2+0',
+            laminationGloss:'Глянцевая ламинация',
+            laminationMatt:'Матовая ламинация',
             width:'Ширина рапорта',
             height:'Высота рапорта',
             min : 'min',
@@ -182,6 +184,8 @@ class Admin extends React.Component{
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._profit} tableName='_profit' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.colorfularr} tableName='colorfularr' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.monochromearr} tableName='monochromearr' updateTable = {this.updateTable2}/>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.laminationGloss} tableName='laminationGloss' updateTable = {this.updateTable2}/>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.laminationMatt} tableName='laminationMatt' updateTable = {this.updateTable2}/>
                     <AdminTableMaterial table={this.state.calculator._materialPrice} tableName='_materialPrice' updateTable = {this.updateTable2}/>
 
                 </div>

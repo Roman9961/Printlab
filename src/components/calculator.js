@@ -125,10 +125,6 @@ const calc = function (state) {
             price = parseFloat(price.toFixed(2));
         }
 
-        if (price <= 111) {
-            return price + 100;
-        }
-        else {
             for (var i = 0; i < profitarray.length; i++) {
                 var obj = profitarray[i];
                 if (price >= obj.min && price <= obj.max) {
@@ -137,7 +133,7 @@ const calc = function (state) {
                 }
             }
             return price;
-        }
+
     }
 
     //Функция расчета стоимости ламинации
@@ -165,7 +161,7 @@ const calc = function (state) {
             if (calcProp.width < 30 || calcProp.height < 30) {
                 switch (calcProp.form) {
                     case 'Прямоугольная':
-                        calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
+                        calcProp.stickersonlist = calculateFigures(rectlistparams, calcProp);
                         break;
                     case 'Простая форма':
                         calcProp.stickersonlist = calculateFigures(circuitlistparams, calcProp);
@@ -258,8 +254,8 @@ const calc = function (state) {
             if (calcProp.width < 30 || calcProp.height < 30) {
                 switch (calcProp.form) {
                     case 'Прямоугольная':
-                        for (let i = 0; i < _cutpriceSimplecircuit.length; i++) {
-                            let obj = _cutpriceSimplecircuit[i];
+                        for (let i = 0; i < _cutpriceRect.length; i++) {
+                            let obj = _cutpriceRect[i];
                             if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
                                 break;
@@ -277,7 +273,6 @@ const calc = function (state) {
                         break;
                     case 'Сложная форма':
                         for (let i = 0; i < _cutpriceHardcircuit.length; i++) {
-                            console.log(_cutpriceHardcircuit[i])
                             let obj = _cutpriceHardcircuit[i];
                             if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
                                 return calcProp.numberoflist * obj.price;
@@ -379,8 +374,12 @@ const calc = function (state) {
         if(calcProp.print_type === 'Листовая') {
             FigureB.width = parseInt(list.width) + list.margin/2;
             FigureB.height = parseInt(list.height) + list.margin/2;
-
-
+            if(parseInt(list.width)== parseInt(FigureA.width)){
+                FigureB.width = parseInt(list.width)
+            }
+            if(parseInt(list.height)== parseInt(FigureA.height)){
+                FigureB.height = parseInt(list.height)
+            }
             (function () {
                 var figures_per_row = Math.floor(FigureA.width / FigureB.width),
                     figures_per_col = Math.floor(FigureA.height / FigureB.height),
@@ -414,12 +413,9 @@ const calc = function (state) {
             var amount = 0;
             var amount1 = 0;
             var marginWidth = Math.floor(FigureA.width/parseInt(list.width))===1?0:parseInt(list.margin);
-            var marginHeight = Math.floor(parseInt(FigureA.height)/(parseInt((list.height)+parseInt(list.margin))))<2?(parseInt(FigureA.height)-parseInt(list.height))/2:parseInt(list.margin);
+            var marginHeight = Math.floor(parseInt(FigureA.height)/(parseInt(list.height)+parseInt(list.margin)))<2?(parseInt(FigureA.height)-parseInt(list.height))/2:parseInt(list.margin);
                 total1 = Math.floor(FigureA.width/(parseInt(parseInt(list.width))+marginWidth));
-
-
                 total2 = Math.floor(FigureA.height/(parseInt(list.height)+marginHeight));
-            // console.log(total1, total2);
              amount = Math.ceil(total1*total2);
             return amount;
         }
@@ -496,7 +492,6 @@ const calc = function (state) {
     function notifyme(Calc) {
         var $calc = Calc;
         if($calc.form === 'Прямоугольная' && ($calc.width >308 || $calc.height > 438)){
-            console.log(Calc);
             $.notify("Размер наклеек прямоугольной формы не может превышать 438х308мм", "warn",{position:"top left"});
         }
         if(($calc.form === 'Простая форма' || $calc.form === 'Сложная форма') && ($calc.width > 278 || $calc.height > 378)){

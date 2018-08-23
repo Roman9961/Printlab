@@ -336,9 +336,7 @@ class Section1 extends React.Component{
         }
     }
 
-    updatecalcProp =  (key, value) =>{
-        const calcProp = {...this.state.calcProp};
-        calcProp[key] = value;
+    restrictions = (calcProp)=>{
         if(calcProp.form === 'Рулонная') {
             calcProp.print_type = 'Рулонная';
         }else{
@@ -352,18 +350,33 @@ class Section1 extends React.Component{
         if(calcProp.print_type == 'Листовая'){
             calcProp.margin=4;
         }
+        return calcProp;
+    }
+
+    updatecalcProp =  (key, value) =>{
+        let calcProp = {...this.state.calcProp};
+        calcProp[key] = value;
+        calcProp = this.restrictions(calcProp);
         this.setState((state)=>({
             ...state,
             calcProp
         }));
     };
 
+    updatecalcInputProp =  (key, value) =>{
+        let calcProp = {...this.state.calcProp};
+        calcProp[key] = value;
+        this.setState((state)=>({
+            ...state,
+            calcProp
+        }));
+    };
      updatecalcOnBlurProp =  (key, value) =>{
-        const calcProp = {...this.state.calcProp};
+        let calcProp = {...this.state.calcProp};
 
          calcProp[key] = value;
+         calcProp = this.restrictions(calcProp);
          if(calcProp.form === 'Рулонная'){
-             calcProp.print_type = 'Рулонная';
              if(parseInt(calcProp.margin)<3){
                  this.state.range=3;
              }else if(parseInt(calcProp.margin)>500){
@@ -380,23 +393,25 @@ class Section1 extends React.Component{
                  calcProp.height =316;
              }
          }else{
-             calcProp.print_type = 'Листовая';
-             calcProp.margin = 4;
              this.state.range=4;
-             if( calcProp.width>378){
-                 calcProp.width =378;
-             }
-             if( calcProp.height>278){
-                 calcProp.height =278;
+             if(calcProp.form=='Прямоугольная'){
+                 if( calcProp.width>440){
+                     calcProp.width =440;
+                 }
+                 if( calcProp.height>310){
+                     calcProp.height =310;
+                 }
+             }else{
+                 if( calcProp.width>378){
+                     calcProp.width =378;
+                 }
+                 if( calcProp.height>278){
+                     calcProp.height =278;
+                 }
              }
              if(calcProp.cut_form=='rectangle'){
                  if( calcProp.width<40 || calcProp.height<40){
                      calcProp.cut_form='simple'
-                 }
-             }
-             if(calcProp.form=='Прямоугольная'){
-                 if( calcProp.width<40 || calcProp.height<40){
-                     calcProp.form='Простая форма'
                  }
              }
          }
@@ -462,7 +477,11 @@ class Section1 extends React.Component{
             // const calculator = this.state;
         }
     };
-
+    handleInput = async (event) => {
+        if(Object.keys(event).length>0) {
+            await this.updatecalcInputProp(event.currentTarget.name,event.currentTarget.value);
+        }
+    };
     toolTipVisible = () => {
         this.setState((state)=>({
             ...state,
@@ -681,12 +700,12 @@ class Section1 extends React.Component{
                                             <div className="modal-block__title">Размер:</div>
                                             <div className="modal-block__content modal-block__content--input">
                                                 <div className="modal-block__content_item modal-block__content_item--input">
-                                                    <input className="number-input"  type="number" name="height" id="field_profile-05" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleChange} onBlur={this.handleBlur} placeholder="302"/>
+                                                    <input className="number-input"  type="number" name="height" id="field_profile-05" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleInput} onBlur={this.handleBlur} placeholder="302"/>
                                                     <span>Высота, мм</span>
                                                 </div>
                                                 <div className="x-size"></div>
                                                 <div className="modal-block__content_item modal-block__content_item--input">
-                                                    <input className="number-input" type="number" name="width" id="field_profile-06" value={this.state.calcProp.width} onChange={this.handleChange} onBlur={this.handleBlur} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
+                                                    <input className="number-input" type="number" name="width" id="field_profile-06" value={this.state.calcProp.width} onChange={this.handleInput} onBlur={this.handleBlur} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
                                                     <span>Ширина, мм</span>
                                                 </div>
                                             </div>
