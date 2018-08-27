@@ -17,11 +17,14 @@ const calc = function (state) {
         _stampingprice = state.calculator._stampingprice,                // Цена за тиснение
         _varnishprice = state.calculator._varnishprice,                // Цена покрытия уф-лаком
         _laminationprice = state.calculator._laminationprice,                // Цена ламинации за лист
+        laminationMatt = state.calculator.laminationMatt,
+        laminationGloss = state.calculator.laminationGloss,
         _materialPrice = state.calculator._materialPrice,
         rollparams = state.calculator.rollparams,
         _delivery =  parseInt( state.calculator._delivery),                // Доставка
         _postprint = parseInt(state.calculator._postprint),                // Постпечатная подгодовка
         _profit = state.calculator._profit,                // Навар :)
+        _profitRoll = state.calculator._profitRoll,
         calcProp = state.calcProp,
         rectlistparams = state.calculator.rectlistparams,
         circuitlistparams = state.calculator.circuitlistparams,
@@ -55,7 +58,7 @@ const calc = function (state) {
         }
         totalprice = printUrgency(totalprice);
         totalpricehrn = totalprice * _exchangeRate;
-        totalpriceprofit = addProfit(totalpricehrn, _profit);
+        totalpriceprofit = addProfit(totalpricehrn);
         totalpricehrncom = totalpriceprofit + ((totalpriceprofit / 100) * 3);
         if(calcProp.user_delivery_district){
             totalpricehrncom = totalpricehrncom + calculateDelivery();
@@ -120,11 +123,16 @@ const calc = function (state) {
         }
     }
     // Функция добавления наценки
-    function addProfit(price, profitarray) {
+    function addProfit(price) {
+        var profitarray = [];
         if(price){
             price = parseFloat(price.toFixed(2));
         }
-
+        if(calcProp.print_type == 'Рулонная'){
+            profitarray = _profitRoll;
+        }else {
+            profitarray = _profit;
+        }
             for (var i = 0; i < profitarray.length; i++) {
                 var obj = profitarray[i];
                 if (price >= obj.min && price <= obj.max) {
@@ -143,7 +151,26 @@ const calc = function (state) {
 
             if(calcProp.print_type === 'Листовая') {
                 $('#laminationprice').html('Стоимость ламинации:' + calcProp.numberoflist * _laminationprice);
-                laminationPrice = calcProp.numberoflist * 0.25;
+                switch (calcProp.lamination) {
+                    case 'matt':
+                        for (let i = 0; i < laminationMatt.length; i++) {
+                            let obj = laminationMatt[i];
+                            if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                                laminationPrice =  calcProp.numberoflist * obj.price;
+                                break;
+                            }
+                        }
+                        break;
+                    case 'gloss':
+                        for (let i = 0; i < laminationGloss.length; i++) {
+                            let obj = laminationGloss[i];
+                            if (obj && calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                                laminationPrice =  calcProp.numberoflist * obj.price;
+                                break;
+                            }
+                        }
+                        break;
+                }
             }else{
                 laminationPrice = calculateBasis(true);
             }

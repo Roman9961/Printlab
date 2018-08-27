@@ -39,7 +39,8 @@ class Admin extends React.Component{
             _plasticlist : 'Цена за лист пластика', //
             _delivery : 'Доставка', //
             _postprint : 'Постпечатная подгодовка', //
-            _profit : 'Наценка на стоимость в гривнах',
+            _profit : 'Наценка на стоимость цифровой печати в гривнах',
+            _profitRoll : 'Наценка на стоимость рулонной печати в гривнах',
             rectlistparams :'Размеры листа под гильотину',
             circuitlistparams : 'Размеры листа под плоттерную порезку',
             colorfularr : 'Price for print in colors', //
@@ -182,6 +183,7 @@ class Admin extends React.Component{
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._cutpriceSimplecircuit} tableName='_cutpriceSimplecircuit' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._cutpriceHardcircuit} tableName='_cutpriceHardcircuit' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._profit} tableName='_profit' updateTable = {this.updateTable2}/>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._profitRoll} tableName='_profitRoll' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.colorfularr} tableName='colorfularr' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.monochromearr} tableName='monochromearr' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.laminationGloss} tableName='laminationGloss' updateTable = {this.updateTable2}/>
