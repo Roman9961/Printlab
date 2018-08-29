@@ -93,18 +93,26 @@ class FastCalculator extends React.Component{
             }
         }else{
             calcProp.print_type = 'Листовая';
-            if( calcProp.width>378){
-                calcProp.width =378;
-            }
-            if( calcProp.height>278){
-                calcProp.height =278;
-            }
+
             if(calcProp.form=='Прямоугольная'){
+                if( calcProp.width>440){
+                    calcProp.width =440;
+                }
+                if( calcProp.height>310){
+                    calcProp.height =310;
+                }
                 if( calcProp.width<40){
                     calcProp.width=40;
                 }
                 if( calcProp.height<40){
                     calcProp.height=40;
+                }
+            }else{
+                if( calcProp.width>378){
+                    calcProp.width =378;
+                }
+                if( calcProp.height>278){
+                    calcProp.height =278;
                 }
             }
 
@@ -166,6 +174,19 @@ class FastCalculator extends React.Component{
                 ...state,
                 customAmount: true
             }));
+        }
+    };
+    updatecalcInputProp =  (key, value) =>{
+        let calcProp = {...this.state.calcProp};
+        calcProp[key] = value;
+        this.setState((state)=>({
+            ...state,
+            calcProp
+        }));
+    };
+    handleInput = async (event) => {
+        if(Object.keys(event).length>0) {
+            await this.updatecalcInputProp(event.currentTarget.name,event.currentTarget.value);
         }
     };
     render(){
@@ -232,8 +253,8 @@ class FastCalculator extends React.Component{
                         <div className="express-calculator__item express-calculator__item--custom">
                             <span className="custom-sizes-description">Ширина х Высота</span>
                             <div className="custom-sizes-container">
-                                <input className="custom-sizes" type="number" name="width" value={this.state.calcProp.width} onChange={this.handleChange}/>
-                                <input className="custom-sizes" type="number" name="height" value={this.state.calcProp.height} onChange={this.handleChange}/>
+                                <input className="custom-sizes" type="number" name="width" value={this.state.calcProp.width} onChange={this.handleInput} onBlur={this.handleChange}/>
+                                <input className="custom-sizes" type="number" name="height" value={this.state.calcProp.height}onChange={this.handleInput}  onBlur={this.handleChange}/>
                             </div>
                         </div>
                     )
@@ -257,7 +278,7 @@ class FastCalculator extends React.Component{
                         <div className="express-calculator__item express-calculator__item--custom">
                             <span className="custom-sizes-description"></span>
                             <div className="custom-sizes-container">
-                                <input className="custom-sizes" type="number" name="quantity" value={this.state.calcProp.quantity} onChange={this.handleChange}/>
+                                <input className="custom-sizes" type="number" name="quantity" value={this.state.calcProp.quantity} onChange={this.handleInput} onBlur={this.handleChange}/>
                             </div>
                         </div>
                     )
