@@ -7,3 +7,8 @@
 .row-done{
   background-color: green;
 }
+
+.orders-row *{
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

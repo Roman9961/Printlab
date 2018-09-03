@@ -55,9 +55,11 @@ class AdminOrders extends React.Component{
             'liq-pay':'liqPay',
             cashless:'Безналичный расчет'
         },
+        filter:false,
         uid: null,
         admin: null,
-        users: null
+        users: null,
+        workers: null
 
     };
 
@@ -77,6 +79,10 @@ class AdminOrders extends React.Component{
             then (users) {
                 this.setState({
                     users,
+                });
+                const workers = users.filter((user)=>user.type=='worker');
+                this.setState({
+                    workers,
                 })
             }
         });
@@ -167,19 +173,49 @@ class AdminOrders extends React.Component{
         const isAdmin = this.state.admin!=null &&this.state.admin.includes(this.state.uid);
         const isUser = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid);
         const isManager = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid&&e.type==='manager');
+        const isWorker = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid&&e.type==='worker');
      if (
          this.state.uid &&
-         ( this.state.admin&&((!isAdmin||!isManager) && this.props.match.id =='orders') ||
+         ( this.state.admin&&((!isAdmin||!isManager||!isWorker) && this.props.match.id =='orders') ||
              this.state.users&&(!isUser && this.props.match.params.id =='works') ||
-             this.state.users&&(isUser && !isManager && this.props.match.params.id =='orders')
+             this.state.users&&(!isWorker && !isManager && this.props.match.params.id =='orders')
          )
      ){
             return(
                 <Redirect to="/"/>
             )
         }
-        else if(this.state.uid && (isAdmin||isUser)) {
-         const columns = [{
+        else if(this.state.uid && (isAdmin||isUser)&&this.state.users) {
+         const workers = this.state.users.filter(user=>user.type=='worker');
+         const users = this.state.users;
+         let manager ={};
+         if(isManager){
+              manager =  this.state.users.filter(e => e.email === this.state.uid)[0];
+         }
+         const options = ()=> {
+             let managersOptions = [{
+                 value: 'wait',
+                 label: 'Ожидает оплаты'
+             }, {
+                 value: 'invoice_wait',
+                 label: 'Ожидает оплаты через invoice'
+             }, {
+                 value: 'failure',
+                 label: 'Ошибка'
+             }];
+             let workersOptions = [{
+                 value: 'accepted',
+                 label: 'Принят'
+             }, {
+                 value: 'processing',
+                 label: 'В работе'
+             }, {
+                 value: 'done',
+                 label: 'Готов'
+             }];
+             return isManager?managersOptions.concat(workersOptions):workersOptions;
+         };
+         let columns = [{
              dataField: 'calcProp.print_time',
              text: '',
              headerFormatter: (column, colIndex) => <Icon size="lg" name="clock-o" />,
@@ -211,27 +247,34 @@ class AdminOrders extends React.Component{
              formatter: (cell,row)=>trans[cell],
              editor: {
                  type: Type.SELECT,
-                 options: [{
-                     value: 'wait',
-                     label: 'Ожидает оплаты'
-                 }, {
-                     value: 'invoice_wait',
-                     label: 'Ожидает оплаты через invoice'
-                 }, {
-                     value: 'failure',
-                     label: 'Ошибка'
-                 }, {
-                     value: 'accepted',
-                     label: 'Принят'
-                 }, {
-                     value: 'processing',
-                     label: 'В работе'
-                 }, {
-                     value: 'done',
-                     label: 'Готов'
-                 }]
+                 options: options()
              }
+         },{
+             dataField: 'manager',
+             text: 'Manager',
+             sort: true,
+             formatter: (cell,row)=>{
+                 let thisManager =  users.filter(e => e.email === cell)[0];
+
+                 return typeof thisManager !=='undefined' ?`${thisManager.name}(${thisManager.email})`:'Не назначен';
+             },
+             editable:false
          }];
+         if(isManager){
+             columns.push({
+                 dataField: 'worker',
+                 text: 'Worker',
+                 sort: true,
+                 formatter: (cell,row)=>{
+                     const worker =  workers.map(e => e.email === cell?e:{name:'Не назначен'});
+                     return worker[0].hasOwnProperty('email')?`${worker[0].name}(${worker[0].email})`:worker[0].name;
+                 },
+                 editor: {
+                     type: Type.SELECT,
+                     options: workers.map(worker=>({value:worker.email, label:worker.name+'/'+worker.email}))
+                 }
+             });
+         }
          const expandRow = {
              renderer: row =>{
                  const rowFiles = row.files!==undefined?Object.values(row.files):[];
@@ -239,8 +282,21 @@ class AdminOrders extends React.Component{
                      files:rowFiles,
                      path:`orders/${row.key}/files`
                  };
-
-
+let mailfiles ='';
+ rowFiles.forEach(function (file) {
+     mailfiles+= file.url+'\n';
+ });
+const mail=`
+Основа:${row.calcProp.basis}
+Порезка: ${row.calcProp.cut_form}
+Высота: ${row.calcProp.height}
+Ширина: ${row.calcProp.width}
+Тираж: ${row.calcProp.quantity}
+Печать: ${row.calcProp.type}
+Файлы:
+${mailfiles}
+`
+                 console.log(decodeURI('Link%20-%20http%3A%2F%2Fmysite.com%2Fcheckitout'));
                  return(
                      <div>
                          <p><b>Тип печати: </b>{ row.calcProp.print_type }</p>
@@ -261,16 +317,18 @@ class AdminOrders extends React.Component{
                                      <img src={file.thumbnailUrl!==undefined?file.thumbnailUrl:'/images/default.png'} style={{width:50+'px'}} alt=""/>
                                  </a>
                                  </div>
-                                 <Icon size="lg" name="times-circle" className="file-delete" onClick={()=>{delete rowFiles[i]; deleteFile({deleteUrl:file.deleteUrl,path:`orders/${row.key}/files`,files:rowFiles})}}/>
+                                     {isManager &&<Icon size="lg" name="times-circle" className="file-delete" onClick={()=>{delete rowFiles[i]; deleteFile({deleteUrl:file.deleteUrl,path:`orders/${row.key}/files`,files:rowFiles})}}/>}
                                  </div>;
                          }) }</div>
                              <label htmlFor="upload1" className="file-upload" onClick={()=>{this.handleH(files)}}>
-                                 <div className="fileform">
+                                 {isManager && <div className="fileform">
                                      <div className="button button--design">
                                          <span>Загрузить макет</span>
                                      </div>
-                                     <input className="upload23"  id="upload1" type="file" name="files[]" multiple onClick={this.handleFiles} />
+                                     <input className="upload23" id="upload1" type="file" name="files[]" multiple
+                                            onClick={this.handleFiles}/>
                                  </div>
+                                 }
                              </label>
                          </div>
                          <p><b>Кол-во листов/раппортов: </b>{  row.calcProp.numberoflist }</p>
@@ -280,21 +338,26 @@ class AdminOrders extends React.Component{
                          <div><b>Доставка: </b><div style={{backgroundColor:'grey'}}>{  Object.keys(row.delivery).map(function (key,i) {
                              return <React.Fragment key={i}><p><b>{trans[key]}: </b> {trans[row.delivery[key]]!==undefined?trans[row.delivery[key]]:row.delivery[key]}</p></React.Fragment>
                          }) }</div></div>
+                         <div>
+                            <button onClick={()=>{
+                                 window.open(`https://mail.google.com/mail/?su=Заказ&body=${encodeURI(mail)}&view=cm&fs=1&to=partner@domain.com`, '_blank');
+                             }}>send by email</button>
+                         </div>
 
                      </div>
                  )
              }
          };
          const rowClasses = (row, rowIndex) => {
-             let classes = null;
+             let classes = 'orders-row ';
              if (row.status == 'failure') {
-                 classes = 'row-failure';
+                 classes += 'row-failure';
              }
              if (row.status == 'wait') {
-                 classes = 'row-wait';
+                 classes += 'row-wait';
              }
              if (row.status == 'done') {
-                 classes = 'row-done';
+                 classes += 'row-done';
              }
 
              return classes;
@@ -307,8 +370,19 @@ class AdminOrders extends React.Component{
                  return a.calcProp.print_time - b.calcProp.print_time
              }
          });
-         if(this.props.match.params.id =='works'){
-             // data = data.filter(order=>order.status=='invoice_wait');
+         if(this.state.filter){
+             data = data.filter(e=>e.manager==this.state.uid);
+         }
+         if(isWorker){
+
+             data = data.filter(order=>(order.worker==this.state.uid&&(status=='accepted'||order.status=='processing'))).sort(function(a,b){
+                    if( a.status=='accepted' &&  b.status=='accepted'){
+                        return a.dateCreate - b.dateCreate;
+                    }
+                     return a.status=='processing';
+
+
+             });
          }
             return (
 
@@ -318,6 +392,10 @@ class AdminOrders extends React.Component{
 
                     <div>
                         <span>Заказы</span>
+                        <button onClick={()=>{this.setState(state=>({
+                            ...state,
+                            filter:!state.filter
+                        }))}}>{this.state.filter?'Показать все заказы':'Показать только мои заказы'}</button>
                     </div>
 
 
@@ -329,10 +407,18 @@ class AdminOrders extends React.Component{
                         cellEdit={ cellEditFactory({
                             mode: 'click',
                             blurToSave: true,
-                            afterSaveCell: (oldValue, newValue, row, column) => {
-                                base.update(`orders/${row.key}`, {
-                                    data: { status: row.status },
+                            beforeSaveCell:  (oldValue, newValue, row, column) => {
+                                if(!newValue ) return false;
+                               let newdata = {};
+                               newdata[column.dataField] = newValue;
+                               base.update(`orders/${row.key}`, {
+                                    data: newdata,
                                 });
+                                if(isManager){
+                                    base.update(`orders/${row.key}`, {
+                                        data: {manager:manager.email},
+                                    });
+                                }
                             }
                         }) }
                         expandRow={ expandRow }
