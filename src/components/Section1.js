@@ -126,7 +126,7 @@ class Section1 extends React.Component{
                             });
 
                             const xhr = new XMLHttpRequest();
-                            xhr.open("POST", 'http://127.0.0.1:8083/server/Firebase', true);
+                            xhr.open("POST", '/server/Firebase', true);
 
 //Передает правильный заголовок в запросе
                             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -580,16 +580,23 @@ class Section1 extends React.Component{
                 const errorMessage ='Размер файла(ов) слишком большой, попробуйте уменьшить размер или загрузить файл(ы) на файлообменник и приложить ссылку в комментарии к заказу';
                 data.originalFiles.map(file=>{
                     totalSize += file['size'];
-                    if(file['size'] > 2000000) {
+                    if(file['size'] > 500000000) {
                         uploadErrors.push('Filesize is too big');
                     }
                 });
 
-                if(uploadErrors.length > 0 || totalSize>2000000) {
+                if(uploadErrors.length > 0 || totalSize>1000000000) {
                     console.log(totalSize)
                     setState(errorMessage);
                     handleModal();
                 } else {
+                    const crypto = require('crypto');
+        
+                for (let i = 0; i < data.files.length; i++) {
+                    const newPath =data.files[0].name.replace(/[^A-Za-z0-9\.]/g,'_');
+                   data.files[i].uploadName =newPath;
+                }
+                data.submit();
                     data.submit();
                 }
             },
@@ -597,6 +604,15 @@ class Section1 extends React.Component{
             singleFileUploads: false,
             dataType: 'json',
             beforeSend:this.handleFileSend,
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+               
+                jQuery(e.target).prev().css(
+                    'background',
+                   `linear-gradient(to right, #7ba232 0%,#95c241 ${progress}%,transparent ${progress}%,transparent 100%)` 
+                );
+                jQuery(e.target).prev().css('background-color', '#fbac52')
+            },
             done: this.handleFileupload,
             error: function(e, data){
                 console.log(e, data);

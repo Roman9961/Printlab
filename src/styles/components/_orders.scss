@@ -1,6 +1,12 @@
 .row-failure{
   background-color: red;
 }
+.preview-container{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 .row-wait{
   background-color: yellow;
 }
@@ -11,4 +17,9 @@
 .orders-row *{
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.bar {
+  height: 18px;
+  background: green;
+  width: 0%;
 }

@@ -142,6 +142,39 @@ class AdminOrders extends React.Component{
             url: 'http://77.222.152.121',
             singleFileUploads: false,
             dataType: 'json',
+            add:(e, data)=>{
+                var uploadErrors = [];
+                let totalSize=0;
+                const errorMessage ='Размер файла(ов) слишком большой, попробуйте уменьшить размер или загрузить файл(ы) на файлообменник и приложить ссылку в комментарии к заказу';
+                data.originalFiles.map(file=>{
+                    totalSize += file['size'];
+                    if(file['size'] > 500000000) {
+                        uploadErrors.push('Filesize is too big');
+                    }
+                });
+
+                if(uploadErrors.length > 0 || totalSize>1000000000) {
+                    alert(errorMessage)
+                } else {
+                    const crypto = require('crypto');
+        
+                for (let i = 0; i < data.files.length; i++) {
+                    const newPath =data.files[0].name.replace(/[^A-Za-z0-9\.]/g,'_');
+                   data.files[i].uploadName =newPath;
+                }
+                data.submit();
+                    data.submit();
+                }
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+               
+                jQuery(e.target).prev().css(
+                    'background',
+                   `linear-gradient(to right, #7ba232 0%,#95c241 ${progress}%,transparent ${progress}%,transparent 100%)` 
+                );
+                jQuery(e.target).prev().css('background-color', '#fbac52')
+            },
             done: this.handleFileupload,
             error: function(e, data){
                 console.log(e, data);
@@ -296,7 +329,6 @@ const mail=`
 Файлы:
 ${mailfiles}
 `
-                 console.log(decodeURI('Link%20-%20http%3A%2F%2Fmysite.com%2Fcheckitout'));
                  return(
                      <div>
                          <p><b>Тип печати: </b>{ row.calcProp.print_type }</p>
@@ -312,16 +344,18 @@ ${mailfiles}
                          <div><b>Прикрепленные файлы: </b> <div className="file-container">{ rowFiles.map(function (file, i) {
 
                              return <div className="file-self"  key={i}>
-                                 <div>
+                                 <div className="preview-container">
                                  <a href={file.url} target="_blank" download>
                                      <img src={file.thumbnailUrl!==undefined?file.thumbnailUrl:'/images/default.png'} style={{width:50+'px'}} alt=""/>
                                  </a>
+                                 <div style={{textAlign:'center'}}>{i+1}</div>
                                  </div>
                                      {isManager &&<Icon size="lg" name="times-circle" className="file-delete" onClick={()=>{delete rowFiles[i]; deleteFile({deleteUrl:file.deleteUrl,path:`orders/${row.key}/files`,files:rowFiles})}}/>}
                                  </div>;
                          }) }</div>
                              <label htmlFor="upload1" className="file-upload" onClick={()=>{this.handleH(files)}}>
                                  {isManager && <div className="fileform">
+                                 
                                      <div className="button button--design">
                                          <span>Загрузить макет</span>
                                      </div>
