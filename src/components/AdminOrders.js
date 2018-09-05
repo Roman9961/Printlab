@@ -139,7 +139,7 @@ class AdminOrders extends React.Component{
 
         jQuery(e.currentTarget).fileupload({
             context:this,
-            url: '/server/php/index.php',
+            url: 'http://77.222.152.121',
             singleFileUploads: false,
             dataType: 'json',
             done: this.handleFileupload,

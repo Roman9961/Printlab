@@ -593,7 +593,7 @@ class Section1 extends React.Component{
                     data.submit();
                 }
             },
-            url: 'server/php/index.php',
+            url: 'http://77.222.152.121',
             singleFileUploads: false,
             dataType: 'json',
             beforeSend:this.handleFileSend,
