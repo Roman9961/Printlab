@@ -20,6 +20,10 @@
     outline:0;
   }
 }
+.button-green {
+  background: linear-gradient(180deg, #95c241 0%, #7ba232 100%);
+  box-shadow: 0 10px 25px 5px rgb(149, 194, 65,0.25);
+}
 .button--design{
   padding: 25px 80px;
 }

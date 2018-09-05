@@ -92,7 +92,7 @@ const Header = (props) => (
                             <div className="header__contacts header__contacts__phone__block">
                                 <a href="tel:+380678283212"> (067) 828 32 12</a>
                             </div>
-                            <a href="javascript:;"  rel="nofollow" className="button" onClick={()=>(props.handleModal({}))}>Посчитать наклейки</a>
+                            <a href="javascript:;"  rel="nofollow" className="button button-green" onClick={()=>(props.handleModal({}))}>Посчитать наклейки</a>
                         </div>                </div>
                     <div className="col-md-3 col-sm-2">
                         <div className="menu-icon" onClick={(e)=>{
