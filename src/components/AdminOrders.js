@@ -53,7 +53,34 @@ class AdminOrders extends React.Component{
             warehouse: 'отделение №',
             self:'Самовывоз',
             'liq-pay':'liqPay',
-            cashless:'Безналичный расчет'
+            cashless:'Безналичный расчет',
+            error:'Неуспешный платеж',
+            reversed:'Платеж возвращен',
+            sandbox:'Тестовый платеж',
+            '3ds_verify':'Требуется 3DS верификация',
+            captcha_verify:'Ожидается подтверждение captcha',
+            cvv_verify:'Требуется ввод CVV карты отправителя',
+            ivr_verify:'Ожидается подтверждение звонком ivr',
+            otp_verify:'Требуется OTP подтверждение клиента',
+            password_verify:'Ожидается подтверждение пароля Приват24',
+            phone_verify:'Ожидается ввод телефона клиентом',
+            pin_verify:'Ожидается подтверждение pin-code',
+            receiver_verify:'Требуется ввод данных получателя',
+            sender_verify:'Требуется ввод данных отправителя',
+            senderapp_verify:'Ожидается подтверждение в SENDER',
+            wait_qr:'Ожидается сканирование QR-кода клиентом',
+            wait_sender:'Ожидается подтверждение оплаты клиентом в приложении Privat24/SENDER',
+            cash_wait:'Ожидается оплата наличными в ТСО',
+            hold_wait:'Сумма успешно заблокирована на счету отправителя',
+            prepared:'Платеж создан, ожидается его завершение отправителем',
+            wait_accept:'Деньги с клиента списаны, но магазин еще не прошел проверку',
+            wait_card:'Не установлен способ возмещения у получателя',
+            wait_compensation:'Платеж успешный, будет зачислен в ежесуточной проводке',
+            wait_lc:'Аккредитив',
+            wait_reserve:'wait_reserve',
+            wait_secure:'Платеж на проверке',
+            in_processing:'В работе',
+            done:'Готов'
         },
         filter:false,
         uid: null,
@@ -229,18 +256,12 @@ class AdminOrders extends React.Component{
              let managersOptions = [{
                  value: 'wait',
                  label: 'Ожидает оплаты'
-             }, {
-                 value: 'invoice_wait',
-                 label: 'Ожидает оплаты через invoice'
-             }, {
-                 value: 'failure',
-                 label: 'Ошибка'
              }];
              let workersOptions = [{
                  value: 'accepted',
                  label: 'Принят'
              }, {
-                 value: 'processing',
+                 value: 'in_processing',
                  label: 'В работе'
              }, {
                  value: 'done',

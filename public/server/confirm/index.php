@@ -7,9 +7,9 @@ use Mailer\Mailer;
 require '../../../vendor/autoload.php';
 
 $config = require '../../../config/config.php';
-$liqpay = $config['LIQPAY_PRIVATE_KEY'];
+$liqpayPK = $config['LIQPAY_PRIVATE_KEY'];
 
-$serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../../../config/catchoftheday-62fd3-firebase-adminsdk-jvr2p-a4c205546c.json');
+$serviceAccount = ServiceAccount::fromJsonFile('./../../../config/catchoftheday-62fd3-firebase-adminsdk-jvr2p-a4c205546c.json');
 
     if((isset($_POST['data'])&& isset($_POST['signature'])) || (isset($_POST['moneyTransfer'])&& $_POST['moneyTransfer'])) {
         $firebase = (new Factory)
@@ -25,15 +25,17 @@ $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../../../config/catch
         $signature = $_POST['signature'];
 
         $sign = base64_encode(sha1(
-            $liqpay['LIQPAY_PRIVATE_KEY'] .
+            $liqpayPK.
             $data .
-            $liqpay['LIQPAY_PRIVATE_KEY']
+            $liqpayPK
             , 1));
 
         if($sign===$signature) {
+
+        $payData = json_decode(base64_decode($data), true);
             $updates = [
-                'orders/' . $_POST['order_id'] . '/status' => $_POST['status'],
-                'orders/' . $_POST['order_id'] . '/dateUpdate' => date("Y-m-d H:i:s")
+                'orders/' . $payData['order_id'] . '/status' => $payData['status'],
+                'orders/' . $payData['order_id'] . '/dateUpdate' => date("Y-m-d H:i:s")
             ];
 
             $db->getReference()// this is the root reference
@@ -43,14 +45,16 @@ $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../../../config/catch
 
     if (isset($sign) || isset($_POST['moneyTransfer'])&& $_POST['moneyTransfer']) {
 
+        if(isset($_POST['order_id'])|| (isset($payData['status'])&&$payData['status']=='success')) {
+            $order = isset($_POST['order_id'])?$_POST['order_id']:$payData['order_id'];
+            $reference = $db->getReference('orders/' . $order);
+            $value = $reference->getValue();
 
-        $reference = $db->getReference('orders/' . $_POST['order_id']);
-        $value = $reference->getValue();
+            $subject = 'Заказ №' . $value['orderId'];
 
-        $subject = 'Заказ №' . $value['orderId'];
-
-        $mailer = new Mailer();
-        $storeMessage = $mailer->getTemplate($value);
-        $mailer->send_mail('romanrimskiy@gmail.com', $subject, $storeMessage, $value['user']['name'], $config['mail_user'], $config['mail_password']);
+            $mailer = new Mailer();
+            $storeMessage = $mailer->getTemplate($value);
+            $mailer->send_mail('romanrimskiy@gmail.com', $subject, $storeMessage, $value['user']['name'], $config['mail_user'], $config['mail_password']);
+        }
 
     }
