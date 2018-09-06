@@ -4,7 +4,7 @@
 /public/dist
 /public/mail_template.html
 /public/style.css
-/config
+/config/
 .env
 .env.test
 .env.development
