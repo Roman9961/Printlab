@@ -77,11 +77,11 @@ class Section1 extends React.Component{
                             const data1 = {
                                 'public_key': process.env.LIQPAY_PUBLIC_KEY,
                                 'action': 'pay',
-                                'amount': this.state.calcProp.price,
+                                'amount': 1,
                                 'currency': 'UAH',
-                                'description': 'description text',
+                                'description': 'заказ наклеек',
                                 'order_id': `${generatedKey}`,
-                                'server_url': 'http://printlab.amdev.pro/server/firebase',
+                                'server_url': 'http://test.okprint.com.ua/server/firebase',
                                 'sandbox': '1',
                                 'version': '3'
                             };

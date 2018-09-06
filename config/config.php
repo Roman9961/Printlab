@@ -3,5 +3,5 @@
 return array(
     'mail_user'=> 'romanrimskiy@gmail.com',
     'mail_password'=> 'qaz321wsx',
-    'LIQPAY_PRIVATE_KEY'=>'nMaT8W4rt06gsoKbcL4in1zefN6Joc8yhTO5jFTz'
+    'LIQPAY_PRIVATE_KEY'=>'yHvaJcudRn07m0Ef7NVrYZwlhdYIl5sjvFVF77Ag'
 );
