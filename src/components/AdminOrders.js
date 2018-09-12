@@ -299,6 +299,11 @@ class AdminOrders extends React.Component{
              return isManager?managersOptions.concat(workersOptions):workersOptions;
          };
          let columns = [{
+             dataField: 'orderId',
+             text: '№ Заказа',
+             editable:false,
+             sort: true
+         },{
              dataField: 'calcProp.print_time',
              text: '',
              headerFormatter: (column, colIndex) => <Icon size="lg" name="clock-o" />,
