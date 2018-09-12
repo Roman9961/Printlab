@@ -9,13 +9,20 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { Redirect } from 'react-router-dom';
 import base from '../base';
+import moment from 'moment';
+import 'react-dates/initialize';
+import { DateRangePicker } from 'react-dates';
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import 'react-dates/lib/css/_datepicker.css'
 
 class AdminOrders extends React.Component{
 
     state = {
         orders : {
         },
+        ordersData : [],
         files:{
             files:null,
             path:null
@@ -79,9 +86,11 @@ class AdminOrders extends React.Component{
             wait_lc:'Аккредитив',
             wait_reserve:'wait_reserve',
             wait_secure:'Платеж на проверке',
-            in_processing:'В работе',
-            done:'Готов'
+            in_processing:'В работе'
         },
+        calendarFocused: null,
+        startDate: moment().startOf('month'),
+        endDate: moment().endOf('month'),
         filter:false,
         uid: null,
         admin: null,
@@ -96,7 +105,10 @@ class AdminOrders extends React.Component{
             context: this,
             asArray: true,
            then(orders){
-               this.setState({orders});
+               const ordersData = orders.filter((order)=>{
+                   return  moment(order.dateCreate).isAfter(this.state.startDate)&&moment(order.dateCreate).isBefore(this.state.endDate);
+               })
+               this.setState(state=>({...state,orders,ordersData}));
            }
         });
 
@@ -151,6 +163,23 @@ class AdminOrders extends React.Component{
     componentWillUnmount() {
         this.unregisterAuthObserver();
     }
+
+    onFocusChange = (calendarFocused) => {
+        this.setState(() => ({ calendarFocused }));
+    }
+
+    onDatesChange = ({ startDate, endDate }) => {
+        const ordersData = this.state.orders.filter((order)=>{
+            return  moment(order.dateCreate).isAfter(startDate)&&moment(order.dateCreate).isBefore(endDate);
+        })
+
+        this.setState(state=>({
+            ...state,
+            startDate,
+            endDate,
+            ordersData
+        }));
+    };
 
     handleFileupload = (e, data)=>{
         let files = this.state.files.files
@@ -328,9 +357,34 @@ class AdminOrders extends React.Component{
                      options: workers.map(worker=>({value:worker.email, label:worker.name+'/'+worker.email}))
                  }
              });
+             columns.push({
+                 dataField: 'key',
+                 text: '',
+                 formatter: (cell,row)=>{
+                     const worker =  workers.map(e => e.email === cell?e:{name:'Не назначен'});
+                     return <button onClick={()=>{
+                         confirmAlert({
+                             title: 'Удалить заказ?',
+                             message: 'Уверены что хотите удалить заказ?',
+                             buttons: [
+                                 {
+                                     label: 'Да',
+                                     onClick: () => base.remove(`orders/${cell}`)
+                                 },
+                                 {
+                                     label: 'Нет',
+                                     onClick: () => {}
+                                 }
+                             ]
+                         })
+
+                     }}>Delete</button>
+                 }
+             });
          }
          const expandRow = {
              renderer: row =>{
+                 const designOnly = row.hasOwnProperty('designOnly');
                  const rowFiles = row.files!==undefined?Object.values(row.files):[];
                  const files = {
                      files:rowFiles,
@@ -352,16 +406,26 @@ ${mailfiles}
 `
                  return(
                      <div>
-                         <p><b>Тип печати: </b>{ row.calcProp.print_type }</p>
-                         <p><b>Основа: </b> {row.calcProp.basis} / {trans[row.calcProp.basis_param]} </p>
-                         <p><b>Контур порезки: </b>{trans[row.calcProp.cut_form] }</p>
-                         <p><b>Дизайн: </b>{
-                             row.calcProp.design=='design-outline'?
-                             trans[row.calcProp.design]+' '+ (trans[row.calcProp.outline]!==undefined?trans[row.calcProp.outline]:"Прямоугольная"):
-                                 trans[row.calcProp.design]
-                         }</p>
-                         <p><b>Тираж: </b>{row.calcProp.quantity }шт.</p>
-                         <p><b>Размеры: </b>{  row.calcProp.height }мм/{ row.calcProp.width }мм (высота/ширина) <span style={{color:'red'}}>!важно при рулонной печати</span></p>
+                         {(()=>{
+                           if(designOnly)
+                           {
+                               return <p><b>Только ДИЗАЙН!!! </b></p>
+                           }else{
+                               return <React.Fragment>
+                                   <p><b>Тип печати: </b>{ row.calcProp.print_type }</p>
+                                   <p><b>Основа: </b> {row.calcProp.basis} / {trans[row.calcProp.basis_param]} </p>
+                                   <p><b>Контур порезки: </b>{trans[row.calcProp.cut_form] }</p>
+                                   <p><b>Дизайн: </b>{
+                                       row.calcProp.design=='design-outline'?
+                                       trans[row.calcProp.design]+' '+ (trans[row.calcProp.outline]!==undefined?trans[row.calcProp.outline]:"Прямоугольная"):
+                                           trans[row.calcProp.design]
+                                   }</p>
+                                   <p><b>Тираж: </b>{row.calcProp.quantity }шт.</p>
+                                   <p><b>Размеры: </b>{  row.calcProp.height }мм/{ row.calcProp.width }мм (высота/ширина) <span style={{color:'red'}}>!важно при рулонной печати</span></p>
+                               </React.Fragment>
+                           }
+                         })() }
+
                          <div><b>Прикрепленные файлы: </b> <div className="file-container">{ rowFiles.map(function (file, i) {
 
                              return <div className="file-self"  key={i}>
@@ -386,19 +450,25 @@ ${mailfiles}
                                  }
                              </label>
                          </div>
-                         <p><b>Кол-во листов/раппортов: </b>{  row.calcProp.numberoflist }</p>
-                         <p><b>Стоимость: </b>{  row.calcProp.price } грн.</p>
-                         <p><b>Способ оплаты: </b>{  trans[row.user.payment_method] }</p>
-                         <p><b>Печать: </b>{  row.calcProp.type }</p>
-                         <div><b>Доставка: </b><div style={{backgroundColor:'grey'}}>{  Object.keys(row.delivery).map(function (key,i) {
-                             return <React.Fragment key={i}><p><b>{trans[key]}: </b> {trans[row.delivery[key]]!==undefined?trans[row.delivery[key]]:row.delivery[key]}</p></React.Fragment>
-                         }) }</div></div>
-                         <div>
-                            <button onClick={()=>{
-                                 window.open(`https://mail.google.com/mail/?su=Заказ&body=${encodeURI(mail)}&view=cm&fs=1&to=partner@domain.com`, '_blank');
-                             }}>send by email</button>
-                         </div>
-
+                         {(()=>{
+                             if(!designOnly)
+                             {
+                                 return <React.Fragment>
+                                     <p><b>Кол-во листов/раппортов: </b>{  row.calcProp.numberoflist }</p>
+                                     <p><b>Стоимость: </b>{  row.calcProp.price } грн.</p>
+                                     <p><b>Способ оплаты: </b>{  trans[row.user.payment_method] }</p>
+                                     <p><b>Печать: </b>{  row.calcProp.type }</p>
+                                     <div><b>Доставка: </b><div style={{backgroundColor:'grey'}}>{  Object.keys(row.delivery).map(function (key,i) {
+                                         return <React.Fragment key={i}><p><b>{trans[key]}: </b> {trans[row.delivery[key]]!==undefined?trans[row.delivery[key]]:row.delivery[key]}</p></React.Fragment>
+                                     }) }</div></div>
+                                     <div>
+                                         <button onClick={()=>{
+                                             window.open(`https://mail.google.com/mail/?su=Заказ&body=${encodeURI(mail)}&view=cm&fs=1&to=partner@domain.com`, '_blank');
+                                         }}>send by email</button>
+                                     </div>
+                                 </React.Fragment>
+                             }
+                         })() }
                      </div>
                  )
              }
@@ -418,7 +488,7 @@ ${mailfiles}
              return classes;
          };
          const {trans} = this.state;
-         let data = this.state.orders.sort(function (a,b) {
+         let data = this.state.ordersData.sort(function (a,b) {
              if(a.calcProp.print_time == b.calcProp.print_time){
                  return (a.dateCreate < b.dateCreate) ? 1 : (a.dateCreate > b.dateCreate) ? -1 : 0;
              }else {
@@ -452,6 +522,18 @@ ${mailfiles}
                             filter:!state.filter
                         }))}}>{this.state.filter?'Показать все заказы':'Показать только мои заказы'}</button>
                     </div>
+                    <DateRangePicker
+                        startDate={this.state.startDate}
+                        endDate={this.state.endDate}
+                        startDateId ={'1'}
+                        endDateId ={'1'}
+                        onDatesChange={this.onDatesChange}
+                        focusedInput={this.state.calendarFocused}
+                        onFocusChange={this.onFocusChange}
+                        showClearDates={true}
+                        numberOfMonths={1}
+                        isOutsideRange={() => false}
+                    />
 
 
 

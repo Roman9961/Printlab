@@ -12,6 +12,7 @@ import SectionLayoutProps from './SectionLayoutProps';
 import SectionQuestions from './SectionQuestions';
 import SectionFeedback from './SectionFeedback';
 import ModalCalculator from './ModalCalculator';
+import ModalDesign from './ModalDesign';
 import Footer from './Footer';
 
 
@@ -35,6 +36,7 @@ class Main extends React.Component{
             _exchangeRate : null,
         },
         modal:false,
+        modalDesign:false,
         stickyMenu:false
     };
 
@@ -88,6 +90,20 @@ class Main extends React.Component{
                 calcProp:prop
             }));
         }
+
+        const handleModalDesign = (prop={},isOpen=false)=>{
+            if(!this.state.modalDesign){
+                document.getElementsByClassName('bod')[0].setAttribute("style", "position:fixed");
+            }else{
+                document.getElementsByClassName('bod')[0].removeAttribute('style');
+            }
+            if(isOpen){
+                document.getElementsByClassName('bod')[0].removeAttribute('style');
+            }
+            this.setState(()=>({
+                modalDesign: isOpen?false:!this.state.modalDesign,
+            }));
+        }
             return Object.keys(this.state.stickers).length>0?(
                 <React.Fragment>
                     <div className="section-top">
@@ -99,11 +115,12 @@ class Main extends React.Component{
                     <SectionDelivery/>
                     <SectionQuality/>
                     <SectionPostPrint/>
-                    <SectionDesign/>
+                    <SectionDesign handleModal = {handleModalDesign}/>
                     <SectionLayoutProps/>
                     <SectionQuestions/>
                     <SectionFeedback/>
                     <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}/>
+                    <ModalDesign isOpen = {this.state.modalDesign} handleModal = {handleModalDesign}/>
                     <Footer/>
                 </React.Fragment>
             ):'...loading';

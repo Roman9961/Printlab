@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add
+  /usr/local/bin/node /usr/local/bin/yarn add .
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
@@ -61,7 +61,9 @@ npm manifest:
       "react": "^16.3.0-alpha.1",
       "react-bootstrap-table-next": "^1.1.1",
       "react-bootstrap-table2-editor": "^1.0.0",
+      "react-bootstrap-table2-paginator": "^1.0.1",
       "react-dom": "^16.3.0-alpha.1",
+      "react-fa": "^5.0.0",
       "react-firebaseui": "^1.2.3",
       "react-google-recaptcha": "^0.12.0",
       "react-input-range": "^1.3.0",
@@ -86,7 +88,7 @@ npm manifest:
     "scripts": {
       "build:dev": "webpack",
       "build:prod": "webpack -p --env=prod",
-      "dev-server": "webpack-dev-server"
+      "dev-server": "webpack-dev-server --content-base src --hot --inline"
     }
   }
 
@@ -3523,7 +3525,7 @@ Lockfile:
     dependencies:
       debug "^3.1.0"
   
-  font-awesome@^4.7.0:
+  font-awesome@^4.3.0, font-awesome@^4.7.0:
     version "4.7.0"
     resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
   
@@ -6784,6 +6786,10 @@ Lockfile:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/react-bootstrap-table2-editor/-/react-bootstrap-table2-editor-1.0.0.tgz#22eab3ae736e7a5e0fb691117088d93a8f8edb4f"
   
+  react-bootstrap-table2-paginator@^1.0.1:
+    version "1.0.1"
+    resolved "https://registry.yarnpkg.com/react-bootstrap-table2-paginator/-/react-bootstrap-table2-paginator-1.0.1.tgz#2b90b8a4e791fb4afb9c61af3dbb41085c206860"
+  
   react-dev-utils@^5.0.0:
     version "5.0.1"
     resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-5.0.1.tgz#1f396e161fe44b595db1b186a40067289bf06613"
@@ -6825,6 +6831,13 @@ Lockfile:
   react-error-overlay@^4.0.0:
     version "4.0.0"
     resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
+  
+  react-fa@^5.0.0:
+    version "5.0.0"
+    resolved "https://registry.yarnpkg.com/react-fa/-/react-fa-5.0.0.tgz#d571732856c6cb2c155c46daef018ba67a75b973"
+    dependencies:
+      font-awesome "^4.3.0"
+      prop-types "^15.5.8"
   
   react-firebaseui@^1.2.3:
     version "1.2.3"
@@ -8996,14 +9009,14 @@ Lockfile:
       toposort "^2.0.2"
 
 Trace: 
-  Error: Missing list of packages to add to your project.
+  Error: Received malformed response from registry for undefined. The registry may be down.
       at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
-      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:40587:13)
+      at Function.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:51419:15)
       at Generator.next (<anonymous>)
       at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
       at /usr/local/lib/node_modules/yarn/lib/cli.js:116:14
       at new Promise (<anonymous>)
       at new F (/usr/local/lib/node_modules/yarn/lib/cli.js:23451:28)
-      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:95:12)
-      at Object.run (/usr/local/lib/node_modules/yarn/lib/cli.js:40599:19)
-      at run (/usr/local/lib/node_modules/yarn/lib/cli.js:89113:20)
+      at Function.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:95:12)
+      at Function.findVersionInRegistryResponse (/usr/local/lib/node_modules/yarn/lib/cli.js:51461:19)
+      at NpmResolver.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:51479:28)

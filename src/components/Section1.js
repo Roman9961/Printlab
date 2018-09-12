@@ -4,6 +4,7 @@ import {Transition} from 'react-transition-group'
 import InputRange from 'react-input-range';
 import moment from 'moment';
 import { Textbox } from 'react-inputs-validation';
+import {Icon} from 'react-fa';
 import Select from 'react-select';
 import base from '../base';
 import calc from './calculator';
@@ -265,7 +266,8 @@ class Section1 extends React.Component{
         validate:false,
         captcha:'',
         order: false,
-        sameDelivery:true
+        sameDelivery:true,
+        jqXHR:null
     };
     componentDidMount(){
         this.ref = base.fetch('Stickers/calculator',{
@@ -590,7 +592,8 @@ class Section1 extends React.Component{
         });
         this.setState(state=>({
             ...state,
-            files:data.result.files
+            files:data.result.files,
+            jqXHR:null
         }));
     };
 
@@ -616,6 +619,12 @@ class Section1 extends React.Component{
             }))
         };
         const handleModal = this.handleModal;
+        const jqXHR = (jqXHR)=> {
+            this.setState(state=>({
+                ...state,
+                jqXHR
+            }))
+        };
         jQuery(e.currentTarget).fileupload({
             context:this,
             add: function(e, data) {
@@ -640,8 +649,7 @@ class Section1 extends React.Component{
                     const newPath =data.files[0].name.replace(/[^A-Za-z0-9\.]/g,'_');
                    data.files[i].uploadName =newPath;
                 }
-                data.submit();
-                    data.submit();
+                    jqXHR( data.submit());
                 }
             },
             url: 'http://77.222.152.121',
@@ -1084,6 +1092,7 @@ class Section1 extends React.Component{
                                                                     {this.state.files.length===0&&!this.state.fileError&&(<span>Если ваш макет соответствует требованиям к макету , то загрузите его:</span>)}
                                                                     {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
                                                                 </div>
+                                                                <div className="abort-upload-container">
                                                                 <label htmlFor="upload1" className="file-upload">
                                                                     <div className="fileform">
                                                                         <div className="button button--design">
@@ -1092,6 +1101,20 @@ class Section1 extends React.Component{
                                                                         <input className="upload23"  id="upload1" type="file" name="files[]" multiple onClick={this.handleFiles} />
                                                                     </div>
                                                                 </label>
+                                                                    {this.state.jqXHR&&<Icon  size="2x" name="times" className="abort_upload" onClick={(e)=>{
+                                                                        if (this.state.jqXHR) {
+                                                                            this.state.jqXHR.abort();
+                                                                            this.setState(state=>({
+                                                                                ...state,
+                                                                                jqXHR:null
+                                                                            }));
+                                                                        }
+                                                                        jQuery('.button').removeAttr('style');
+                                                                        e.stopPropagation()
+                                                                        e.nativeEvent.stopImmediatePropagation();
+                                                                        return false;
+                                                                    }}/> }
+                                                                </div>
                                                             </div>
                                                             )}
                                                         </Transition>
@@ -1172,6 +1195,7 @@ class Section1 extends React.Component{
                                                                     <div className="modal-block__content_item__description">
                                                                         {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
                                                                     </div>
+                                                                    <div className="abort-upload-container">
                                                                     <label htmlFor="upload2" className="file-upload">
                                                                         <div className="fileform fileform--outline">
                                                                             <div className="button button--design">
@@ -1180,6 +1204,19 @@ class Section1 extends React.Component{
                                                                             <input className="upload" id="upload2" type="file" name="files[]" multiple onClick={this.handleFiles}/>
                                                                         </div>
                                                                     </label>
+                                                                    {this.state.jqXHR&&<Icon  size="2x" name="times" className="abort_upload" onClick={()=>{
+
+                                                                        if (this.state.jqXHR) {
+                                                                            this.state.jqXHR.abort();
+                                                                            this.setState(state=>({
+                                                                                ...state,
+                                                                                jqXHR:null
+                                                                            }));
+                                                                        }
+                                                                        jQuery('.button').removeAttr('style');
+                                                                        return false;
+                                                                    }}/> }
+                                                                    </div>
                                                                 </div>
                                                             )}
                                                         </Transition>
@@ -1204,6 +1241,7 @@ class Section1 extends React.Component{
                                                                         {this.state.files.length===0&&!this.state.fileError&&(<span>Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна.</span>)}
                                                                         {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
                                                                     </div>
+                                                                    <div className="abort-upload-container">
                                                                     <label htmlFor="upload3" className="file-upload">
                                                                         <div className="fileform">
                                                                             <div className="button button--design">
@@ -1212,6 +1250,19 @@ class Section1 extends React.Component{
                                                                             <input className="upload"  id="upload3" type="file" name="files[]" multiple onClick={this.handleFiles}/>
                                                                         </div>
                                                                     </label>
+                                                                        {this.state.jqXHR&&<Icon  size="2x" name="times" className="abort_upload" onClick={()=>{
+
+                                                                            if (this.state.jqXHR) {
+                                                                                this.state.jqXHR.abort();
+                                                                                this.setState(state=>({
+                                                                                    ...state,
+                                                                                    jqXHR:null
+                                                                                }));
+                                                                            }
+                                                                            jQuery('.button').removeAttr('style');
+                                                                            return false;
+                                                                        }}/> }
+                                                                    </div>
                                                                 </div>
                                                             )}
                                                         </Transition>

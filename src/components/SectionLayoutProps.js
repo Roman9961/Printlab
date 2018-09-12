@@ -10,7 +10,7 @@ const SectionLayoutProps = ()=>{
                                <div className="section-block section-block--layout-props left">
                                    <div className="layout-props__side-content">
                                        <div>Чтобы наклейки получились классные, а главное соответствовали ожиданиям, соблюдайте наши требования к макетам</div>
-                                       <div><a href="javascript:;"  rel="nofollow" className="button button--pdf">Скачать PDF</a></div>
+                                       <div><a href="/images/printlab_requirements.pdf"  rel="nofollow" className="button button--pdf" download >Скачать PDF</a></div>
                                        <div>В любом случае бояться нечего, мы вам поможем ;)</div>
                                    </div>
                                    <div className="layout-props__side-content layout-props__side-content--gray">

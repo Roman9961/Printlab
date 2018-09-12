@@ -14,6 +14,8 @@
 }
 .modal-block__content_item label .file-upload{
   all: unset;
+  display: flex;
+  margin-top: 4rem;
 }
 .file-upload{
   input{
@@ -37,6 +39,10 @@
       }
     }
   }
+}
+.abort-upload-container{
+  display: flex;
+  align-items:center;
 }
 .file-upload-container{
   opacity: 0;
