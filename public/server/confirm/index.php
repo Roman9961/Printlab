@@ -9,52 +9,81 @@ require '../../../vendor/autoload.php';
 $config = require '../../../config/config.php';
 $liqpayPK = $config['LIQPAY_PRIVATE_KEY'];
 
-$serviceAccount = ServiceAccount::fromJsonFile('./../../../config/catchoftheday-62fd3-firebase-adminsdk-jvr2p-a4c205546c.json');
+$serviceAccount = ServiceAccount::fromJsonFile('./../../../config/printlab-cda25-firebase-adminsdk-u4q60-8ae915f183.json');
 
-    if((isset($_POST['data'])&& isset($_POST['signature'])) || (isset($_POST['moneyTransfer'])&& $_POST['moneyTransfer'])) {
+$mailer = new Mailer();
+
+    if((isset($_POST['data'])&& isset($_POST['signature'])) || (isset($_POST['order'])&& $_POST['order'])) {
         $firebase = (new Factory)
             ->withServiceAccount($serviceAccount)
             ->create();
 
         $db = $firebase->getDatabase();
-    }
 
-    if(isset($_POST['data'])&& isset($_POST['signature'])) {
 
-        $data = $_POST['data'];
-        $signature = $_POST['signature'];
+        if(isset($_POST['data'])&& isset($_POST['signature'])) {
 
-        $sign = base64_encode(sha1(
-            $liqpayPK.
-            $data .
-            $liqpayPK
-            , 1));
+            $data = $_POST['data'];
+            $signature = $_POST['signature'];
 
-        if($sign===$signature) {
+            $sign = base64_encode(sha1(
+                $liqpayPK.
+                $data .
+                $liqpayPK
+                , 1));
 
-        $payData = json_decode(base64_decode($data), true);
-            $updates = [
-                'orders/' . $payData['order_id'] . '/status' => $payData['status'],
-                'orders/' . $payData['order_id'] . '/dateUpdate' => date("Y-m-d H:i:s")
-            ];
+            if($sign===$signature) {
 
-            $db->getReference()// this is the root reference
-            ->update($updates);
-        }
-    }
+            $payData = json_decode(base64_decode($data), true);
+                $updates = [
+                    'orders/' . $payData['order_id'] . '/status' => $payData['status'],
+                    'orders/' . $payData['order_id'] . '/dateUpdate' => date("Y-m-d H:i:s")
+                ];
 
-    if (isset($sign) || isset($_POST['moneyTransfer'])&& $_POST['moneyTransfer']) {
-
-        if(isset($_POST['order_id'])|| (isset($payData['status'])&&$payData['status']=='success')) {
-            $order = isset($_POST['order_id'])?$_POST['order_id']:$payData['order_id'];
-            $reference = $db->getReference('orders/' . $order);
-            $value = $reference->getValue();
-
-            $subject = 'Заказ №' . $value['orderId'];
-
-            $mailer = new Mailer();
-            $storeMessage = $mailer->getTemplate($value);
-            $mailer->send_mail('romanrimskiy@gmail.com', $subject, $storeMessage, $value['user']['name'], $config['mail_user'], $config['mail_password']);
+                $db->getReference()// this is the root reference
+                ->update($updates);
+            }
         }
 
+        if (isset($sign) || isset($_POST['order'])&& $_POST['order']) {
+
+            if(isset($_POST['order_id'])|| (isset($payData['status'])&&$payData['status']=='success')) {
+                $order = isset($_POST['order_id'])?$_POST['order_id']:$payData['order_id'];
+                $reference = $db->getReference('orders/' . $order);
+                $value = $reference->getValue();
+
+                $subject = 'Заказ №' . $value['orderId'];
+
+                $storeMessage = $mailer->getTemplate($value);
+
+                if(isset($sign)) {
+                    $mailer->send_mail($value['user']['email'], $subject, $storeMessage, $value['user']['name'], $config['mail_user'], $config['mail_password']);
+                    $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Заказ оплачен', 'admin', $config['mail_user'], $config['mail_password']);
+                }elseif(isset($_POST['moneyTransfer'])&& $_POST['moneyTransfer']){
+                    $mailer->send_mail($value['user']['email'], $subject, $storeMessage, $value['user']['name'], $config['mail_user'], $config['mail_password']);
+                    $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Поступил заказ на наклейки', 'admin', $config['mail_user'], $config['mail_password']);
+                }elseif (isset($_POST['design'])&& $_POST['design']){
+                    $mailer->send_mail($value['user']['email'], $subject, 'Ваш заказ принят, с вами свяжется менеджер', $value['user']['name'], $config['mail_user'], $config['mail_password']);
+                    $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Поступил заказ на дизайн наклеек', 'admin', $config['mail_user'], $config['mail_password']);
+                }
+            }
+
+        }
+    }elseif (isset($_POST['question'])&& $_POST['question']){
+        $subject = 'Обратная связь';
+
+        $message = '
+        <html>
+        <head>
+          <title>Обратная связь</title>
+        </head>
+        <body>
+          <div><b>Имя:</b>'.$_POST['name'].'</div>
+          <div><b>Телефон:</b>'.$_POST['phone'].'</div>
+          <div><b>Вопрос:</b>'.$_POST['message'].'</div>
+        </body>
+        </html>
+        ';
+
+        $mailer->send_mail('zakaz@okprint.com.ua', $subject, $message, 'admin', $config['mail_user'], $config['mail_password']);
     }

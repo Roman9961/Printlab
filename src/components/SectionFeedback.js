@@ -10,13 +10,16 @@ const SectionFeedback = ({
     values,
     touched,
     submitForm,
-    setFieldValue
+    setFieldValue,
+    handleModal
 })=>{
     const phoneHandleFocus =(e)=>{
         if(!values.phone) {
             setFieldValue("phone", '+380');
         }
-    }
+    };
+
+
     return (
         <section>
             <div className="container">
@@ -51,11 +54,12 @@ const SectionFeedback = ({
                                 <div className="feedback-form__input-block">
                                     <ReCAPTCHA
                                         ref={(el) => { captcha = el; }}
-                                        sitekey="6LdDDWAUAAAAAOetFWeJr_MYOKAJGxcEXk6QoqxO"
+                                        sitekey="6LcyQXEUAAAAAAt3JePBHrbYiPm0V9JtwQZt1ywF"
                                         size="invisible"
                                         onChange={
                                             (response) => {
                                                 setFieldValue("recaptcha", response);
+                                                handleModal()
                                                 submitForm()
                                             }
                                         }
@@ -96,15 +100,17 @@ const FormikFeedback = withFormik({
     }),
     handleSubmit(values, {resetForm, setSubmitting}){
         if(values.recaptcha){
-            console.log(values);
-            var formData = new FormData();
-            formData.append('test', '123');
-            Object.keys(values).map(key =>{
-                if(values[key]){
-                    formData.append(key, values[key]);
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", '/server/confirm/index.php', true);
+
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function(data) {//Вызывает функцию при смене состояния.
+                if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
                 }
-            });
-            console.log(formData.get('email'));
+            }
+            xhr.send(`question=true&email=${values.email}&name=${values.name}&phone=${values.phone}&message=${values.message}`);
+
             resetForm();
             setSubmitting(false);
             captcha.reset();

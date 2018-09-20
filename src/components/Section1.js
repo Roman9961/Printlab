@@ -22,8 +22,6 @@ class Section1 extends React.Component{
         this.setState((state)=>({...state, validate }));
     }
 
-
-
     validateForm (e){
             if(e) {
                 e.preventDefault();
@@ -52,7 +50,7 @@ class Section1 extends React.Component{
                     const data1 = {
                         'public_key': process.env.LIQPAY_PUBLIC_KEY,
                         'action': 'pay',
-                        'amount': 1,
+                        'amount': data.calcProp.price,
                         'currency': 'UAH',
                         'description': 'заказ наклеек',
                         'order_id': `${generatedKey}`,
@@ -108,16 +106,13 @@ class Section1 extends React.Component{
                     const xhr = new XMLHttpRequest();
                     xhr.open("POST", '/server/confirm/index.php', true);
 
-//Передает правильный заголовок в запросе
                     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
                     xhr.onreadystatechange = function(data) {//Вызывает функцию при смене состояния.
                         if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-                            console.log(data);
                         }
                     }
-                    xhr.send(`order_id=${newLocation}&moneyTransfer=true`);
-
+                    xhr.send(`order_id=${newLocation}&order=true&moneyTransfer=true`);
                 }
             }
             const price = !!this.state.calcProp.price;
@@ -147,15 +142,22 @@ class Section1 extends React.Component{
                 handleModal();
 
                 if (!this.state.currentOrder.location) {
-                    base.fetch('orders', {
+                    base.fetch('orderCount', {
                         context: this,
-                        asArray: true
-                    }).then(orders => {
-                        var orderId = orders[orders.length - 1].orderId ? (orders[orders.length - 1].orderId + 1) : 1;
+                    }).then(({increment}) => {
+                        let orderId = increment;
+                        increment++;
+                        let str = "" + orderId;
+                        let pad = "0000";
+                        orderId = pad.substring(0, pad.length - str.length) + str;
                         data = {
                             ...data,
                             orderId
-                        }
+                        };
+                        base.update('orderCount', {
+                            data: {increment}
+                        });
+
                         const immediatelyAvailableReference = base.push('orders', {
                             data: data,
                         }).then(newLocation => {
@@ -204,6 +206,7 @@ class Section1 extends React.Component{
                 handleModal();
                 this.toggleValidating(true);
             }else{
+
                 this.state.captcha.execute();
             }
     }
@@ -639,11 +642,9 @@ class Section1 extends React.Component{
                 });
 
                 if(uploadErrors.length > 0 || totalSize>1000000000) {
-                    console.log(totalSize)
                     setState(errorMessage);
                     handleModal();
                 } else {
-                    const crypto = require('crypto');
         
                 for (let i = 0; i < data.files.length; i++) {
                     const newPath =data.files[0].name.replace(/[^A-Za-z0-9\.]/g,'_');
@@ -1740,13 +1741,13 @@ class Section1 extends React.Component{
                         </div>
                         <ReCAPTCHA
                             ref={(el) => { this.state.captcha = el; }}
-                            sitekey="6LdDDWAUAAAAAOetFWeJr_MYOKAJGxcEXk6QoqxO"
+                            sitekey="6LcyQXEUAAAAAAt3JePBHrbYiPm0V9JtwQZt1ywF"
                             size="invisible"
                             onChange={
                                 (response) => {
                                     this.setState( state=>({
                                         ...state,
-                                        recaptcha:response
+                                        recaptcha:true
                                     }));
                                     this.validateForm();
                                 }

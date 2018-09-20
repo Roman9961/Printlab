@@ -36,7 +36,7 @@ class Mailer{
         $mail->Password = $password;
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
-        $mail->setFrom('romanrimskiy@gmail.com.com', 'Stickers');
+        $mail->setFrom('zakaz@okprint.com.ua', 'Stickers');
         $mail->addAddress($to, $name);
         $mail->Subject = $subject;
         $mail->Body    = $message;

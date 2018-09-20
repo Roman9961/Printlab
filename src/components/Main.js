@@ -1,6 +1,8 @@
 import React from 'react';
 import {render} from 'react-dom';
 import base from '../base';
+import Modal from 'react-modal';
+import {Transition} from 'react-transition-group'
 import Header from './Header';
 import ExpressCalculation from './ExpressCalculation';
 import SectionBase from './SectionBase';
@@ -36,6 +38,7 @@ class Main extends React.Component{
             _exchangeRate : null,
         },
         modal:false,
+        modalFeedback:false,
         modalDesign:false,
         stickyMenu:false
     };
@@ -73,6 +76,13 @@ class Main extends React.Component{
         // timeout = setTimeout(()=>{
         //     el.classList.add('sticky-hide');
         // },delay);
+    }
+
+    handleModal = ()=> {
+        this.setState(state=>({
+            ...state,
+            modalFeedback: !state.modalFeedback
+        }));
     }
 
     render(){
@@ -118,10 +128,35 @@ class Main extends React.Component{
                     <SectionDesign handleModal = {handleModalDesign}/>
                     <SectionLayoutProps/>
                     <SectionQuestions/>
-                    <SectionFeedback/>
+                    <SectionFeedback  handleModal = {this.handleModal}/>
                     <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}/>
                     <ModalDesign isOpen = {this.state.modalDesign} handleModal = {handleModalDesign}/>
                     <Footer/>
+                    <Transition in={this.state.modalFeedback} timeout={300}>
+                        {status=> {
+                            return (
+                                <Modal
+                                    isOpen={this.state.modalFeedback}
+                                    onRequestClose={()=> {
+                                        this.handleModal();
+                                    }}
+                                    contentLabel="Error"
+                                    closeTimeoutMS={300}
+                                    className={`modal-error ${status}`}
+                                    overlayClassName="modal-error-overlay"
+                                >
+                                    <div className="modal-error__close" onClick={()=> {
+                                        this.handleModal();
+                                    }}></div>
+                                    <div className="modal-error__message">
+                                        <div>Ваше cобщение отправлено,</div>
+                                        <div>скоро мы свяжемся с Вами</div>
+                                    </div>
+                                </Modal>
+                            )
+                            }
+                        }
+                    </Transition>
                 </React.Fragment>
             ):'...loading';
     }

@@ -5,6 +5,7 @@ import InputRange from 'react-input-range';
 import { Textbox } from 'react-inputs-validation';
 import {Icon} from 'react-fa';
 import Select from 'react-select';
+import moment from 'moment';
 import base from '../base';
 import calc from './calculator';
 import jQuery from 'jquery';
@@ -55,15 +56,22 @@ class SectionDesignOnly extends React.Component{
                 handleModal();
 
                 if (!this.state.currentOrder.location) {
-                    base.fetch('orders', {
+
+                    base.fetch('orderCount', {
                         context: this,
-                        asArray: true
-                    }).then(orders => {
-                        var orderId = orders[orders.length - 1].orderId ? (orders[orders.length - 1].orderId + 1) : 1;
+                    }).then(({increment}) => {
+                        let orderId = increment;
+                        increment++;
+                        let str = "" + orderId;
+                        let pad = "0000";
+                        orderId = pad.substring(0, pad.length - str.length) + str;
                         data = {
                             ...data,
                             orderId
-                        }
+                        };
+                        base.update('orderCount', {
+                            data: {increment}
+                        });
                         const immediatelyAvailableReference = base.push('orders', {
                             data: data,
                         }).then(newLocation => {
@@ -75,6 +83,18 @@ class SectionDesignOnly extends React.Component{
                                 }
                             }));
 
+                            const xhr = new XMLHttpRequest();
+                            xhr.open("POST", '/server/confirm/index.php', true);
+
+//Передает правильный заголовок в запросе
+                            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                            xhr.onreadystatechange = function(data) {//Вызывает функцию при смене состояния.
+                                if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                                }
+                            }
+                            xhr.send(`order_id=${newLocation.key}&order=true&design=true`);
+
                             handleModal();
                             setOrder(true);
                             handleModal();
@@ -83,7 +103,7 @@ class SectionDesignOnly extends React.Component{
                             //handle error
                         });
                     }).catch(error => {
-                        //handle error
+                        console.log(error)
                     })
                 }else{
                     data = {
@@ -251,7 +271,6 @@ class SectionDesignOnly extends React.Component{
                     setState(errorMessage);
                     handleModal();
                 } else {
-                    const crypto = require('crypto');
         
                 for (let i = 0; i < data.files.length; i++) {
                     const newPath =data.files[0].name.replace(/[^A-Za-z0-9\.]/g,'_');
@@ -469,7 +488,7 @@ class SectionDesignOnly extends React.Component{
                                 </div>
                                 <ReCAPTCHA
                                     ref={(el) => { this.state.captcha = el; }}
-                                    sitekey="6LdDDWAUAAAAAOetFWeJr_MYOKAJGxcEXk6QoqxO"
+                                    sitekey="6LcyQXEUAAAAAAt3JePBHrbYiPm0V9JtwQZt1ywF"
                                     size="invisible"
                                     onChange={
                                         (response) => {
