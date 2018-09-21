@@ -100,17 +100,34 @@ class AdminOrders extends React.Component{
     };
 
     componentDidMount(){
-
-       base.listenTo('orders',{
+        this.ref = base.listenTo('versionAdmin', {
             context: this,
-            asArray: true,
-           then(orders){
-               const ordersData = orders.filter((order)=>{
-                   return  moment(order.dateCreate).isAfter(this.state.startDate)&&moment(order.dateCreate).isBefore(this.state.endDate);
-               })
-               this.setState(state=>({...state,orders,ordersData}));
-           }
+        then(versionAdmin) {
+
+            let versionAdminStorage = JSON.parse(localStorage.getItem("versionAdminStorage"));
+            if(localStorage.getItem("orders") === null || versionAdminStorage!=versionAdmin) {
+                base.listenTo('orders', {
+                    context: this,
+                    asArray: true,
+                    then(orders){console.log('fire');
+                        window.localStorage.setItem("orders", JSON.stringify(orders));
+                        window.localStorage.setItem("versionAdminStorage", JSON.stringify(versionAdmin));
+                        const ordersData = orders.filter((order)=> {
+                            return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
+                        })
+                        this.setState(state=>({...state, orders, ordersData}));
+                    }
+                });
+            }else{console.log('local');
+                let orders = JSON.parse(localStorage.getItem("orders"));
+                const ordersData = orders.filter((order)=> {
+                    return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
+                });
+                this.setState(state=>({...state, orders, ordersData}));
+            }
+        }
         });
+
 
        base.listenTo('users',{
             context: this,
@@ -189,6 +206,10 @@ class AdminOrders extends React.Component{
         base.post(this.state.files.path, {
             data: {...files},
         });
+        const uuidv4 = require('uuid/v4');
+        base.post('versionAdmin', {
+            data: uuidv4(),
+        });
     };
 
     handleFiles = (e)=>{
@@ -212,7 +233,7 @@ class AdminOrders extends React.Component{
                 if(uploadErrors.length > 0 || totalSize>1000000000) {
                     alert(errorMessage)
                 } else {
-                    const crypto = require('crypto');
+
         
                 for (let i = 0; i < data.files.length; i++) {
                     const newPath =data.files[0].name.replace(/[^A-Za-z0-9\.]/g,'_');
@@ -263,6 +284,7 @@ class AdminOrders extends React.Component{
         const isUser = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid);
         const isManager = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid&&e.type==='manager');
         const isWorker = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid&&e.type==='worker');
+
      if (
          this.state.uid &&
          ( this.state.admin&&((!isAdmin||!isManager||!isWorker) && this.props.match.id =='orders') ||
@@ -354,8 +376,9 @@ class AdminOrders extends React.Component{
                  text: 'Worker',
                  sort: true,
                  formatter: (cell,row)=>{
-                     const worker =  workers.map(e => e.email === cell?e:{name:'Не назначен'});
-                     return worker[0].hasOwnProperty('email')?`${worker[0].name}(${worker[0].email})`:worker[0].name;
+
+                     const worker =  workers.filter(e => e.email == cell);
+                     return worker.length>0?`${worker[0].name}(${worker[0].email})`:'Не назначен'
                  },
                  editor: {
                      type: Type.SELECT,
@@ -466,11 +489,11 @@ ${mailfiles}
                                      <div><b>Доставка: </b><div style={{backgroundColor:'grey'}}>{  Object.keys(row.delivery).map(function (key,i) {
                                          return <React.Fragment key={i}><p><b>{trans[key]}: </b> {trans[row.delivery[key]]!==undefined?trans[row.delivery[key]]:row.delivery[key]}</p></React.Fragment>
                                      }) }</div></div>
-                                     <div>
+                                     {isManager&&<div>
                                          <button onClick={()=>{
                                              window.open(`https://mail.google.com/mail/?su=Заказ&body=${encodeURI(mail)}&view=cm&fs=1&to=partner@domain.com`, '_blank');
                                          }}>send by email</button>
-                                     </div>
+                                     </div>}
                                  </React.Fragment>
                              }
                          })() }
@@ -504,8 +527,7 @@ ${mailfiles}
              data = data.filter(e=>e.manager==this.state.uid);
          }
          if(isWorker){
-
-             data = data.filter(order=>(order.worker==this.state.uid&&(status=='accepted'||order.status=='processing'))).sort(function(a,b){
+             data = data.filter(order=>(order.worker===this.state.uid&&(order.status=='accepted'||order.status=='processing'))).sort(function(a,b){
                     if( a.status=='accepted' &&  b.status=='accepted'){
                         return a.dateCreate - b.dateCreate;
                     }
@@ -520,13 +542,17 @@ ${mailfiles}
                     <h2>Admin</h2>
                     {logOut}
 
-                    <div>
-                        <span>Заказы</span>
-                        <button onClick={()=>{this.setState(state=>({
-                            ...state,
-                            filter:!state.filter
-                        }))}}>{this.state.filter?'Показать все заказы':'Показать только мои заказы'}</button>
-                    </div>
+                    {
+                       isManager && <div>
+                            <span>Заказы</span>
+                            <button onClick={()=> {
+                                this.setState(state=>({
+                                    ...state,
+                                    filter: !state.filter
+                                }))
+                            }}>{this.state.filter ? 'Показать все заказы' : 'Показать только мои заказы'}</button>
+                        </div>
+                    }
                     <DateRangePicker
                         startDate={this.state.startDate}
                         endDate={this.state.endDate}
@@ -551,14 +577,28 @@ ${mailfiles}
                             blurToSave: true,
                             beforeSaveCell:  (oldValue, newValue, row, column) => {
                                 if(!newValue ) return false;
-                               let newdata = {};
-                               newdata[column.dataField] = newValue;
-                               base.update(`orders/${row.key}`, {
-                                    data: newdata,
-                                });
-                                if(isManager){
+                                if(oldValue !== newValue) {
+                                    let newdata = {};
+                                    newdata[column.dataField] = newValue;
                                     base.update(`orders/${row.key}`, {
-                                        data: {manager:manager.email},
+                                        data: newdata,
+                                    }).then(()=> {
+                                        if (isWorker) {
+                                            const uuidv4 = require('uuid/v4');
+                                            base.post('versionAdmin', {
+                                                data: uuidv4(),
+                                            });
+                                        }
+                                        if (isManager) {
+                                            base.update(`orders/${row.key}`, {
+                                                data: {manager: manager.email},
+                                            }).then(()=> {
+                                                const uuidv4 = require('uuid/v4');
+                                                base.post('versionAdmin', {
+                                                    data: uuidv4(),
+                                                });
+                                            });
+                                        }
                                     });
                                 }
                             }

@@ -58,8 +58,8 @@ class AdminTable extends React.Component{
             <table className="table table-striped">
                 <thead>
                 <tr>
-                    <td>
-                        {this.state.trans[this.props.tableName]}<button onClick={sort}>Sort</button>
+                    <td colSpan="3">
+                        {this.state.trans[this.props.tableName]} <button onClick={sort}>Sort</button>
                     </td>
                 </tr>
                 <tr>

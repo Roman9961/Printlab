@@ -1,7 +1,6 @@
 import React from 'react';
 import FastCalculator from './FastCalculator';
 import base from '../base';
-import customSelect from '../custom_select';
 
 
 class ExpressCalculation extends React.Component{
@@ -9,13 +8,30 @@ class ExpressCalculation extends React.Component{
         calculator: {}
     };
     componentDidMount(){
-         this.ref = base.syncState('Stickers/calculator',{
-            context: this,
-            state: 'calculator',
-            then () {
-                customSelect();
+
+        this.ref = base.fetch('version', {
+            context: this
+        }).then((version)=> {
+            let versionStorage = JSON.parse(localStorage.getItem("versionStorage"));
+            if(localStorage.getItem("calculator") === null || versionStorage!=version) {
+                this.ref = base.fetch('Stickers/calculator', {
+                    context: this
+                }).then((calculator)=> {
+                    window.localStorage.setItem("calculator", JSON.stringify(calculator));
+                    window.localStorage.setItem("versionStorage", JSON.stringify(version));
+                    this.setState(state=>({
+                        ...state,
+                        calculator
+                    }));
+                });
+            }else{
+                let calculator = JSON.parse(localStorage.getItem("calculator"));
+                this.setState(state=>({
+                    ...state,
+                    calculator
+                }));
             }
-        })
+        });
     };
 
     render(){

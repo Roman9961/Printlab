@@ -128,6 +128,14 @@ class Admin extends React.Component{
             },
         })
     }
+
+    updateVersion = ()=>{
+        const uuidv4 = require('uuid/v4');
+        base.post('version', {
+            data: uuidv4(),
+        });
+        alert('Версия обновлена!');
+    }
     remoweRow = (row, key)=>{
         const calculator = {...this.state.calculator};
         calculator[row][key] = null;
@@ -169,8 +177,10 @@ class Admin extends React.Component{
 
                 <div style={{padding:20+'px'}}>
                     <h2>Admin</h2>
+                    <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
                     {logOut}
-
+                    <div><button onClick={this.updateVersion}>Обновить версию</button><div>(Обязательно! после внесения изменений)</div></div>
+                    </div>
                     <div>
                         <span>Курс доллара</span>
                         <div>

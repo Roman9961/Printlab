@@ -44,14 +44,25 @@ class Main extends React.Component{
     };
 
     componentDidMount(){
-        this.ref = base.listenTo('Stickers/stickers',{
-            context: this,
-            then (stickers) {
-                this.setState({
-                    stickers,
-                })
-            }
-        });
+        if(localStorage.getItem("stickers") === null) {
+            this.ref = base.listenTo('Stickers/stickers', {
+                context: this,
+                then (stickers) {
+                    window.localStorage.setItem("stickers", JSON.stringify(stickers));
+                    this.setState({
+                        stickers,
+                    });
+
+                }
+            });
+        }else{
+            console.log('local')
+            let stickers = JSON.parse(localStorage.getItem("stickers"));
+            this.setState(state=>({
+                ...state,
+                stickers
+            }));
+        }
         window.addEventListener('scroll', this.handleScroll);
 
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import base from '../base';
 import calc from './calculator';
 import ReactTooltip from 'react-tooltip';
+import customSelect from '../custom_select';
 
 class FastCalculator extends React.Component{
     state = {
@@ -43,21 +44,23 @@ class FastCalculator extends React.Component{
             ...state,
             calculator: this.props.calculator
         }));
-                switch (this.props.form) {
-                    case 'rectangle':
-                        this.updatecalcProp('form', 'Прямоугольная');
-                        break;
-                    case 'simple':
-                        this.updatecalcProp('form', 'Простая форма');
-                        break;
-                    case 'hard':
-                        this.updatecalcProp('form', 'Сложная форма');
-                        break;
-                    case 'roll':
-                        this.updatecalcProp('print_type', 'Рулонная');
-                        this.updatecalcProp('form', 'Рулонная');
-                        break;
-                }
+
+        switch (this.props.form) {
+            case 'rectangle':
+                this.updatecalcProp('form', 'Прямоугольная');
+                break;
+            case 'simple':
+                this.updatecalcProp('form', 'Простая форма');
+                break;
+            case 'hard':
+                this.updatecalcProp('form', 'Сложная форма');
+                break;
+            case 'roll':
+                this.updatecalcProp('print_type', 'Рулонная');
+                this.updatecalcProp('form', 'Рулонная');
+                break;
+        }
+        customSelect();
     }
 
     componentDidUpdate(){

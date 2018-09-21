@@ -273,21 +273,39 @@ class Section1 extends React.Component{
         jqXHR:null
     };
     componentDidMount(){
-        this.ref = base.fetch('Stickers/calculator',{
+        this.ref = base.fetch('version', {
             context: this
-
-        }).then ((calculator)=>{
-
-               this.setState(state=>({
+        }).then((version)=> {
+            let versionStorage = JSON.parse(localStorage.getItem("versionStorage"));
+            if(localStorage.getItem("calculator") === null || versionStorage!=version) {
+            this.ref = base.fetch('Stickers/calculator', {
+                context: this
+            }).then((calculator)=> {
+                window.localStorage.setItem("calculator", JSON.stringify(calculator))
+                this.setState(state=>({
                     ...state,
                     calculator
                 }));
-                if(Object.keys(this.props.calcProp).length !== 0){
+                if (Object.keys(this.props.calcProp).length !== 0) {
                     this.setState((state)=>({
                         ...state,
-                        calcProp:this.props.calcProp
+                        calcProp: this.props.calcProp
                     }));
                 }
+            });
+            }else{
+                let calculator = JSON.parse(localStorage.getItem("calculator"));
+                this.setState(state=>({
+                    ...state,
+                    calculator
+                }));
+                if (Object.keys(this.props.calcProp).length !== 0) {
+                    this.setState((state)=>({
+                        ...state,
+                        calcProp: this.props.calcProp
+                    }));
+                }
+            }
         });
 
         (async () => {
