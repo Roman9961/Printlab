@@ -56,7 +56,6 @@ class Main extends React.Component{
                 }
             });
         }else{
-            console.log('local')
             let stickers = JSON.parse(localStorage.getItem("stickers"));
             this.setState(state=>({
                 ...state,

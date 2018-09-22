@@ -12,7 +12,7 @@ const Router = () => (
         <Switch>
             <Route exact path="/" component={Main}/>
             <Route exact path="/admin" component={Admin} />
-            <Route path="/admin/:id" component={AdminOrders} />
+            <Route exact path="/admin/orders" component={AdminOrders} />
             <Route component={NotFound} />
         </Switch>
     </BrowserRouter>

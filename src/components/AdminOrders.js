@@ -109,7 +109,7 @@ class AdminOrders extends React.Component{
                 base.listenTo('orders', {
                     context: this,
                     asArray: true,
-                    then(orders){console.log('fire');
+                    then(orders){
                         window.localStorage.setItem("orders", JSON.stringify(orders));
                         window.localStorage.setItem("versionAdminStorage", JSON.stringify(versionAdmin));
                         const ordersData = orders.filter((order)=> {
@@ -118,7 +118,7 @@ class AdminOrders extends React.Component{
                         this.setState(state=>({...state, orders, ordersData}));
                     }
                 });
-            }else{console.log('local');
+            }else{
                 let orders = JSON.parse(localStorage.getItem("orders"));
                 const ordersData = orders.filter((order)=> {
                     return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
@@ -437,7 +437,12 @@ ${mailfiles}
                          {(()=>{
                            if(designOnly)
                            {
-                               return <p><b>Только ДИЗАЙН!!! </b></p>
+                               return <React.Fragment>
+                                    <p><b>Только ДИЗАЙН!!! </b></p>
+                                    <p><b>Заказчик: </b>{  row.user.name }</p>
+                                    <p><b>Телефон заказчика: </b>{  row.user.phone }</p>
+                                    <p><b>Email заказчика: </b>{  row.user.email }</p>
+                                   </React.Fragment>
                            }else{
                                return <React.Fragment>
                                    <p><b>Тип печати: </b>{ row.calcProp.print_type }</p>
@@ -485,6 +490,9 @@ ${mailfiles}
                                      <p><b>Кол-во листов/раппортов: </b>{  row.calcProp.numberoflist }</p>
                                      <p><b>Стоимость: </b>{  row.calcProp.price } грн.</p>
                                      <p><b>Способ оплаты: </b>{  trans[row.user.payment_method] }</p>
+                                     <p><b>Заказчик: </b>{  row.user.name }</p>
+                                     <p><b>Телефон заказчика: </b>{  row.user.phone }</p>
+                                     <p><b>Email заказчика: </b>{  row.user.email }</p>
                                      <p><b>Печать: </b>{  row.calcProp.type }</p>
                                      <div><b>Доставка: </b><div style={{backgroundColor:'grey'}}>{  Object.keys(row.delivery).map(function (key,i) {
                                          return <React.Fragment key={i}><p><b>{trans[key]}: </b> {trans[row.delivery[key]]!==undefined?trans[row.delivery[key]]:row.delivery[key]}</p></React.Fragment>
@@ -599,6 +607,9 @@ ${mailfiles}
                                                 });
                                             });
                                         }
+                                        base.update(`orders/${row.key}`, {
+                                            data: {dateUpdate: moment().format("YYYY-MM-DD HH:mm:ss")},
+                                        })
                                     });
                                 }
                             }

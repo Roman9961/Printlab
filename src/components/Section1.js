@@ -54,8 +54,7 @@ class Section1 extends React.Component{
                         'currency': 'UAH',
                         'description': 'заказ наклеек',
                         'order_id': `${generatedKey}`,
-                        'server_url': 'http://test.okprint.com.ua/server/confirm/index.php',
-                        'sandbox': '1',
+                        'server_url': 'http://stikers.okprint.com.ua/server/confirm/index.php',
                         'version': '3'
                     };
 
@@ -76,6 +75,18 @@ class Section1 extends React.Component{
                                 data: {status: data.status, dateUpdate:moment().format("YYYY-MM-DD HH:mm:ss")}
                             }).then(()=>{
                                 setLiq(true);
+                                if(data.status != 'success') {
+                                    const xhr = new XMLHttpRequest();
+                                    xhr.open("POST", '/server/confirm/index.php', true);
+
+                                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                                    xhr.onreadystatechange = function (data) {//Вызывает функцию при смене состояния.
+                                        if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                                        }
+                                    }
+                                    xhr.send(`order_id=${data.order_id}&order=true&liqPay=true`);
+                                }
                             });
 
                         }).on("liqpay.ready", function (data) {
@@ -127,6 +138,7 @@ class Section1 extends React.Component{
                     status: 'wait',
                     files: this.state.files,
                     dateCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
+                    dateUpdate: moment().format("YYYY-MM-DD HH:mm:ss"),
                     user: this.state.user
                 };
                 if (data.delivery.method == 'np') {
@@ -169,7 +181,10 @@ class Section1 extends React.Component{
                                     id: data.orderId
                                 }
                             }));
-
+                            const uuidv4 = require('uuid/v4');
+                            base.post('versionAdmin', {
+                                data: uuidv4(),
+                            });
                         }).catch(err => {
                             //handle error
                         });
