@@ -216,7 +216,7 @@ class AdminOrders extends React.Component{
 
         jQuery(e.currentTarget).fileupload({
             context:this,
-            url: 'http://77.222.152.121',
+            url: 'https://printlab.net.ua',
             singleFileUploads: false,
             dataType: 'json',
             add:(e, data)=>{
@@ -397,7 +397,14 @@ class AdminOrders extends React.Component{
                              buttons: [
                                  {
                                      label: 'Да',
-                                     onClick: () => base.remove(`orders/${cell}`)
+                                     onClick: () => {
+                                         base.remove(`orders/${cell}`).then(()=>{
+                                             const uuidv4 = require('uuid/v4');
+                                             base.post('versionAdmin', {
+                                                 data: uuidv4(),
+                                             });
+                                         })
+                                     }
                                  },
                                  {
                                      label: 'Нет',
@@ -585,6 +592,35 @@ ${mailfiles}
                             blurToSave: true,
                             beforeSaveCell:  (oldValue, newValue, row, column) => {
                                 if(!newValue ) return false;
+                                if(column.dataField == 'status' && newValue == 'done'){
+                                    confirmAlert({
+                                        title: 'Отправить смс заказчику?',
+                                        message: `Уверены что хотите отправить смс о готовности заказа №${row.orderId} заказчику ${row.user.name} на номер ${row.user.phone}`,
+                                        buttons: [
+                                            {
+                                                label: 'Да',
+                                                onClick: () => {
+                                                    let url =`http://127.0.0.1:8084/server/sms`;
+                                                    let xmlHttp = new XMLHttpRequest();
+                                                    xmlHttp.open( "POST", url, true ); // false for synchronous request
+                                                    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                                    xmlHttp.onreadystatechange = function(data) {//Вызывает функцию при смене состояния.
+                                                        if(xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status == 200) {
+                                                           console.log(xmlHttp.responseText);
+                                                        }
+                                                    }
+
+                                                    xmlHttp.send(`phone=${row.user.phone.substr(1)}&id=${row.orderId}`);
+
+                                                }
+                                            },
+                                            {
+                                                label: 'Нет',
+                                                onClick: () => {}
+                                            }
+                                        ]
+                                    })
+                                }
                                 if(oldValue !== newValue) {
                                     let newdata = {};
                                     newdata[column.dataField] = newValue;

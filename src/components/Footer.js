@@ -1,5 +1,6 @@
 import React from 'react';
 import Scroll from 'react-scroll-to-element';
+import { Link } from 'react-router-dom';
 
 const Footer = e => (
     <footer>
@@ -8,27 +9,14 @@ const Footer = e => (
                 <div  className="header">
                     <div className="header__logo footer__logo">
                     </div>
-                    <div className="mobile-contacts">
-                        <div className="header__contacts__phone__icon">
-                            <a href="tel:+380678283212"> <img alt="Наклейки" title="Наклейки" src="images/call.svg"/> </a>
-                        </div>
-                    </div>
                     <div className="header__menu">
                         <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
                         <Scroll type="class" element="requairements"><div className="header__menu__item">Требования к макетам</div></Scroll>
                         <Scroll type="class" element="delivery__top"><div className="header__menu__item">Оплата и доставка</div></Scroll>
                     </div>
-                    <div className="header__contacts">
-                        <div className="header__contacts__phone">
-                            <div className="header__contacts__phone__icon">
-                                <img alt="Наклейки" title="Наклейки" src="images/call.svg"/>
-                            </div>
-                            <div className="header__contacts__phone__block">
-                                <span>(067) 828 32 12</span>
-                                <span>(044) 232 10 88</span>
-                            </div>
-                        </div>
-                        <span>zakaz@okprint.com.ua</span>
+                    <div className="footer__terms">
+                        <span className="terms"><Link to="/terms" target="_blank" >Договор оказания услуг</Link></span>
+                        <img alt="Наклейки" title="Наклейки" src="images/visa_logo2.svg"/>
                     </div>
                 </div>
             </div>

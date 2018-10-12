@@ -28,6 +28,12 @@
   &--outline{
     margin-top: 0;
   }
+  .requirements-info{
+    margin: 0;
+    margin-top: 10px;
+    font-weight: normal;
+    font-size: 12px;
+  }
 }
 .file-upload-header{
   display: flex;
@@ -46,6 +52,8 @@
 }
 .file-upload-container{
   opacity: 0;
+  width: -webkit-fill-available;
+  max-width: 100%;
   transition: all .3s ease-in-out;
   &.entering,&.exiting{
     display: block;

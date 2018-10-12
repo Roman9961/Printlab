@@ -38,7 +38,7 @@ const SectionFeedback = ({
                                 <div className="feedback-form__input-block">
                                     <p className={`${touched.phone && errors.phone&&'active'}`}>{errors.phone}</p>
                                     <label className={`feedback-form__label ${errors.phone?'error':''}`} htmlFor="phone">Ваш телефон:</label>
-                                    <Field onFocus={phoneHandleFocus} className={`feedback-form__field ${errors.phone?'error':''}`}  type="text" id="phone" name="phone" placeholder="+389999999999"/>
+                                    <Field onFocus={phoneHandleFocus} className={`feedback-form__field ${errors.phone?'error':''}`}  type="text" id="phone" name="phone" placeholder="+38(099) 999 99 99"/>
                                 </div>
 
                                 <div className="feedback-form__input-block">
@@ -48,8 +48,9 @@ const SectionFeedback = ({
                                 </div>
 
                                 <div className="feedback-form__input-block">
-                                    <label className="feedback-form__label" htmlFor="name">Сообщение:</label>
-                                    <Field className="feedback-form__field" type="text" name="message" placeholder="Текст"/>
+                                    <p className={`${touched.message && errors.message&&'active'}`}>{errors.message}</p>
+                                    <label className={`feedback-form__label ${errors.message?'error':''}`} htmlFor="name">Сообщение:</label>
+                                    <Field className={`feedback-form__field ${errors.message?'error':''}`} type="text" name="message" placeholder="Текст"/>
                                 </div>
                                 <div className="feedback-form__input-block">
                                     <ReCAPTCHA
@@ -94,9 +95,10 @@ const FormikFeedback = withFormik({
         }
     },
     validationSchema: Yup.object().shape({
-        name: Yup.string().required('Обязательное поле'),
-        phone: Yup.string().matches(/\+380\d{9}/, 'Неверній номер'),
-        email: Yup.string().email().required('Обязательное поле'),
+        name: Yup.string().max(50, 'Имя должно быть менее 50 символов').required('Обязательное поле'),
+        phone: Yup.string().max(13, 'Неверный номер').matches(/\+380\d{9}/, 'Неверный номер'),
+        email: Yup.string().max(50, 'E-mail должен быть менее 50 символов').email('Неверный E-mail').required('Обязательное поле'),
+        message: Yup.string().max(100, 'Сообщение должно быть менее 100 символов'),
     }),
     handleSubmit(values, {resetForm, setSubmitting}){
         if(values.recaptcha){

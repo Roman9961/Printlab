@@ -19,6 +19,9 @@ const Header = (props) => (
                         <div className="header__contacts__phone__icon">
                             <a href="tel:+380678283212"> <img alt="Наклейки" title="Наклейки" src="images/call.svg"/> </a>
                         </div>
+                        <div className="header__contacts__phone__icon">
+                            <a href="mailto:zakaz@okprint.com.ua"> <img style={{height:'97%'}} alt="Наклейки" title="Наклейки" src="images/email@1x.svg"/> </a>
+                        </div>
                     </div>
                     <div className="header__menu">
                         <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>

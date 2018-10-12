@@ -239,6 +239,31 @@ class SectionDesignOnly extends React.Component{
         }
     };
 
+    handleFileDelete =(filetoDelete)=>{
+
+        const files = this.state.files;
+        let newFiles =  files.filter(file=>{
+            if(filetoDelete == file) {
+                fetch(
+                    file.deleteUrl,
+                    {
+                        method: "DELETE"
+                    }
+                );
+                return false;
+            }else{
+                return true;
+            }
+        });
+        if(newFiles.length==0){
+            jQuery('.js-maket-download').removeAttr('style');
+        }
+        this.setState(state=>({
+            ...state,
+            files:newFiles
+        }));
+    };
+
     handleFiles = (e)=>{
         const setState = (errorMessage)=> {
             this.setState(state=>({
@@ -273,17 +298,27 @@ class SectionDesignOnly extends React.Component{
                 } else {
         
                 for (let i = 0; i < data.files.length; i++) {
-                    const newPath =data.files[0].name.replace(/[^A-Za-z0-9\.]/g,'_');
+                    const newPath =data.files[i].name.replace(/[^A-Za-z0-9\.]/g,'_');
                    data.files[i].uploadName =newPath;
                 }
                     jqXHR( data.submit());
 
                 }
             },
-            url: 'http://77.222.152.121',
+            change: function (e, data) {
+                for (let i = 0; i < data.files.length; i++) {
+                    if (!(/\.(jpg|jpeg|png|pdf|ttf|tiff|psd|cdr|ai|eps)$/i).test(data.files[i].name)) {
+                        let b = document.createElement('b');
+                        let errorMessage = <span style={{wordBreak:'break-word'}}>Файл <b>{data.files[0].name}</b> имеет недопустимый формат</span>;
+                        setState(errorMessage);
+                        handleModal();
+                        return false;
+                    }
+                }
+            },
+            url: 'https://printlab.net.ua',
             singleFileUploads: false,
             dataType: 'json',
-            beforeSend:this.handleFileSend,
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
                
@@ -332,7 +367,16 @@ class SectionDesignOnly extends React.Component{
                                                     <div className={`file-upload-container`}>
                                                         <div className="modal-block__content_item__description">
                                                             {this.state.files.length===0&&!this.state.fileError&&(<span>Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна.</span>)}
-                                                            {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
+                                                            {this.state.files.length>0&&!this.state.fileError&&(
+                                                                this.state.files.map((file,key)=>{
+                                                                    return <React.Fragment key={key}>
+                                                                        <div className="uploaded-file-container">
+                                                                            <span key={key} className="file-success">{file.name}</span>
+                                                                            <Icon name="times" className="abort_upload" onClick={()=> this.handleFileDelete(file)}/>
+                                                                        </div>
+                                                                    </React.Fragment>
+                                                                })
+                                                            )}
                                                         </div>
                                                         <div className="abort-upload-container">
                                                         <label htmlFor="upload3" className="file-upload">
@@ -341,6 +385,7 @@ class SectionDesignOnly extends React.Component{
                                                                     <span>Загрузить пример</span>
                                                                 </div>
                                                                 <input className="upload"  id="upload3" type="file" name="files[]" multiple onClick={this.handleFiles}/>
+                                                                <div className="requirements-info">*cуммарный объем файлов не должен превышать 1Гб</div>
                                                             </div>
                                                         </label>
                                                             {this.state.jqXHR&&<Icon  size="2x" name="times" className="abort_upload" onClick={()=>{
@@ -384,7 +429,12 @@ class SectionDesignOnly extends React.Component{
                                                         value={this.state.user.name}
                                                         onBlur={()=>{}}
                                                         onChange={(name)=> {
-                                                            this.setState(state=>({user: {...state.user,name},delivery: {...state.delivery,name}}))
+                                                            if(name.length<=50) {
+                                                                this.setState(state=>({
+                                                                    user: {...state.user, name},
+                                                                    delivery: {...state.delivery, name}
+                                                                }))
+                                                            }
                                                         }
                                                         }
                                                         validationOption={{
@@ -413,15 +463,27 @@ class SectionDesignOnly extends React.Component{
                                                         value={this.state.user.phone}
                                                         onBlur={()=>{}}
                                                         onChange={phone=> {
-                                                            if (!phone||!phone.match(/\+/)){
-                                                                this.setState(state=>({user: {...state.user,phone:'+380'},delivery: {...state.delivery,phone:'+380'}}))
-                                                            }
-                                                            else if(!phone.match(/^\+[0-9]*$/)){;
-                                                            }
-                                                            else if (phone.match(/^\+380[0-9]{0,9}$/)) {
-                                                                this.setState(state=>({user: {...state.user,phone},delivery: {...state.delivery,phone}}))
-                                                            }else if(phone.length<4){
-                                                                this.setState(state=>({user: {...state.user,phone:'+380'},delivery: {...state.delivery,phone:'+380'}}))
+                                                            if(phone.length<=13) {
+                                                                if (!phone || !phone.match(/\+/)) {
+                                                                    this.setState(state=>({
+                                                                        user: {...state.user, phone: '+380'},
+                                                                        delivery: {...state.delivery, phone: '+380'}
+                                                                    }))
+                                                                }
+                                                                else if (!phone.match(/^\+[0-9]*$/)) {
+                                                                    ;
+                                                                }
+                                                                else if (phone.match(/^\+380[0-9]{0,9}$/)) {
+                                                                    this.setState(state=>({
+                                                                        user: {...state.user, phone},
+                                                                        delivery: {...state.delivery, phone}
+                                                                    }))
+                                                                } else if (phone.length < 4) {
+                                                                    this.setState(state=>({
+                                                                        user: {...state.user, phone: '+380'},
+                                                                        delivery: {...state.delivery, phone: '+380'}
+                                                                    }))
+                                                                }
                                                             }
                                                         }
                                                         }
@@ -451,7 +513,12 @@ class SectionDesignOnly extends React.Component{
                                                             this.setState({ hasEmailError: res, validate:!res})}
                                                         value={this.state.user.email}
                                                         onBlur={()=>{}}
-                                                        onChange={email=>this.setState(state=>({user:{...state.user,email}}))}
+                                                        onChange={email=> {
+                                                            if(email.length<=50) {
+                                                                this.setState(state=>({user: {...state.user, email}}))
+                                                            }
+                                                        }
+                                                        }
                                                         validationOption={{
                                                             type:"string",
                                                             reg:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,

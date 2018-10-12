@@ -9,6 +9,7 @@
     position: relative;
     .menu-icon{
       display: block;
+      flex-grow: 1;
     }
   }
 }
@@ -16,6 +17,11 @@
   display: none;
   @media (max-width: 767px){
     display: flex;
+    justify-content: space-around;
+    flex-grow: 2;
+  }
+  .header__contacts__phone__icon{
+    margin: 0 10px;
   }
 }
 .header__logo {

@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
-import {Transition} from 'react-transition-group'
+import {Transition} from 'react-transition-group';
+import { Link } from 'react-router-dom';
 import InputRange from 'react-input-range';
 import moment from 'moment';
 import { Textbox } from 'react-inputs-validation';
@@ -54,7 +55,7 @@ class Section1 extends React.Component{
                         'currency': 'UAH',
                         'description': 'заказ наклеек',
                         'order_id': `${generatedKey}`,
-                        'server_url': 'http://stikers.okprint.com.ua/server/confirm/index.php',
+                        'server_url': 'https://stikers.okprint.com.ua/server/confirm/index.php',
                         'version': '3'
                     };
 
@@ -219,7 +220,6 @@ class Section1 extends React.Component{
 
                 this.toggleValidating(false);
                 handleModal();
-                this.toggleValidating(true);
             }else{
 
                 this.state.captcha.execute();
@@ -626,9 +626,10 @@ class Section1 extends React.Component{
                 }));
 
         });
+        let files = [...this.state.files, ...data.result.files];
         this.setState(state=>({
             ...state,
-            files:data.result.files,
+            files,
             jqXHR:null
         }));
     };
@@ -645,6 +646,31 @@ class Section1 extends React.Component{
                 );
             })
         }
+    };
+
+    handleFileDelete =(filetoDelete)=>{
+
+        const files = this.state.files;
+           let newFiles =  files.filter(file=>{
+                if(filetoDelete == file) {
+                    fetch(
+                        file.deleteUrl,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+                    return false;
+                }else{
+                    return true;
+                }
+            });
+        if(newFiles.length==0){
+            jQuery('.js-maket-download').removeAttr('style');
+        }
+        this.setState(state=>({
+            ...state,
+            files:newFiles
+        }));
     };
 
     handleFiles = (e)=>{
@@ -678,26 +704,39 @@ class Section1 extends React.Component{
                     setState(errorMessage);
                     handleModal();
                 } else {
-        
+
                 for (let i = 0; i < data.files.length; i++) {
-                    const newPath =data.files[0].name.replace(/[^A-Za-z0-9\.]/g,'_');
+                    const newPath =data.files[i].name.replace(/[^A-Za-z0-9\.]/g,'_');
                    data.files[i].uploadName =newPath;
                 }
                     jqXHR( data.submit());
                 }
             },
-            url: 'http://77.222.152.121',
+            change: function (e, data) {
+                for (let i = 0; i < data.files.length; i++) {
+                    if (!(/\.(jpg|jpeg|png|pdf|ttf|tiff|psd|cdr|ai|eps)$/i).test(data.files[i].name)) {
+                        let b = document.createElement('b');
+                        let errorMessage = <span style={{wordBreak:'break-word'}}>Файл <b>{data.files[0].name}</b> имеет недопустимый формат</span>;
+                        setState(errorMessage);
+                        handleModal();
+                        return false;
+                    }
+                }
+            },
+            url: 'https://printlab.net.ua',
             singleFileUploads: false,
             dataType: 'json',
-            beforeSend:this.handleFileSend,
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
-               
-                jQuery(e.target).prev().css(
-                    'background',
-                   `linear-gradient(to right, #7ba232 0%,#95c241 ${progress}%,transparent ${progress}%,transparent 100%)` 
-                );
-                jQuery(e.target).prev().css('background-color', '#fbac52')
+               if(progress<3){
+                   jQuery('.js-maket-download').removeAttr('style');
+               }else {
+                   jQuery(e.target).prev().css(
+                       'background',
+                       `linear-gradient(to right, #7ba232 0%,#95c241 ${progress}%,transparent ${progress}%,transparent 100%)`
+                   );
+                   jQuery(e.target).prev().css('background-color', '#fbac52')
+               }
             },
             done: this.handleFileupload,
             error: function(e, data){
@@ -728,7 +767,7 @@ class Section1 extends React.Component{
             <div className="wrapper-container wrapper-container--modal">
                 <div className="container container--modal-info">
                     <div className="modal-info__title">Укажите, на что хотите печатать наклейки:</div>
-                    <div><input className="modal-info__field" type="text" placeholder="на банки"/></div>
+                    <div><input className="modal-info__field" type="text" maxLength={50} placeholder="на банки"/></div>
                 </div>
             </div>
 
@@ -1124,16 +1163,27 @@ class Section1 extends React.Component{
                                                             <div className={`file-upload-container ${status}`}>
                                                                 <div className="modal-block__content_item__description">
                                                                     {this.state.files.length===0&&!this.state.fileError&&(<span>Если ваш макет соответствует требованиям к макету , то загрузите его:</span>)}
-                                                                    {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
+                                                                    {this.state.files.length>0&&!this.state.fileError&&(
+                                                                         this.state.files.map((file,key)=>{
+                                                                             return <React.Fragment key={key}>
+                                                                                 <div className="uploaded-file-container">
+                                                                                 <span key={key} className="file-success">{file.name}</span>
+                                                                                 <Icon  name="times" className="abort_upload" onClick={()=> this.handleFileDelete(file)}/>
+                                                                                 </div>
+                                                                                 </React.Fragment>
+                                                                         })
+                                                                    )}
                                                                 </div>
                                                                 <div className="abort-upload-container">
                                                                 <label htmlFor="upload1" className="file-upload">
                                                                     <div className="fileform">
-                                                                        <div className="button button--design">
+                                                                        <div className="button button--design js-maket-download">
                                                                             <span>Загрузить макет</span>
                                                                         </div>
                                                                         <input className="upload23"  id="upload1" type="file" name="files[]" multiple onClick={this.handleFiles} />
+                                                                        <div className="requirements-info">*cуммарный объем файлов не должен превышать 1Гб</div>
                                                                     </div>
+
                                                                 </label>
                                                                     {this.state.jqXHR&&<Icon  size="2x" name="times" className="abort_upload" onClick={(e)=>{
                                                                         if (this.state.jqXHR) {
@@ -1227,16 +1277,27 @@ class Section1 extends React.Component{
                                                                         </div>
                                                                     </div>
                                                                     <div className="modal-block__content_item__description">
-                                                                        {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
+                                                                        {this.state.files.length>0&&!this.state.fileError&&(
+                                                                            this.state.files.map((file,key)=>{
+                                                                                return <React.Fragment key={key}>
+                                                                                    <div className="uploaded-file-container">
+                                                                                        <span key={key} className="file-success">{file.name}</span>
+                                                                                        <Icon  name="times" className="abort_upload" onClick={()=> this.handleFileDelete(file)}/>
+                                                                                    </div>
+                                                                                </React.Fragment>
+                                                                            })
+                                                                        )}
                                                                     </div>
                                                                     <div className="abort-upload-container">
                                                                     <label htmlFor="upload2" className="file-upload">
                                                                         <div className="fileform fileform--outline">
-                                                                            <div className="button button--design">
+                                                                            <div className="button button--design js-maket-download">
                                                                                 <span>Загрузить макет</span>
                                                                             </div>
                                                                             <input className="upload" id="upload2" type="file" name="files[]" multiple onClick={this.handleFiles}/>
+                                                                            <div className="requirements-info">*cуммарный объем файлов не должен превышать 1Гб</div>
                                                                         </div>
+
                                                                     </label>
                                                                     {this.state.jqXHR&&<Icon  size="2x" name="times" className="abort_upload" onClick={()=>{
 
@@ -1273,15 +1334,25 @@ class Section1 extends React.Component{
                                                                 <div className={`file-upload-container ${status}`}>
                                                                     <div className="modal-block__content_item__description">
                                                                         {this.state.files.length===0&&!this.state.fileError&&(<span>Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна.</span>)}
-                                                                        {this.state.files.length>0&&!this.state.fileError&&(<span className="file-success">Файл(ы) успешно загружен(ы)</span>)}
+                                                                        {this.state.files.length>0&&!this.state.fileError&&(
+                                                                            this.state.files.map((file,key)=>{
+                                                                                return <React.Fragment key={key}>
+                                                                                    <div className="uploaded-file-container">
+                                                                                        <span key={key} className="file-success">{file.name}</span>
+                                                                                        <Icon name="times" className="abort_upload" onClick={()=> this.handleFileDelete(file)}/>
+                                                                                    </div>
+                                                                                </React.Fragment>
+                                                                            })
+                                                                        )}
                                                                     </div>
                                                                     <div className="abort-upload-container">
                                                                     <label htmlFor="upload3" className="file-upload">
                                                                         <div className="fileform">
-                                                                            <div className="button button--design">
+                                                                            <div className="button button--design js-maket-download">
                                                                                 <span>Загрузить пример</span>
                                                                             </div>
                                                                             <input className="upload"  id="upload3" type="file" name="files[]" multiple onClick={this.handleFiles}/>
+                                                                            <div className="requirements-info">*cуммарный объем файлов не должен превышать 1Гб</div>
                                                                         </div>
                                                                     </label>
                                                                         {this.state.jqXHR&&<Icon  size="2x" name="times" className="abort_upload" onClick={()=>{
@@ -1354,7 +1425,12 @@ class Section1 extends React.Component{
                                                 value={this.state.user.name}
                                                 onBlur={()=>{}}
                                                 onChange={(name)=> {
-                                                        this.setState(state=>({user: {...state.user,name},delivery: {...state.delivery,name}}))
+                                                    if(name.length<=50) {
+                                                        this.setState(state=>({
+                                                            user: {...state.user, name},
+                                                            delivery: {...state.delivery, name}
+                                                        }))
+                                                    }
                                                 }
                                                 }
                                                 validationOption={{
@@ -1368,7 +1444,7 @@ class Section1 extends React.Component{
                                         </div>
 
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="phone">Ваше телефон:</label>
+                                            <label className="feedback-form__label" htmlFor="phone">Ваш телефон:</label>
                                             <Textbox
                                                 classNameInput="validation_input"
                                                 classNameWrapper="validation_wrapper"
@@ -1383,15 +1459,27 @@ class Section1 extends React.Component{
                                                 value={this.state.user.phone}
                                                 onBlur={()=>{}}
                                                 onChange={phone=> {
-                                                    if (!phone||!phone.match(/\+/)){
-                                                        this.setState(state=>({user: {...state.user,phone:'+380'},delivery: {...state.delivery,phone:'+380'}}))
-                                                    }
-                                                    else if(!phone.match(/^\+[0-9]*$/)){;
-                                                    }
-                                                    else if (phone.match(/^\+380[0-9]{0,9}$/)) {
-                                                        this.setState(state=>({user: {...state.user,phone},delivery: {...state.delivery,phone}}))
-                                                    }else if(phone.length<4){
-                                                        this.setState(state=>({user: {...state.user,phone:'+380'},delivery: {...state.delivery,phone:'+380'}}))
+                                                    if(phone.length<=13) {
+                                                        if (!phone || !phone.match(/\+/)) {
+                                                            this.setState(state=>({
+                                                                user: {...state.user, phone: '+380'},
+                                                                delivery: {...state.delivery, phone: '+380'}
+                                                            }))
+                                                        }
+                                                        else if (!phone.match(/^\+[0-9]*$/)) {
+                                                            ;
+                                                        }
+                                                        else if (phone.match(/^\+380[0-9]{0,9}$/)) {
+                                                            this.setState(state=>({
+                                                                user: {...state.user, phone},
+                                                                delivery: {...state.delivery, phone}
+                                                            }))
+                                                        } else if (phone.length < 4) {
+                                                            this.setState(state=>({
+                                                                user: {...state.user, phone: '+380'},
+                                                                delivery: {...state.delivery, phone: '+380'}
+                                                            }))
+                                                        }
                                                     }
                                                 }
                                                 }
@@ -1407,7 +1495,7 @@ class Section1 extends React.Component{
                                         </div>
 
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="email">Ваше email:</label>
+                                            <label className="feedback-form__label" htmlFor="email">Ваш email:</label>
                                                 <Textbox
                                                 classNameInput="validation_input"
                                                 classNameWrapper="validation_wrapper"
@@ -1421,13 +1509,19 @@ class Section1 extends React.Component{
                                                     this.setState({ hasEmailError: res, validate:!res})}
                                                 value={this.state.user.email}
                                                 onBlur={()=>{}}
-                                                onChange={email=>this.setState(state=>({user:{...state.user,email}}))}
+                                                onChange={email=> {
+                                                    if(email.length<=50) {
+                                                        this.setState(state=>({user: {...state.user, email}}))
+                                                    }
+                                                }
+                                                }
                                                 validationOption={{
                                                     type:"string",
                                                     reg:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
                                                     regMsg:'Некорректный E-mail',
                                                     showMsg:true,
-                                                    msgOnError:'Некорректный E-mail',                                                    check: true,
+                                                    msgOnError:'Некорректный E-mail',
+                                                    check: true,
                                                     required: true
 
                                                 }}
@@ -1621,11 +1715,20 @@ class Section1 extends React.Component{
                                                         type="text"
                                                         tabIndex="0"
                                                         validate={this.state.validate}
-                                                        validationCallback={(res) =>
-                                                            this.setState({ deliveryNameError: res, validate:!res})}
+                                                        validationCallback={(res) =>{
+                                                            let validate = this.state.validate;
+                                                            if(validate && !res){
+                                                                validate = true;
+                                                            }
+                                                            return this.setState({ deliveryNameError: res, validate})
+                                                        }}
                                                         value={this.state.delivery.name}
                                                         onBlur={()=>{}}
-                                                        onChange={(name)=> {this.setState(state=>({delivery: {...state.delivery,name}}))}}
+                                                        onChange={(name)=> {
+                                                            if(name.length<=50) {
+                                                                this.setState(state=>({delivery: {...state.delivery,name}}))
+                                                            }
+                                                        }}
                                                         validationOption={{
                                                             type:"string",
                                                             showMsg:true,
@@ -1647,20 +1750,27 @@ class Section1 extends React.Component{
                                                         type="phone"
                                                         tabIndex="0"
                                                         validate={this.state.validate}
-                                                        validationCallback={(res) =>
-                                                            this.setState({ deliveryPhoneError: res, validate:!res})}
+                                                        validationCallback={(res) =>{
+                                                            let validate = this.state.validate;
+                                                            if(validate && !res){
+                                                                validate = true;
+                                                            }
+                                                            return this.setState({ deliveryNameError: res, validate})
+                                                        }}
                                                         value={this.state.delivery.phone}
                                                         onBlur={()=>{}}
                                                         onChange={phone=> {
-                                                                if (!phone||!phone.match(/\+/)){
-                                                                    this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
-                                                                }
-                                                                else if(!phone.match(/^\+[0-9]*$/)){;
-                                                                }
-                                                                else if (phone.match(/^\+380[0-9]{0,9}$/)) {
-                                                                    this.setState(state=>({delivery: {...state.delivery,phone}}))
-                                                                }else if(phone.length<4){
-                                                                    this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
+                                                            if(phone.length<=13){
+                                                                    if (!phone||!phone.match(/\+/)){
+                                                                        this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
+                                                                    }
+                                                                    else if(!phone.match(/^\+[0-9]*$/)){;
+                                                                    }
+                                                                    else if (phone.match(/^\+380[0-9]{0,9}$/)) {
+                                                                        this.setState(state=>({delivery: {...state.delivery,phone}}))
+                                                                    }else if(phone.length<4){
+                                                                        this.setState(state=>({delivery: {...state.delivery,phone:'+380'}}))
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -1730,9 +1840,11 @@ class Section1 extends React.Component{
                                                 onBlur={()=>{}}
                                                 onChange={
                                                     (comment)=> {
-                                                        this.setState(state=>(
-                                                            {delivery: {...state.delivery,comment}})
-                                                        )
+                                                        if(comment.length<=100) {
+                                                            this.setState(state=>(
+                                                                {delivery: {...state.delivery, comment}})
+                                                            )
+                                                        }
                                                     }
                                                 }
                                                 validationOption={{
@@ -1741,6 +1853,7 @@ class Section1 extends React.Component{
                                                 }}
                                             />
                                         </div>
+                                        <div className="terms">*отправляя заказ Вы принимаете <Link to="/terms" target="_blank" >Договор оказания услуг</Link></div>
                                     </div>
                                 </div>
                             </div>
@@ -1838,7 +1951,11 @@ class Section1 extends React.Component{
                                     this.handleModal();
                                     this.props.handleModal({},true)
                                 }}></div>
-                                <div className="modal-error__message">Заказ принят</div>
+                                <div className="modal-error__message">
+                                    <div className="modal-order-title">Ваш заказ <b>№{this.state.currentOrder.id}</b> принят</div>
+                                    <div>Данные о заказе были отправлены на почту <b>{this.state.user.email}</b></div>
+                                    <div>Наши сотрудники свяжутся с вами для уточнения деталей</div>
+                                </div>
                             </Modal>
                         )
                     }

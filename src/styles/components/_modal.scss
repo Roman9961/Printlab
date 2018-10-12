@@ -12,6 +12,10 @@
   background-color: white;
   overflow-y: scroll;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translateZ(0px);
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-perspective: 1000;
 }
 .wrapper-container.wrapper-container--modal{
   padding: $xl-size 0;
@@ -100,6 +104,9 @@
   @media (max-width: 767px){
     padding:0;
   }
+  .terms{
+    font-size: 16px;
+  }
 }
 .modal-block__content--button{
   justify-content:flex-end;
@@ -165,8 +172,14 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
+  .uploaded-file-container{
+    display: flex;
+  }
     .file-success{
       color:green;
+      text-overflow: ellipsis;
+      width: auto;
+      overflow: hidden;
     }
 
 }
@@ -474,5 +487,8 @@
 }
 .abort_upload{
   color: #cc1313;
+}
+.modal-order-title{
+  font-size: 20px;
 }
 
