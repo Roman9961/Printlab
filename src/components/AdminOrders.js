@@ -2,6 +2,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import firebase from 'firebase';
 import BootstrapTable from 'react-bootstrap-table-next';
+import ModalCalculator from './ModalCalculator';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import {Icon} from 'react-fa';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -29,12 +30,15 @@ class AdminOrders extends React.Component{
         },
         trans:{
             wait: 'Ожидает оплаты',
+            wait_c:'Ожидает подтверждения',
+            success: 'Оплачен',
             failure: 'Ошибка',
             invoice_wait:'Ожидает оплаты через invoice',
             processing:'В работе',
             accepted:'Принят',
             done:'Готов',
             white:'Белая',
+            comment: 'Комментарий',
             transparent:'Прозрачная',
             simple:'Простой',
             hard:'Сложный',
@@ -86,7 +90,8 @@ class AdminOrders extends React.Component{
             wait_lc:'Аккредитив',
             wait_reserve:'wait_reserve',
             wait_secure:'Платеж на проверке',
-            in_processing:'В работе'
+            in_processing:'В работе',
+            canceled: 'Отменен'
         },
         calendarFocused: null,
         startDate: moment().startOf('month'),
@@ -95,7 +100,9 @@ class AdminOrders extends React.Component{
         uid: null,
         admin: null,
         users: null,
-        workers: null
+        workers: null,
+        modal:false,
+        editOrder:{}
 
     };
 
@@ -106,20 +113,77 @@ class AdminOrders extends React.Component{
 
             let versionAdminStorage = JSON.parse(localStorage.getItem("versionAdminStorage"));
             if(localStorage.getItem("orders") === null || versionAdminStorage!=versionAdmin) {
-                base.listenTo('orders', {
-                    context: this,
-                    asArray: true,
-                    then(orders){
-                        window.localStorage.setItem("orders", JSON.stringify(orders));
-                        window.localStorage.setItem("versionAdminStorage", JSON.stringify(versionAdmin));
-                        const ordersData = orders.filter((order)=> {
-                            return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
-                        })
-                        this.setState(state=>({...state, orders, ordersData}));
+                if(localStorage.getItem("orders") === null){
+                    base.fetch('ordersVersion', {
+                        context: this,
+                        asArray: true,
+                        then(ov){
+                            base.fetch('orders', {
+                                context: this,
+                                asArray: true,
+                                then(orders){
+                                    window.localStorage.setItem("orders", JSON.stringify(orders));
+                                    window.localStorage.setItem("versionAdminStorage", JSON.stringify(versionAdmin));
+                                    window.localStorage.setItem("versionOrdersStorage", JSON.stringify(ov));
+                                    const ordersData = orders.filter((order)=> {
+                                        return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
+                                    })
+                                    this.setState(state=>({...state, orders, ordersData}));
+                                }
+                            });
+                        }
+                    });
+                }else{
+                        let orders = JSON.parse(localStorage.getItem("orders"));
+                        const operation = (list1, list2, isUnion = false) =>
+                            list1.filter( a => isUnion === list2.some( b => a.key === b.key && a.ver === b.ver ) );
+
+                        const sameOrders = (list1, list2) => operation(list1, list2, true),
+                            inFirstOnly = operation,
+                            changedOrders = (list1, list2) => inFirstOnly(list2, list1);
+
+                        base.fetch('ordersVersion', {
+                            context: this,
+                            asArray: true,
+                            then(ov){
+
+                                const orderVersions = localStorage.getItem("versionOrdersStorage")?JSON.parse(localStorage.getItem("versionOrdersStorage")):orders;
+
+                                const same = sameOrders(orderVersions, ov);
+                                const changed = changedOrders(orderVersions, ov);
+                                const sameOrder = orders.map(a => {if(false !== same.some( b => a.key === b.key )){return a}}).filter(a=> a !== undefined);
+
+                                async function update(changed, sameOrder) {
+                                    for (let chOrder of changed) {
+                                        await base.fetch(`orders/${chOrder.key}`, {
+                                            context: this,
+                                            then(order){
+                                                order.key = chOrder.key;
+                                                sameOrder.push(order);
+                                            }
+                                        });
+                                    }
+
+                                    return sameOrder;
+                                }
+                                update(changed, sameOrder).then(res=>{
+                                    orders = res;
+                                    const ordersData = orders.filter((order)=> {
+                                        return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
+                                    });
+                                    window.localStorage.setItem("orders", JSON.stringify(orders));
+                                    window.localStorage.setItem("versionAdminStorage", JSON.stringify(versionAdmin));
+                                    window.localStorage.setItem("versionOrdersStorage", JSON.stringify(versionAdmin));
+                                    window.localStorage.setItem("versionOrdersStorage", JSON.stringify(ov));
+                                    this.setState(state=>({...state, orders, ordersData}));
+                                }) ;
+
+                            }
+                        });
                     }
-                });
             }else{
                 let orders = JSON.parse(localStorage.getItem("orders"));
+
                 const ordersData = orders.filter((order)=> {
                     return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
                 });
@@ -207,6 +271,9 @@ class AdminOrders extends React.Component{
             data: {...files},
         });
         const uuidv4 = require('uuid/v4');
+        base.post(this.state.files.order, {
+            data:{ver:uuidv4()}
+        });
         base.post('versionAdmin', {
             data: uuidv4(),
         });
@@ -261,6 +328,20 @@ class AdminOrders extends React.Component{
     handleH = (files)=>{
             this.setState({files});
     }
+    handleModal = (editOrder={},isOpen=false)=>{
+        if(!this.state.modal){
+            document.getElementsByClassName('bod')[0].setAttribute("style", "position:fixed");
+        }else{
+            document.getElementsByClassName('bod')[0].removeAttribute('style');
+        }
+        if(isOpen){
+            document.getElementsByClassName('bod')[0].removeAttribute('style');
+        }
+        this.setState(()=>({
+            modal: isOpen?false:!this.state.modal,
+            editOrder
+        }));
+    }
 
 
 
@@ -272,8 +353,17 @@ class AdminOrders extends React.Component{
                     method: "DELETE"
                 }
             );
+
             base.post(params.path, {
                 data: params.files,
+            }).then(()=>{
+                const uuidv4 = require('uuid/v4');
+                base.post(params.versionPath, {
+                    data:{ver:uuidv4()}
+                });
+                base.post('versionAdmin', {
+                    data: uuidv4(),
+                });
             });
         }
         const logOut = <button onClick={this.logOut}>Logout</button>
@@ -284,7 +374,7 @@ class AdminOrders extends React.Component{
         const isUser = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid);
         const isManager = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid&&e.type==='manager');
         const isWorker = this.state.users!=null &&this.state.users.some(e => e.email === this.state.uid&&e.type==='worker');
-
+        const user = this.state.users?this.state.users.filter(e => e.email === this.state.uid)[0]:{name:'Пользователь'};
      if (
          this.state.uid &&
          ( this.state.admin&&((!isAdmin||!isManager||!isWorker) && this.props.match.id =='orders') ||
@@ -305,8 +395,8 @@ class AdminOrders extends React.Component{
          }
          const options = ()=> {
              let managersOptions = [{
-                 value: 'wait',
-                 label: 'Ожидает оплаты'
+                 value: 'wait_c',
+                 label: 'Ожидает подтверждения'
              }];
              let workersOptions = [{
                  value: 'accepted',
@@ -319,6 +409,20 @@ class AdminOrders extends React.Component{
                  label: 'Готов'
              }];
              return isManager?managersOptions.concat(workersOptions):workersOptions;
+         };
+         const payOptions = ()=> {
+             let managersOptions = [{
+                 value: 'wait',
+                 label: 'Ожидает оплаты'
+             },{
+                 value: 'success',
+                 label: 'Оплачен'
+             },{
+                 value: 'canceled',
+                 label: 'Отменен'
+             }];
+
+             return isManager? managersOptions :[];
          };
          let columns = [{
              dataField: 'orderId',
@@ -359,7 +463,20 @@ class AdminOrders extends React.Component{
                  type: Type.SELECT,
                  options: options()
              }
-         },{
+         }];
+         if(isManager) {
+             columns.push({
+                 dataField: 'pay_status',
+                 text: 'Pay Status',
+                 sort: true,
+                 formatter: (cell,row)=>trans[cell],
+                 editor: {
+                     type: Type.SELECT,
+                     options: payOptions()
+                 }
+             })
+         }
+         columns.push({
              dataField: 'manager',
              text: 'Manager',
              sort: true,
@@ -369,7 +486,7 @@ class AdminOrders extends React.Component{
                  return typeof thisManager !=='undefined' ?`${thisManager.name}(${thisManager.email})`:'Не назначен';
              },
              editable:false
-         }];
+         });
          if(isManager){
              columns.push({
                  dataField: 'worker',
@@ -390,15 +507,16 @@ class AdminOrders extends React.Component{
                  text: '',
                  formatter: (cell,row)=>{
                      const worker =  workers.map(e => e.email === cell?e:{name:'Не назначен'});
-                     return <button onClick={()=>{
+                     return <div className="order-editing"> <button  onClick={()=>{
                          confirmAlert({
                              title: 'Удалить заказ?',
-                             message: 'Уверены что хотите удалить заказ?',
+                             message: `Уверены что хотите удалить заказ №${row.orderId}?`,
                              buttons: [
                                  {
                                      label: 'Да',
                                      onClick: () => {
                                          base.remove(`orders/${cell}`).then(()=>{
+                                             base.remove(`ordersVersion/${cell}`);
                                              const uuidv4 = require('uuid/v4');
                                              base.post('versionAdmin', {
                                                  data: uuidv4(),
@@ -414,16 +532,21 @@ class AdminOrders extends React.Component{
                          })
 
                      }}>Delete</button>
+                     <button onClick={()=>{
+                         this.handleModal(row)
+                     }}>Edit</button>
+                     </div>
                  }
              });
-         }
+         };
          const expandRow = {
              renderer: row =>{
                  const designOnly = row.hasOwnProperty('designOnly');
                  const rowFiles = row.files!==undefined?Object.values(row.files):[];
                  const files = {
                      files:rowFiles,
-                     path:`orders/${row.key}/files`
+                     path:`orders/${row.key}/files`,
+                     order:`ordersVersion/${row.key}`
                  };
 let mailfiles ='';
  rowFiles.forEach(function (file) {
@@ -475,7 +598,7 @@ ${mailfiles}
                                  </a>
                                  <div style={{textAlign:'center'}}>{i+1}</div>
                                  </div>
-                                     {isManager &&<Icon size="lg" name="times-circle" className="file-delete" onClick={()=>{delete rowFiles[i]; deleteFile({deleteUrl:file.deleteUrl,path:`orders/${row.key}/files`,files:rowFiles})}}/>}
+                                     {isManager &&<Icon size="lg" name="times-circle" className="file-delete" onClick={()=>{delete rowFiles[i]; deleteFile({deleteUrl:file.deleteUrl,path:`orders/${row.key}/files`,versionPath:`ordersVersion/${row.key}` ,files:rowFiles, })}}/>}
                                  </div>;
                          }) }</div>
                              <label htmlFor="upload1" className="file-upload" onClick={()=>{this.handleH(files)}}>
@@ -518,13 +641,13 @@ ${mailfiles}
          };
          const rowClasses = (row, rowIndex) => {
              let classes = 'orders-row ';
-             if (row.status == 'failure') {
+             if ( row.pay_status == 'failure' || row.pay_status == 'canceled') {
                  classes += 'row-failure';
              }
-             if (row.status == 'wait') {
+             if (row.pay_status == 'success' && row.status=='wait_c') {
                  classes += 'row-wait';
              }
-             if (row.status == 'done') {
+             if (row.status == 'done' && row.pay_status == 'success') {
                  classes += 'row-done';
              }
 
@@ -532,11 +655,13 @@ ${mailfiles}
          };
          const {trans} = this.state;
          let data = this.state.ordersData.sort(function (a,b) {
-             if(a.calcProp.print_time == b.calcProp.print_time){
-                 return (a.dateCreate < b.dateCreate) ? 1 : (a.dateCreate > b.dateCreate) ? -1 : 0;
-             }else {
-                 return a.calcProp.print_time - b.calcProp.print_time
-             }
+             let atime = parseInt(a.calcProp.print_time);
+             let  btime = parseInt(b.calcProp.print_time);
+             return atime > btime;
+         });
+         data = data.sort(function (a,b) {
+             var ORDER = { done: 1 };
+             return (ORDER[a.status] || 0) - (ORDER[b.status] || 0);
          });
          if(this.state.filter){
              data = data.filter(e=>e.manager==this.state.uid);
@@ -554,11 +679,13 @@ ${mailfiles}
             return (
 
                 <div style={{padding:20+'px'}}>
-                    <h2>Admin</h2>
-                    {logOut}
-
+                    <div className="orders-title">
+                        <h2>{user.name}</h2>
+                        {logOut}
+                    </div>
+                    <div className="orders-nav">
                     {
-                       isManager && <div>
+                       isManager && <div className="orders-manager">
                             <span>Заказы</span>
                             <button onClick={()=> {
                                 this.setState(state=>({
@@ -568,18 +695,21 @@ ${mailfiles}
                             }}>{this.state.filter ? 'Показать все заказы' : 'Показать только мои заказы'}</button>
                         </div>
                     }
-                    <DateRangePicker
-                        startDate={this.state.startDate}
-                        endDate={this.state.endDate}
-                        startDateId ={'1'}
-                        endDateId ={'1'}
-                        onDatesChange={this.onDatesChange}
-                        focusedInput={this.state.calendarFocused}
-                        onFocusChange={this.onFocusChange}
-                        showClearDates={true}
-                        numberOfMonths={1}
-                        isOutsideRange={() => false}
-                    />
+                    <div className="orders-date_range">
+                        <DateRangePicker
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate}
+                            startDateId ={'1'}
+                            endDateId ={'1'}
+                            onDatesChange={this.onDatesChange}
+                            focusedInput={this.state.calendarFocused}
+                            onFocusChange={this.onFocusChange}
+                            showClearDates={true}
+                            numberOfMonths={1}
+                            isOutsideRange={() => false}
+                        />
+                    </div>
+                    </div>
 
 
 
@@ -600,11 +730,11 @@ ${mailfiles}
                                             {
                                                 label: 'Да',
                                                 onClick: () => {
-                                                    let url =`http://127.0.0.1:8084/server/sms`;
+                                                    let url =`/public/server/sms/index.php`;
                                                     let xmlHttp = new XMLHttpRequest();
                                                     xmlHttp.open( "POST", url, true ); // false for synchronous request
                                                     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                                                    xmlHttp.onreadystatechange = function(data) {//Вызывает функцию при смене состояния.
+                                                    xmlHttp.onreadystatechange = function(data) {
                                                         if(xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status == 200) {
                                                            console.log(xmlHttp.responseText);
                                                         }
@@ -624,11 +754,14 @@ ${mailfiles}
                                 if(oldValue !== newValue) {
                                     let newdata = {};
                                     newdata[column.dataField] = newValue;
+                                    const uuidv4 = require('uuid/v4');
+                                    newdata['ver'] = uuidv4();
                                     base.update(`orders/${row.key}`, {
                                         data: newdata,
                                     }).then(()=> {
                                         if (isWorker) {
                                             const uuidv4 = require('uuid/v4');
+
                                             base.post('versionAdmin', {
                                                 data: uuidv4(),
                                             });
@@ -638,11 +771,15 @@ ${mailfiles}
                                                 data: {manager: manager.email},
                                             }).then(()=> {
                                                 const uuidv4 = require('uuid/v4');
+
                                                 base.post('versionAdmin', {
                                                     data: uuidv4(),
                                                 });
                                             });
                                         }
+                                        base.post(`ordersVersion/${row.key}`, {
+                                            data:{ver:uuidv4()}
+                                        });
                                         base.update(`orders/${row.key}`, {
                                             data: {dateUpdate: moment().format("YYYY-MM-DD HH:mm:ss")},
                                         })
@@ -654,7 +791,7 @@ ${mailfiles}
                         pagination={ paginationFactory()}
                         rowClasses={ rowClasses }
                     />
-
+                    <ModalCalculator isOpen = {this.state.modal} handleModal = {this.handleModal} calcProp={{}} editOrder = {this.state.editOrder}/>
                 </div>
             );
         }

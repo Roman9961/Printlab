@@ -129,6 +129,9 @@ class FastCalculator extends React.Component{
         if( calcProp.quantity<1 ){
             calcProp.quantity=1;
         }
+        if(calcProp.quantity>9999999){
+            calcProp.quantity = 9999999;
+        }
          this.setState((state)=>({
              ...state,
              calcProp
@@ -316,7 +319,7 @@ class FastCalculator extends React.Component{
                             <span>{this.state.calcProp.price}</span><span> грн</span>
                         </div>
                     </div>
-                    <div className="express-calculator__basket" onClick={()=>{this.props.handleModal(this.state.calcProp)}}>
+                    <div className="express-calculator__basket" onClick={()=>{gtag('event', 'В корзину', {'event_category': 'Кнопка','event_label' : this.state.title[this.props.form]});this.props.handleModal(this.state.calcProp)}}>
                         <img src="images/basket.svg" alt=""/>
                     </div>
                 </div>

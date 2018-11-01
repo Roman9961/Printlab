@@ -17,7 +17,7 @@ const Header = (props) => (
                     </div>
                     <div className="mobile-contacts">
                         <div className="header__contacts__phone__icon">
-                            <a href="tel:+380678283212"> <img alt="Наклейки" title="Наклейки" src="images/call.svg"/> </a>
+                            <a href="tel:+380678283212" onClick={()=>{gtag('event', 'Позвонить', {'event_category': 'Кнопка','event_label' : 'Pop-up позвонить'})}}> <img alt="Наклейки" title="Наклейки" src="images/call.svg"/> </a>
                         </div>
                         <div className="header__contacts__phone__icon">
                             <a href="mailto:zakaz@okprint.com.ua"> <img style={{height:'97%'}} alt="Наклейки" title="Наклейки" src="images/email@1x.svg"/> </a>
@@ -74,7 +74,7 @@ const Header = (props) => (
                         <img alt="Наклейки" title="Наклейки" src="images/orange_path.svg"/>
                     </div>
                     <div className="col-md-6">
-                        <a href="javascript:;" rel="nofollow" className="button button--calculator" onClick={()=>(props.handleModal({}))}>Посчитать цену</a>
+                        <a href="javascript:;" rel="nofollow" className="button button--calculator" onClick={()=>{gtag('event', 'Посчитать цену', {'event_category': 'Кнопка','event_label' : 'Просчет'}); props.handleModal({})}}>Посчитать цену</a>
                     </div>
                 </div>
             </div>
@@ -93,9 +93,9 @@ const Header = (props) => (
                                 <img alt="Наклейки" title="Наклейки" src="images/call.svg"/>
                             </div>
                             <div className="header__contacts header__contacts__phone__block">
-                                <a href="tel:+380678283212"> (067) 828 32 12</a>
+                                <a href="tel:+380678283212" onClick={()=>{gtag('event', 'Позвонить', {'event_category': 'Кнопка','event_label' : 'Pop-up позвонить'})}}> (067) 828 32 12</a>
                             </div>
-                            <a href="javascript:;"  rel="nofollow" className="button button-green" onClick={()=>(props.handleModal({}))}>Посчитать наклейки</a>
+                            <a href="javascript:;"  rel="nofollow" className="button button-green" onClick={()=>{gtag('event', 'Посчитать наклейки', {'event_category': 'Кнопка','event_label' : 'Pop-up посчитать'}); props.handleModal({})}}>Посчитать наклейки</a>
                         </div>                </div>
                     <div className="col-md-3 col-sm-2">
                         <div className="menu-icon" onClick={(e)=>{

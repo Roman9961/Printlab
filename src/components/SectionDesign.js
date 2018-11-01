@@ -38,7 +38,7 @@ class SectionDesign extends React.Component{
                                    <div className="section-block__content section-block__content--design">
                                        <div>Для вас мы разработаем индивидуальный дизайн наклеек.</div>
                                        <div>Стоимость дизайна начинается от 300 грн, зависит от уровня сложности.</div>
-                                       <a href="javascript:;"  rel="nofollow" className="button button--design" onClick={this.props.handleModal}>Заказать</a>
+                                       <a href="javascript:;"  rel="nofollow" className="button button--design" onClick={()=>{gtag('event', 'Заказать', {'event_category': 'Кнопка','event_label' : 'Дизайн'}); this.props.handleModal()}}>Заказать</a>
                                    </div>
                                </div>
                            </div>

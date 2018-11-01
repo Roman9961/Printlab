@@ -46,7 +46,8 @@ class SectionDesignOnly extends React.Component{
                         ...this.state.delivery
                     },
                     designOnly:true,
-                    status: 'wait',
+                    pay_status: 'wait',
+                    status: 'wait_c',
                     files: this.state.files,
                     dateCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
                     user: this.state.user
@@ -82,7 +83,13 @@ class SectionDesignOnly extends React.Component{
                                     id: data.orderId
                                 }
                             }));
-
+                            const uuidv4 = require('uuid/v4');
+                            base.post(`ordersVersion/${newLocation.key}`, {
+                                data:{ver:uuidv4()}
+                            });
+                            base.post('versionAdmin', {
+                                data: uuidv4(),
+                            });
                             const xhr = new XMLHttpRequest();
                             xhr.open("POST", '/server/confirm/index.php', true);
 
@@ -116,8 +123,6 @@ class SectionDesignOnly extends React.Component{
                     })
 
                 }
-
-                //available immediately, you don't have to wait for the callback to be called
             } else if(!this.state.validate) {
                 this.setState(state=>({
                     ...state,
@@ -307,7 +312,7 @@ class SectionDesignOnly extends React.Component{
             },
             change: function (e, data) {
                 for (let i = 0; i < data.files.length; i++) {
-                    if (!(/\.(jpg|jpeg|png|pdf|ttf|tiff|psd|cdr|ai|eps)$/i).test(data.files[i].name)) {
+                    if (!(/\.(jpg|jpeg|png|pdf|ttf|tiff|tif|psd|cdr|ai|eps)$/i).test(data.files[i].name)) {
                         let b = document.createElement('b');
                         let errorMessage = <span style={{wordBreak:'break-word'}}>Файл <b>{data.files[0].name}</b> имеет недопустимый формат</span>;
                         setState(errorMessage);

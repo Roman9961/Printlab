@@ -36,7 +36,7 @@ $mailer = new Mailer();
 
             $payData = json_decode(base64_decode($data), true);
                 $updates = [
-                    'orders/' . $payData['order_id'] . '/status' => $payData['status'],
+                    'orders/' . $payData['order_id'] . '/pay_status' => $payData['status'],
                     'orders/' . $payData['order_id'] . '/dateUpdate' => date("Y-m-d H:i:s"),
                     'versionAdmin'=>md5(time())
                 ];
@@ -68,7 +68,7 @@ $mailer = new Mailer();
                     $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Поступил заказ на дизайн наклеек', 'admin', $config['mail_user'], $config['mail_password']);
                 }elseif (isset($_POST['liqPay'])&& $_POST['liqPay']){
                     $mailer->send_mail($value['user']['email'], $subject, 'Ваш заказ принят, ожидаем подтверждения оплаты', $value['user']['name'], $config['mail_user'], $config['mail_password']);
-                    $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Поступил заказ на дизайн наклеек, ожидаем оплату через liqPay', 'admin', $config['mail_user'], $config['mail_password']);
+                    $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Поступил заказ на печать наклеек, ожидаем оплату через liqPay', 'admin', $config['mail_user'], $config['mail_password']);
                 }
             }
 

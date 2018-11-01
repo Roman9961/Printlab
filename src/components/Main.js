@@ -139,7 +139,7 @@ class Main extends React.Component{
                     <SectionLayoutProps/>
                     <SectionQuestions/>
                     <SectionFeedback  handleModal = {this.handleModal}/>
-                    <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}/>
+                    <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}  editOrder ={{}}/>
                     <ModalDesign isOpen = {this.state.modalDesign} handleModal = {handleModalDesign}/>
                     <Footer/>
                     <Transition in={this.state.modalFeedback} timeout={300}>

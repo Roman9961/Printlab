@@ -27,203 +27,299 @@ class Section1 extends React.Component{
             if(e) {
                 e.preventDefault();
             }
-            const closeCalc = ()=>{this.props.handleModal({},true)};
-            const handleModal =this.handleModal;
-            const handleBookmark =this.props.handleBookmark;
-            const setOrder = order=>{
-                this.setState(state=>({
-                    ...state,
-                    order
-                }));
-            };
-        const setLiq = liqCallback=>{
-            this.setState(state=>({
-                ...state,
-                liqCallback
-            }));
-        }
-        const isLiq = ()=>this.state.liqCallback;
+                const closeCalc = ()=> {
+                    this.props.handleModal({}, true)
+                };
+        if(!this.state.isEditOrder) {
+                const handleModal = this.handleModal;
+                const handleBookmark = this.props.handleBookmark;
+                const setOrder = order=> {
+                    this.setState(state=>({
+                        ...state,
+                        order
+                    }));
+                };
+                const setLiq = liqCallback=> {
+                    this.setState(state=>({
+                        ...state,
+                        liqCallback
+                    }));
+                }
+                const isLiq = ()=>this.state.liqCallback;
 
-            const liqPayInit = (data, newLocation)=>{
-                if (data.user.payment_method == 'liq-pay') {
-                    handleModal();
-                    const generatedKey = newLocation;
-                    const data1 = {
-                        'public_key': process.env.LIQPAY_PUBLIC_KEY,
-                        'action': 'pay',
-                        'amount': data.calcProp.price,
-                        'currency': 'UAH',
-                        'description': 'заказ наклеек',
-                        'order_id': `${generatedKey}`,
-                        'server_url': 'https://stikers.okprint.com.ua/server/confirm/index.php',
-                        'version': '3'
+                const setLiqEmail = liqEmail=> {
+                    this.setState(state=>({
+                        ...state,
+                        liqEmail
+                    }));
+                }
+                const isLiqEmail = ()=>this.state.liqEmail;
+                const updateStatus = (pay_status)=>{
+                    this.setState(state=>({
+                        ...state,
+                        pay_status,
+                        dateUpdate: moment().format("YYYY-MM-DD HH:mm:ss")
+                    }))
+                };
+                const liqPayInit = (orderData, newLocation)=> {
+                    if (orderData.user.payment_method == 'liq-pay') {
+                        handleModal();
+                        const generatedKey = newLocation;
+                        const data1 = {
+                            'public_key': process.env.LIQPAY_PUBLIC_KEY,
+                            'action': 'pay',
+                            'amount': orderData.calcProp.price,
+                            'currency': 'UAH',
+                            'description': 'заказ наклеек',
+                            'order_id': `${generatedKey}`,
+                            'server_url': 'https://stikers.okprint.com.ua/server/confirm/index.php',
+                            'version': '3'
+                        };
+
+                        const dataL = JSON.stringify(data1);
+
+                        const crypto = require('crypto');
+                        let str = crypto.createHash('sha1').update(process.env.LIQPAY_PRIVATE_KEY + dataL + process.env.LIQPAY_PRIVATE_KEY);
+
+                        const signature = str.digest('base64');
+                        window.LiqPayCheckoutCallback = function () {
+                            LiqPayCheckout.init({
+                                data: dataL,
+                                embedTo: "#liqpay_checkout",
+                                signature: signature,
+                                mode: "popup" // embed || popup,
+                            }).on("liqpay.callback", function (data) {
+                                base.update(`orders/${data.order_id}`, {
+                                    data: {pay_status: data.status, dateUpdate: moment().format("YYYY-MM-DD HH:mm:ss")}
+                                }).then(()=> {
+                                    setLiq(true);
+                                    updateStatus(data.status)
+                                    if (data.status != 'success' && !isLiqEmail()) {
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.open("POST", '/server/confirm/index.php', true);
+
+                                        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                                        xhr.onreadystatechange = function (data) {
+                                            if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                                            }
+                                        }
+                                        xhr.send(`order_id=${data.order_id}&order=true&liqPay=true`);
+                                        setLiqEmail(true);
+                                    }
+                                });
+
+                            }).on("liqpay.ready", function (data) {
+                                // ready
+                            }).on("liqpay.close", function (data) {
+                                if (isLiq()) {
+                                    setLiq(false);
+                                    setOrder(true);
+                                    handleModal();
+                                    handleBookmark({
+                                        print: true,
+                                        design: false,
+                                        deliver: false
+                                    })
+                                }
+                            });
+                        }();
+                    } else {
+                        handleModal();
+                        setOrder(true);
+                        handleModal();
+                        handleBookmark({
+                            print: true,
+                            design: false,
+                            deliver: false
+                        });
+
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("POST", '/server/confirm/index.php', true);
+
+                        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                        xhr.onreadystatechange = function (data) {//Вызывает функцию при смене состояния.
+                            if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                            }
+                        }
+                        xhr.send(`order_id=${newLocation}&order=true&moneyTransfer=true`);
+                    }
+                }
+                const price = !!this.state.calcProp.price;
+                this.validateContacts();
+                if (this.state.validate && this.state.recaptcha && price) {
+                    const uuidv4 = require('uuid/v4');
+                    let data = {
+                        calcProp: this.state.calcProp,
+                        delivery: {
+                            ...this.state.delivery
+                        },
+                        pay_status: this.state.pay_status,
+                        status: this.state.status,
+                        files: this.state.files,
+                        dateCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
+                        dateUpdate: moment().format("YYYY-MM-DD HH:mm:ss"),
+                        user: this.state.user
                     };
+                    if (data.delivery.method == 'np') {
+                        data = {
+                            ...data,
+                            delivery: {
+                                ...data.delivery,
+                                ...this.state.np
+                            }
+                        }
+                    }
+                    this.toggleValidating(true);
+                    handleModal();
 
-                    const dataL = JSON.stringify(data1);
+                    if (!this.state.currentOrder.location) {
+                        base.fetch('orderCount', {
+                            context: this,
+                        }).then(({increment}) => {
+                            let orderId = increment;
+                            increment++;
+                            let str = "" + orderId;
+                            let pad = "0000";
+                            orderId = pad.substring(0, pad.length - str.length) + str;
+                            data = {
+                                ...data,
+                                orderId
+                            };
+                            base.update('orderCount', {
+                                data: {increment}
+                            });
 
-                    const crypto = require('crypto');
-                    let str = crypto.createHash('sha1').update(process.env.LIQPAY_PRIVATE_KEY + dataL + process.env.LIQPAY_PRIVATE_KEY);
-
-                    const signature = str.digest('base64');
-                    window.LiqPayCheckoutCallback = function () {
-                        LiqPayCheckout.init({
-                            data: dataL,
-                            embedTo: "#liqpay_checkout",
-                            signature: signature,
-                            mode: "popup" // embed || popup,
-                        }).on("liqpay.callback", function (data) {
-                            base.update(`orders/${data.order_id}`, {
-                                data: {status: data.status, dateUpdate:moment().format("YYYY-MM-DD HH:mm:ss")}
-                            }).then(()=>{
-                                setLiq(true);
-                                if(data.status != 'success') {
+                            const immediatelyAvailableReference = base.push('orders', {
+                                data: data,
+                            }).then(newLocation => {
+                                liqPayInit(data, newLocation.key);
+                                this.setState(state=>({
+                                    ...state,
+                                    currentOrder: {
+                                        location: newLocation.key,
+                                        id: data.orderId
+                                    }
+                                }));
+                                if (!isLiqEmail()) {
                                     const xhr = new XMLHttpRequest();
                                     xhr.open("POST", '/server/confirm/index.php', true);
 
                                     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-                                    xhr.onreadystatechange = function (data) {//Вызывает функцию при смене состояния.
+                                    xhr.onreadystatechange = function (data) {
                                         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
                                         }
                                     }
-                                    xhr.send(`order_id=${data.order_id}&order=true&liqPay=true`);
+                                    xhr.send(`order_id=${newLocation.key}&order=true&liqPay=true`);
+                                    setLiqEmail(true);
                                 }
+                                const uuidv4 = require('uuid/v4');
+                                base.post(`ordersVersion/${newLocation.key}`, {
+                                    data:{ver:uuidv4()}
+                                });
+                                base.post('versionAdmin', {
+                                    data: uuidv4(),
+                                });
+                            }).catch(err => {
+                                //handle error
                             });
-
-                        }).on("liqpay.ready", function (data) {
-                            // ready
-                        }).on("liqpay.close", function (data) {
-                            if(isLiq()) {
-                                setLiq(false);
-                                setOrder(true);
-                                handleModal();
-                                handleBookmark({
-                                    print: true,
-                                    design: false,
-                                    deliver: false
-                                })
-                            }
-                        });
-                    }();
-                }else{
-                    handleModal();
-                    setOrder(true);
-                    handleModal();
-                    handleBookmark({
-                        print:true,
-                        design:false,
-                        deliver:false
-                    });
-
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("POST", '/server/confirm/index.php', true);
-
-                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                    xhr.onreadystatechange = function(data) {//Вызывает функцию при смене состояния.
-                        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-                        }
-                    }
-                    xhr.send(`order_id=${newLocation}&order=true&moneyTransfer=true`);
-                }
-            }
-            const price = !!this.state.calcProp.price;
-
-            if (this.state.validate && this.state.recaptcha && price) {
-
-                let data = {
-                    calcProp: this.state.calcProp,
-                    delivery: {
-                        ...this.state.delivery
-                    },
-                    status: 'wait',
-                    files: this.state.files,
-                    dateCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
-                    dateUpdate: moment().format("YYYY-MM-DD HH:mm:ss"),
-                    user: this.state.user
-                };
-                if (data.delivery.method == 'np') {
-                    data = {
-                        ...data,
-                        delivery: {
-                            ...data.delivery,
-                            ...this.state.np
-                        }
-                    }
-                }
-                this.toggleValidating(true);
-                handleModal();
-
-                if (!this.state.currentOrder.location) {
-                    base.fetch('orderCount', {
-                        context: this,
-                    }).then(({increment}) => {
-                        let orderId = increment;
-                        increment++;
-                        let str = "" + orderId;
-                        let pad = "0000";
-                        orderId = pad.substring(0, pad.length - str.length) + str;
+                        }).catch(error => {
+                            //handle error
+                        })
+                    } else {
                         data = {
                             ...data,
-                            orderId
-                        };
-                        base.update('orderCount', {
-                            data: {increment}
-                        });
+                            orderId: this.state.currentOrder.id
+                        }
+                        base.update(`orders/${this.state.currentOrder.location}`, {
+                            data: data
+                        }).then(()=> {
+                            liqPayInit(data, this.state.currentOrder.location);
+                        })
 
-                        const immediatelyAvailableReference = base.push('orders', {
-                            data: data,
-                        }).then(newLocation => {
-                            liqPayInit(data, newLocation.key);
-                            this.setState(state=>({
-                                ...state,
-                                currentOrder: {
-                                    location: newLocation.key,
-                                    id: data.orderId
-                                }
-                            }));
-                            const uuidv4 = require('uuid/v4');
-                            base.post('versionAdmin', {
-                                data: uuidv4(),
-                            });
-                        }).catch(err => {
-                            //handle error
-                        });
-                    }).catch(error => {
-                        //handle error
-                    })
-                }else{
-                    data = {
-                        ...data,
-                        orderId:this.state.currentOrder.id
                     }
-                    base.update(`orders/${this.state.currentOrder.location}`, {
-                        data: data
-                    }).then(()=>{
-                        liqPayInit(data, this.state.currentOrder.location);
-                    })
 
-                }
-
-                //available immediately, you don't have to wait for the callback to be called
-            } else if(!this.state.validate|| !price) {
-                this.setState(state=>({
-                    ...state,
-                    errorMessage:'Заполните необходимые поля'
-                }));
-                if(!price){
+                    //available immediately, you don't have to wait for the callback to be called
+                } else if (!this.state.validate || !price) {
                     this.setState(state=>({
                         ...state,
-                        errorMessage:'Вы ничего не выбрали'
+                        errorMessage: 'Заполните необходимые поля'
                     }));
+                    if (!price) {
+                        this.setState(state=>({
+                            ...state,
+                            errorMessage: 'Вы ничего не выбрали'
+                        }));
+                    }
+
+                    this.toggleValidating(false);
+                    handleModal();
+                } else {
+
+                    this.state.captcha.execute();
                 }
-
-                this.toggleValidating(false);
-                handleModal();
             }else{
-
-                this.state.captcha.execute();
+            const uuidv4 = require('uuid/v4');
+            const orderVers = uuidv4();
+            let data = {
+                calcProp: this.state.calcProp,
+                delivery: {
+                    ...this.state.delivery
+                },
+                pay_status: this.state.pay_status,
+                status: this.state.status,
+                files: this.state.files,
+                dateUpdate: moment().format("YYYY-MM-DD HH:mm:ss"),
+                user: this.state.user
+            };
+            if (data.delivery.method == 'np') {
+                data = {
+                    ...data,
+                    delivery: {
+                        ...data.delivery,
+                        ...this.state.np
+                    }
+                }
             }
+
+            base.update(`orders/${ this.state.currentOrder.location}`, {
+               data
+            }).then(()=>{
+                const uuidv4 = require('uuid/v4');
+                base.post(`ordersVersion/${ this.state.currentOrder.location}`, {
+                    data:{ver:orderVers}
+                });
+                base.post('versionAdmin', {
+                    data: uuidv4(),
+                }).then(()=>{ window.location='/admin/orders'});
+            })
+
+            }
+    }
+    validateContacts = ()=>{
+        let phone = this.state.user.phone;
+        let email = this.state.user.email;
+        let name = this.state.user.name;
+        if(!phone&&!email&&!name){
+            this.setState(state=>({
+                ...state,
+                validate:false
+            }))
+        }
+        else if(!phone.match(/((\+380)+([0-9]){9})/)){
+            this.setState(state=>({
+                ...state,
+                validate:false
+            }))
+        }
+        else if(email&&!email.match(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)){
+            this.setState(state=>({
+                ...state,
+                validate:false
+            }))
+        }
     }
     state = {
         tooltip:false,
@@ -257,6 +353,7 @@ class Section1 extends React.Component{
             phone:'+380'
         },
         liqCallback:false,
+        liqEmail:false,
         currentOrder:{
             location:null,
             id:null
@@ -272,11 +369,16 @@ class Section1 extends React.Component{
         delivery:{
             phone:'+380'
         },
+        isEditOrder:false,
         files:[],
         fileError:false,
         hasNameError:true,
         hasPhoneError:true,
         hasEmailError:true,
+        pay_status: 'wait',
+        status: 'wait_c',
+        dateCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
+        dateUpdate: moment().format("YYYY-MM-DD HH:mm:ss"),
         deliveryNameError:true,
         deliveryPhoneError:true,
         modal:false,
@@ -307,6 +409,24 @@ class Section1 extends React.Component{
                         calcProp: this.props.calcProp
                     }));
                 }
+                if(Object.keys(this.props.editOrder).length !== 0) {
+                    this.setState((state)=>({
+                        ...state,
+                        calcProp: this.props.editOrder.calcProp,
+                        dateCreate: this.props.editOrder.dateCreate,
+                        delivery: this.props.editOrder.delivery,
+                        files: this.props.editOrder.files,
+                        orderId: this.props.editOrder.orderId,
+                        pay_status: this.props.editOrder.pay_status,
+                        status: this.props.editOrder.status,
+                        user: this.props.editOrder.user,
+                        currentOrder:{
+                            location:this.props.editOrder.key,
+                            id:this.props.editOrder.orderId
+                        },
+                        isEditOrder:true
+                    }));
+                }
             });
             }else{
                 let calculator = JSON.parse(localStorage.getItem("calculator"));
@@ -318,6 +438,24 @@ class Section1 extends React.Component{
                     this.setState((state)=>({
                         ...state,
                         calcProp: this.props.calcProp
+                    }));
+                }
+                if(Object.keys(this.props.editOrder).length !== 0) {
+                    this.setState((state)=>({
+                        ...state,
+                        calcProp: this.props.editOrder.calcProp,
+                        dateCreate: this.props.editOrder.dateCreate,
+                        delivery: this.props.editOrder.delivery?this.props.editOrder.delivery:{},
+                        files: this.props.editOrder.files?this.props.editOrder.files:{},
+                        orderId: this.props.editOrder.orderId,
+                        pay_status: this.props.editOrder.pay_status,
+                        status: this.props.editOrder.status,
+                        user: this.props.editOrder.user,
+                        currentOrder:{
+                            location:this.props.editOrder.key,
+                            id:this.props.editOrder.orderId
+                        },
+                        isEditOrder:true
                     }));
                 }
             }
@@ -419,18 +557,63 @@ class Section1 extends React.Component{
     }
 
     restrictions = (calcProp)=>{
+        if(calcProp.basis=='Бумажная'){
+            calcProp.basis_param = 'white';
+        }
         if(calcProp.form === 'Рулонная') {
             calcProp.print_type = 'Рулонная';
+            if(calcProp.cut_form=='rectangle') {
+                calcProp.cut_form = 'simple';
+            }
         }else{
             calcProp.print_type = 'Листовая';
         }
         if(calcProp.form=='Прямоугольная'){
             if( calcProp.width<40 || calcProp.height<40){
-                calcProp.form='Простая форма'
+                calcProp.form='Простая форма';
+                calcProp.cut_form='simple';
             }
+            calcProp.cut_form='rectangle';
+        }
+        if(calcProp.form=='Простая форма'){
+            calcProp.cut_form='simple';
+        }
+        if(calcProp.form=='Сложная форма'){
+            calcProp.cut_form='hard';
         }
         if(calcProp.print_type == 'Листовая'){
             calcProp.margin=4;
+        }
+        if(
+            calcProp.outline=='cloud'||
+            calcProp.outline=='star'||
+            calcProp.outline=='chopped'||
+            calcProp.outline=='accent'
+        ){
+            calcProp.form='Сложная форма';
+            calcProp.cut_form='hard';
+        }
+        if(
+            calcProp.outline=='radius35'||
+            calcProp.outline=='radius50'||
+            calcProp.outline=='radius100'||
+            calcProp.outline=='ellipse'||
+            calcProp.outline=='circle'
+        ){
+            calcProp.form='Простая форма';
+            calcProp.cut_form='simple';
+        }
+        if(calcProp.outline=='rectangle'){
+            if(calcProp.width>=40 && calcProp.height>=40) {
+                calcProp.form = 'Прямоугольная';
+                calcProp.cut_form = 'rectangle';
+            }else{
+                calcProp.form='Простая форма';
+                calcProp.cut_form = 'rectangle';
+            }
+        }
+        if(calcProp.quantity>9999999){
+            calcProp.quantity = 9999999;
         }
         return calcProp;
     }
@@ -714,7 +897,7 @@ class Section1 extends React.Component{
             },
             change: function (e, data) {
                 for (let i = 0; i < data.files.length; i++) {
-                    if (!(/\.(jpg|jpeg|png|pdf|ttf|tiff|psd|cdr|ai|eps)$/i).test(data.files[i].name)) {
+                    if (!(/\.(jpg|jpeg|png|pdf|ttf|tiff|tif|psd|cdr|ai|eps)$/i).test(data.files[i].name)) {
                         let b = document.createElement('b');
                         let errorMessage = <span style={{wordBreak:'break-word'}}>Файл <b>{data.files[0].name}</b> имеет недопустимый формат</span>;
                         setState(errorMessage);
@@ -762,12 +945,12 @@ class Section1 extends React.Component{
         <div className="close-popup btn-close-popup"><i className="icon-cross"></i></div>
         <div id="final-price-main" className="price-wrapper">
             <div>Сумма заказа:</div>
-            <span>{this.state.calcProp.price}</span>
+            <span>{this.state.calcProp.price} грн.</span>
         </div>
             <div className="wrapper-container wrapper-container--modal">
                 <div className="container container--modal-info">
-                    <div className="modal-info__title">Укажите, на что хотите печатать наклейки:</div>
-                    <div><input className="modal-info__field" type="text" maxLength={50} placeholder="на банки"/></div>
+                    <div className="modal-info__title">{!this.state.isEditOrder ? 'Укажите, на что хотите печатать наклейки:': 'Редактирование заказа №'+this.state.currentOrder.id}</div>
+                    {!this.state.isEditOrder && <div><input className="modal-info__field" type="text" maxLength={50} placeholder="на банки"/></div>}
                 </div>
             </div>
 
@@ -1162,8 +1345,8 @@ class Section1 extends React.Component{
                                                             {status=>(
                                                             <div className={`file-upload-container ${status}`}>
                                                                 <div className="modal-block__content_item__description">
-                                                                    {this.state.files.length===0&&!this.state.fileError&&(<span>Если ваш макет соответствует требованиям к макету , то загрузите его:</span>)}
-                                                                    {this.state.files.length>0&&!this.state.fileError&&(
+                                                                    {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>Если ваш макет соответствует требованиям к макету , то загрузите его:</span>)}
+                                                                    {this.state.files&&this.state.files.length>0&&!this.state.fileError&&(
                                                                          this.state.files.map((file,key)=>{
                                                                              return <React.Fragment key={key}>
                                                                                  <div className="uploaded-file-container">
@@ -1277,7 +1460,7 @@ class Section1 extends React.Component{
                                                                         </div>
                                                                     </div>
                                                                     <div className="modal-block__content_item__description">
-                                                                        {this.state.files.length>0&&!this.state.fileError&&(
+                                                                        {this.state.files&&this.state.files.length>0&&!this.state.fileError&&(
                                                                             this.state.files.map((file,key)=>{
                                                                                 return <React.Fragment key={key}>
                                                                                     <div className="uploaded-file-container">
@@ -1333,8 +1516,8 @@ class Section1 extends React.Component{
                                                             {status=>(
                                                                 <div className={`file-upload-container ${status}`}>
                                                                     <div className="modal-block__content_item__description">
-                                                                        {this.state.files.length===0&&!this.state.fileError&&(<span>Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна.</span>)}
-                                                                        {this.state.files.length>0&&!this.state.fileError&&(
+                                                                        {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна. Cтоимость дизайна от 300 грн.</span>)}
+                                                                        {this.state.files&&this.state.files.length>0&&!this.state.fileError&&(
                                                                             this.state.files.map((file,key)=>{
                                                                                 return <React.Fragment key={key}>
                                                                                     <div className="uploaded-file-container">
@@ -1395,7 +1578,7 @@ class Section1 extends React.Component{
                                                         print:false,
                                                         design:false,
                                                         deliver:true
-                                                    })}}>Оформить заказ</a>
+                                                    })}}>{!this.state.isEditOrder?'Оформить заказ':'Редактировать заказ'}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1454,8 +1637,12 @@ class Section1 extends React.Component{
                                                 type="phone"
                                                 tabIndex="0"
                                                 validate={this.state.validate}
-                                                validationCallback={(res) =>
-                                                    this.setState({ hasPhoneError: res, validate:!res})}
+                                                validationCallback={(res) => {
+                                                        this.setState({hasPhoneError: res, validate: !res})
+                                                        this.validateContacts();
+                                                    }
+                                                }
+
                                                 value={this.state.user.phone}
                                                 onBlur={()=>{}}
                                                 onChange={phone=> {
@@ -1485,7 +1672,7 @@ class Section1 extends React.Component{
                                                 }
                                                 validationOption={{
                                                     type:"string",
-                                                    reg:/\+380[0-9]{9}/,
+                                                    reg:/((\+380)+([0-9]){9})/,
                                                     regMsg:'Некорректный телефон',
                                                     showMsg:true,
                                                     check: true,
@@ -1505,8 +1692,11 @@ class Section1 extends React.Component{
                                                 type="text"
                                                 tabIndex="0"
                                                 validate={this.state.validate}
-                                                validationCallback={(res) =>
-                                                    this.setState({ hasEmailError: res, validate:!res})}
+                                                validationCallback={(res) =>{
+                                                    this.setState({ hasEmailError: res, validate:!res});
+                                                    this.validateContacts();
+                                                }
+                                                    }
                                                 value={this.state.user.email}
                                                 onBlur={()=>{}}
                                                 onChange={email=> {
@@ -1875,7 +2065,7 @@ class Section1 extends React.Component{
                                                 className="button button--design button--modal"
                                                 onClick={this.validateForm}
                                             >
-                                                Оформить заказ
+                                                {!this.state.isEditOrder?'Оформить заказ':'Сохранить правки'}
                                             </div>
                                             <input type="submit" style={{ display: 'none' }} />
 

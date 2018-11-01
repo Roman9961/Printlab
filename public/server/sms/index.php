@@ -3,10 +3,13 @@
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, X-Requested-With");
+
+$config = require '../../../config/config.php';
+
 $phone = $_POST['phone'];
 
 $id = $_POST['id'];
-$url = 'https://alphasms.ua/api/http.php?version=http&key='.$config['api_key'].'&command=send&from=Printlab&to='.$phone.'&message=Ваш заказ № '.$id.' готов.';
+$url = 'https://alphasms.ua/api/http.php?version=http&key='.$config['alphasms_api_key'].'&command=send&from=Printlab&to='.$phone.'&message=Ваши%20наклейки%20№'.$id.'%20готовы.%20Инфо:%20+380678283212';
 
 $options = array(
 

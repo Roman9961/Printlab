@@ -1,8 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
 import ModalHeader from './ModalHeader';
-import ModalBlockInfo from './ModalBlockInfo';
-import ModalBlockForm from './ModalBlockForm';
 import Section1 from './Section1';
 
 Modal.setAppElement('.bod');
@@ -18,9 +16,11 @@ class ModalCalculator extends React.Component{
             height   : null,
             quantity : null,
             _exchangeRate : null,
-        },
+        }
     }
+
     render() {
+
         const handleBookmark = (state)=>{
             this.setState(()=>(
                 state
@@ -36,10 +36,9 @@ class ModalCalculator extends React.Component{
                 overlayClassName = "modal-calculator-overlay"
             >
                <ModalHeader handleModal={this.props.handleModal} bookmarks = {this.state} handleBookmark={handleBookmark}/>
-                {/*<ModalBlockInfo/>*/}
-                {/*<ModalBlockForm/>*/}
                 <Section1
                     state = { this.state }
+                    editOrder = {this.props.editOrder}
                     calcProp = { this.props.calcProp}
                     handleBookmark={handleBookmark}
                     handleModal = {this.props.handleModal}

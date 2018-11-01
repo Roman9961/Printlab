@@ -38,6 +38,9 @@ class Mailer{
         $mail->Port = 465;
         $mail->setFrom('zakaz@okprint.com.ua', 'Stickers');
         $mail->addAddress($to, $name);
+        if($to=='zakaz@okprint.com.ua') {
+            $mail->addCC('cv@okprint.com.ua', 'Владимир');
+        }
         $mail->Subject = $subject;
         $mail->Body    = $message;
         if($mail->send()){
@@ -48,8 +51,36 @@ class Mailer{
     }
 
     public function getTemplate($params){
+        $trans =array(
+           'white'=>'белая',
+            'transparent'=>'прозрачная',
+            'simple'=>'Простой',
+            'hard'=>'Сложный',
+            'rectangle'=>'Прямоугольная',
+            'star'=>'"Звезда"',
+            'circle'=>'"Круг"',
+            'ellipse'=>'"Эллипс"',
+            'radius100'=>'"Радиус 10мм"',
+            'radius50'=>'"Радиус 5мм"',
+            'radius35'=>'"Радиус 3,5мм"',
+            'chopped'=>'"Рубленый"',
+            'cloud'=>'"Облако"',
+            'accent'=>'"Акцент"',
+            'matt'=>'Матовая',
+            'gloss'=>'Глянцевая'
+        );
         $message = file_get_contents('../../mail.html');
+        $message = str_replace('%order%', $params['orderId'], $message);
         $message = str_replace('%price%', $params['calcProp']['price'], $message);
+        $message = str_replace('%quantity%', $params['calcProp']['quantity'], $message);
+        $message = str_replace('%sizes%', $params['calcProp']['height'].'x'.$params['calcProp']['width'], $message);
+        $message = str_replace('%basis%', $params['calcProp']['basis'].'('.$trans[$params['calcProp']['basis_param']].')', $message);
+        $message = str_replace('%cut_form%', $trans[$params['calcProp']['cut_form']], $message);
+        if($params['calcProp']['lamination']) {
+            $message = str_replace('%lamination%', $trans[$params['calcProp']['lamination']], $message);
+        }else{
+            $message = str_replace('%lamination%', '-', $message);
+        }
         return $message;
     }
 }

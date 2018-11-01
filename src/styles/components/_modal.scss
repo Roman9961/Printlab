@@ -65,10 +65,10 @@
 }
 .price-wrapper{
   @media (max-width: 767px){
-    bottom:5rem;
+    bottom:27rem;
     padding: 1rem 1rem 0.8rem;
   }
-  position: fixed;
+  position: sticky;
   display: flex;
   color: white;
   flex-direction: column;
@@ -76,6 +76,8 @@
   background-color: #F79258;
   padding: $m-size 4.2rem $s-size;
   right:0;
+  top:300px;
+  float: right;
   box-shadow: 0 10px 25px 0 rgba(0,0,0,0.1);
   border-radius: 0.5rem 0 0 0.5rem;
   font-size: $m-size;

@@ -102,6 +102,7 @@ const FormikFeedback = withFormik({
     }),
     handleSubmit(values, {resetForm, setSubmitting}){
         if(values.recaptcha){
+            gtag('event', 'Отправить', {'event_category': 'Кнопка','event_label' : 'Обратная связь'});
             const xhr = new XMLHttpRequest();
             xhr.open("POST", '/server/confirm/index.php', true);
 
