@@ -212,8 +212,12 @@ class Section1 extends React.Component{
                                         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
                                         }
                                     }
-                                    xhr.send(`order_id=${newLocation.key}&order=true&liqPay=true`);
-                                    setLiqEmail(true);
+                                    if(this.state.user.payment_method=='liq-pay') {
+                                        xhr.send(`order_id=${newLocation.key}&order=true&liqPay=true&payment=true`);
+                                        setLiqEmail(true);
+                                    }else{
+                                        xhr.send(`order_id=${newLocation.key}&order=true&payment=true`);
+                                    }
                                 }
                                 const uuidv4 = require('uuid/v4');
                                 base.post(`ordersVersion/${newLocation.key}`, {
@@ -350,7 +354,8 @@ class Section1 extends React.Component{
             "price":0
         },
         user:{
-            phone:'+380'
+            phone:'+380',
+            payment_method:'cashless'
         },
         liqCallback:false,
         liqEmail:false,
@@ -590,7 +595,7 @@ class Section1 extends React.Component{
             calcProp.outline=='chopped'||
             calcProp.outline=='accent'
         ){
-            calcProp.form='Сложная форма';
+            calcProp.print_type != 'Рулонная' && (calcProp.form='Сложная форма');
             calcProp.cut_form='hard';
         }
         if(
@@ -600,17 +605,23 @@ class Section1 extends React.Component{
             calcProp.outline=='ellipse'||
             calcProp.outline=='circle'
         ){
-            calcProp.form='Простая форма';
+
+            calcProp.print_type != 'Рулонная' && (calcProp.form ='Простая форма');
             calcProp.cut_form='simple';
         }
         if(calcProp.outline=='rectangle'){
             if(calcProp.width>=40 && calcProp.height>=40) {
-                calcProp.form = 'Прямоугольная';
-                calcProp.cut_form = 'rectangle';
+                if(calcProp.print_type != 'Рулонная') {
+                    calcProp.form = 'Прямоугольная';
+                    calcProp.cut_form = 'rectangle';
+                }
             }else{
-                calcProp.form='Простая форма';
-                calcProp.cut_form = 'rectangle';
+                if(calcProp.print_type != 'Рулонная') {
+                    calcProp.form = 'Простая форма';
+                    calcProp.cut_form = 'rectangle';
+                }
             }
+            calcProp.print_type == 'Рулонная'&&(calcProp.cut_form='simple');
         }
         if(calcProp.quantity>9999999){
             calcProp.quantity = 9999999;

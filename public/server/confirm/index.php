@@ -66,9 +66,13 @@ $mailer = new Mailer();
                 }elseif (isset($_POST['design'])&& $_POST['design']){
                     $mailer->send_mail($value['user']['email'], $subject, 'Ваш заказ принят, с вами свяжется менеджер', $value['user']['name'], $config['mail_user'], $config['mail_password']);
                     $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Поступил заказ на дизайн наклеек', 'admin', $config['mail_user'], $config['mail_password']);
-                }elseif (isset($_POST['liqPay'])&& $_POST['liqPay']){
+                }elseif (isset($_POST['payment'])&& $_POST['payment']){
                     $mailer->send_mail($value['user']['email'], $subject, 'Ваш заказ принят, ожидаем подтверждения оплаты', $value['user']['name'], $config['mail_user'], $config['mail_password']);
-                    $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Поступил заказ на печать наклеек, ожидаем оплату через liqPay', 'admin', $config['mail_user'], $config['mail_password']);
+                    if(isset($_POST['liqPay'])&& $_POST['liqPay']) {
+                        $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Поступил заказ на печать наклеек, ожидаем оплату через liqPay', 'admin', $config['mail_user'], $config['mail_password']);
+                    }else{
+                        $mailer->send_mail('zakaz@okprint.com.ua', $subject, 'Поступил заказ на печать наклеек, оплата по безналичному расчету', 'admin', $config['mail_user'], $config['mail_password']);
+                    }
                 }
             }
 

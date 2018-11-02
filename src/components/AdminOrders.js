@@ -55,6 +55,8 @@ class AdminOrders extends React.Component{
             chopped:'"Рубленый"',
             cloud:'"Облако"',
             accent:'"Акцент"',
+            gloss:"глянцевая",
+            matt:"матовая",
             name:'Имя',
             phone:'Телефон',
             city:'Город',
@@ -578,6 +580,7 @@ ${mailfiles}
                                    <p><b>Тип печати: </b>{ row.calcProp.print_type }</p>
                                    <p><b>Основа: </b> {row.calcProp.basis} / {trans[row.calcProp.basis_param]} </p>
                                    <p><b>Контур порезки: </b>{trans[row.calcProp.cut_form] }</p>
+                                   {row.calcProp.lamination?<p><b>Ламинация: </b>{trans[row.calcProp.lamination]}</p>:''}
                                    <p><b>Дизайн: </b>{
                                        row.calcProp.design=='design-outline'?
                                        trans[row.calcProp.design]+' '+ (trans[row.calcProp.outline]!==undefined?trans[row.calcProp.outline]:"Прямоугольная"):
