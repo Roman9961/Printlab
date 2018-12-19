@@ -19,9 +19,9 @@ const SectionDelivery = ()=>{
                                    </div>
                                    <div className="section-block__content">
                                            <div className="section-block__item">Безналичный расчет ФОП и ТОВ (+5% к стоимости)</div>
-                                           <div className="section-block__item">Оплата на карту Приватбанка</div>
+                                           <div className="section-block__item">На карту Приватбанка</div>
                                            <div className="section-block__item">Оплата LiqPay</div>
-                                            <div className="section-block__item__no__dot">Мы работаем по 100% предоплате.</div>
+                                            <div className="section-block__item__no__dot">100% предоплата.</div>
                                    </div>
                                </div>
                                <div className="section-block delivery-block">
@@ -32,9 +32,9 @@ const SectionDelivery = ()=>{
                                        </div>
                                    </div>
                                    <div className="section-block__content">
-                                           <div className="section-block__item">по Киеву курьером 50 грн</div>
-                                           <div className="section-block__item">при заказе от 1000 грн – доставка бесплатная</div>
-                                           <div className="section-block__item">по Украине курьерской службой «Новая Почта»</div>
+                                           <div className="section-block__item">По Киеву курьером 50 грн</div>
+                                           <div className="section-block__item">При заказе от 1000 грн – доставка бесплатная</div>
+                                           <div className="section-block__item">По Украине курьерской службой «Новая Почта»</div>
                                    </div>
                                </div>
                            </div>

@@ -38,11 +38,14 @@ $mailer = new Mailer();
                 $updates = [
                     'orders/' . $payData['order_id'] . '/pay_status' => $payData['status'],
                     'orders/' . $payData['order_id'] . '/dateUpdate' => date("Y-m-d H:i:s"),
+                    'ordersVersion/' . $payData['order_id'] . '/ver' => md5(time()),
                     'versionAdmin'=>md5(time())
                 ];
-
-                $db->getReference()// this is the root reference
-                ->update($updates);
+                $reference = $db->getReference('orders/' . $payData['order_id']);
+                if($reference->getValue()) {
+                    $db->getReference()// this is the root reference
+                    ->update($updates);
+                }
             }
         }
 

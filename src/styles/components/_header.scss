@@ -1,3 +1,12 @@
+.main-header{
+  @media (max-width: 767px){
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    background-color: #f9fbfc;
+    padding: 10px 20px;
+    }
+  }
 .header{
   display: flex;
   justify-content: space-between;
@@ -22,6 +31,59 @@
   }
   .header__contacts__phone__icon{
     margin: 0 10px;
+    .phone-container{
+      animation: phone-outer 3000ms infinite;
+    }
+    @keyframes phone-outer {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      33.3333% {
+        transform: translate3d(0, 0, 0) scale(1.1);
+      }
+      66.6666% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      100% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+    .phone{
+      animation: phone-icon 3000ms infinite;
+    }
+    @keyframes phone-icon {
+      0% { transform: translate3d(0em, 0, 0); }
+      2% { transform: translate3d(0.075em, 0, 0); }
+      4% { transform: translate3d(-0.075em, 0, 0); }
+      6% { transform: translate3d(0.075em, 0, 0); }
+      8% { transform: translate3d(-0.075em, 0, 0); }
+      10% { transform: translate3d(0.075em, 0, 0); }
+      12% { transform: translate3d(-0.075em, 0, 0); }
+      14% { transform: translate3d(0.075em, 0, 0); }
+      16% { transform: translate3d(-0.075em, 0, 0); }
+      18% { transform: translate3d(0.075em, 0, 0); }
+      20% { transform: translate3d(-0.075em, 0, 0); }
+      22% { transform: translate3d(0.075em, 0, 0); }
+      24% { transform: translate3d(-0.075em, 0, 0); }
+      26% { transform: translate3d(0.075em, 0, 0); }
+      28% { transform: translate3d(-0.075em, 0, 0); }
+      30% { transform: translate3d(0.075em, 0, 0); }
+      31% { transform: translate3d(-0.075em, 0, 0); }
+      32% { transform: translate3d(0.075em, 0, 0); }
+      33% { transform: translate3d(-0.075em, 0, 0); }
+      34% { transform: translate3d(0.075em, 0, 0); }
+      35% { transform: translate3d(-0.075em, 0, 0); }
+      36% { transform: translate3d(0.075em, 0, 0); }
+      37% { transform: translate3d(-0.075em, 0, 0); }
+      38% { transform: translate3d(0.075em, 0, 0); }
+      39% { transform: translate3d(-0.075em, 0, 0); }
+      40% { transform: translate3d(0.075em, 0, 0); }
+      41% { transform: translate3d(-0.075em, 0, 0); }
+      42% { transform: translate3d(0.075em, 0, 0); }
+      43% { transform: translate3d(-0.075em, 0, 0); }
+      44% { transform: translate3d(0.075em, 0, 0); }
+      46% { transform: translate3d(0em, 0, 0); }
+    }
   }
 }
 .header__logo {
@@ -88,6 +150,60 @@
   width: 100%;
   &__icon{
     width: 3rem;
+    .phone-container{
+      animation: phone-outer 3000ms infinite;
+      cursor: pointer;
+    }
+    @keyframes phone-outer {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      33.3333% {
+        transform: translate3d(0, 0, 0) scale(1.05);
+      }
+      66.6666% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      100% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+    .phone{
+       animation: phone-icon 3000ms infinite;
+    }
+    @keyframes phone-icon {
+      0% { transform: translate3d(0em, 0, 0)  rotateZ(0.3deg); }
+      2% { transform: translate3d(0.05em, 0, 0)  rotateZ(-0.3deg); }
+      4% { transform: translate3d(-0.05em, 0, 0)  rotateZ(0.3deg); }
+      6% { transform: translate3d(0.05em, 0, 0)  rotateZ(-0.3deg); }
+      8% { transform: translate3d(-0.05em, 0, 0)  rotateZ(0.3deg); }
+      10% { transform: translate3d(0.05em, 0, 0)  rotateZ(-0.3deg); }
+      12% { transform: translate3d(-0.05em, 0, 0)  rotateZ(0.3deg); }
+      14% { transform: translate3d(0.05em, 0, 0)  rotateZ(-0.3deg); }
+      16% { transform: translate3d(-0.05em, 0, 0)  rotateZ(0.6deg); }
+      18% { transform: translate3d(0.05em, 0, 0)  rotateZ(-0.6deg); }
+      20% { transform: translate3d(-0.05em, 0, 0)  rotateZ(0.6deg); }
+      22% { transform: translate3d(0.05em, 0, 0)  rotateZ(-0.6deg); }
+      24% { transform: translate3d(-0.05em, 0, 0)  rotateZ(0.6deg); }
+      26% { transform: translate3d(0.05em, 0, 0)  rotateZ(-0.6deg); }
+      28% { transform: translate3d(-0.05em, 0, 0)  rotateZ(0.6deg); }
+      30% { transform: translate3d(0.05em, 0, 0)  rotateZ(-0.6deg); }
+      31% { transform: translate3d(-0.075em, 0, 0)  rotateZ(3deg); }
+      32% { transform: translate3d(0.075em, 0, 0)  rotateZ(-3deg); }
+      33% { transform: translate3d(-0.075em, 0, 0)  rotateZ(3deg); }
+      34% { transform: translate3d(0.075em, 0, 0)  rotateZ(-3deg); }
+      35% { transform: translate3d(-0.075em, 0, 0)  rotateZ(3deg); }
+      36% { transform: translate3d(0.075em, 0, 0)  rotateZ(-3deg); }
+      37% { transform: translate3d(-0.075em, 0, 0)  rotateZ(3deg); }
+      38% { transform: translate3d(0.075em, 0, 0)  rotateZ(-3deg); }
+      39% { transform: translate3d(-0.075em, 0, 0)  rotateZ(3deg); }
+      40% { transform: translate3d(0.075em, 0, 0)  rotateZ(-3deg); }
+      41% { transform: translate3d(-0.075em, 0, 0)  rotateZ(3deg); }
+      42% { transform: translate3d(0.075em, 0, 0)  rotateZ(-3deg); }
+      43% { transform: translate3d(-0.075em, 0, 0)  rotateZ(3deg); }
+      44% { transform: translate3d(0.075em, 0, 0)  rotateZ(-3deg); }
+      46% { transform: translate3d(0em, 0, 0) rotateZ(0deg); }
+    }
   }
   &__block{
     display: flex;
@@ -241,4 +357,33 @@
   display: flex;
   justify-content: space-around;
   align-items:center;
+}
+.react-datepicker__input-container {
+  width: inherit;
+}
+.react-datepicker{
+  //transform: scale(1.5);
+  //font-size: 1.2rem;
+  &__time-list-item--disabled{
+    display: none;
+  }
+}
+.react-datepicker {
+  font-size: 1.3rem !important;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.5rem !important;
+}
+
+.react-datepicker__header {
+  padding-top: 6px !important;
+}
+
+.react-datepicker__navigation {
+  top: 13px !important;
+}
+
+.react-datepicker__day-name, .react-datepicker__day {
+  margin: 0.5rem !important;
 }

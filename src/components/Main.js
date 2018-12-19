@@ -3,6 +3,8 @@ import {render} from 'react-dom';
 import base from '../base';
 import Modal from 'react-modal';
 import {Transition} from 'react-transition-group'
+import customSelect from '../custom_select';
+import moment from 'moment';
 import Header from './Header';
 import ExpressCalculation from './ExpressCalculation';
 import SectionBase from './SectionBase';
@@ -15,6 +17,7 @@ import SectionQuestions from './SectionQuestions';
 import SectionFeedback from './SectionFeedback';
 import ModalCalculator from './ModalCalculator';
 import ModalDesign from './ModalDesign';
+import ModalCall from './ModalCall';
 import Footer from './Footer';
 
 
@@ -37,7 +40,10 @@ class Main extends React.Component{
             quantity : null,
             _exchangeRate : null,
         },
+        operator:null,
+        number:null,
         modal:false,
+        modalCall:false,
         modalFeedback:false,
         modalDesign:false,
         stickyMenu:false
@@ -63,7 +69,6 @@ class Main extends React.Component{
             }));
         }
         window.addEventListener('scroll', this.handleScroll);
-
     }
 
     handleScroll = () => {
@@ -95,7 +100,25 @@ class Main extends React.Component{
         }));
     }
 
-    render(){
+    handleCallModal = ()=> {
+        // this.setState(state=>({
+        //     ...state,
+        //     modalCall: !state.modalCall
+        // }));
+        //
+        // setTimeout(()=> {
+        //     customSelect('call')
+        // }, 100)
+
+    }
+
+    handleChange = time => {
+        console.log(time.unix());
+        this.setState({ time });
+    };
+
+
+        render(){
         const handleModal = (prop={},isOpen=false)=>{
             if(!this.state.modal){
                 document.getElementsByClassName('bod')[0].setAttribute("style", "position:fixed");
@@ -127,20 +150,22 @@ class Main extends React.Component{
             return Object.keys(this.state.stickers).length>0?(
                 <React.Fragment>
                     <div className="section-top">
-                        <Header handleModal = {handleModal} stickyMenu={this.state.stickyMenu&&!this.state.modal}/>
+                        <Header handleModal = {handleModal} handleCallModal = {this.handleCallModal} stickyMenu={this.state.stickyMenu&&!this.state.modal}/>
                         <ExpressCalculation handleModal = {handleModal}/>
                         <div className="section-bg__top"></div>
                     </div>
-                    <SectionBase state={ this.state.stickers }/>
-                    <SectionDelivery/>
                     <SectionQuality/>
-                    <SectionPostPrint/>
                     <SectionDesign handleModal = {handleModalDesign}/>
+                    <SectionDelivery/>
                     <SectionLayoutProps/>
+                    <SectionBase state={ this.state.stickers }/>
+                    <SectionPostPrint/>
                     <SectionQuestions/>
                     <SectionFeedback  handleModal = {this.handleModal}/>
                     <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}  editOrder ={{}}/>
                     <ModalDesign isOpen = {this.state.modalDesign} handleModal = {handleModalDesign}/>
+                    <ModalCall isOpen = {this.state.modalCall} handleModal = {this.handleCallModal}/>
+
                     <Footer/>
                     <Transition in={this.state.modalFeedback} timeout={300}>
                         {status=> {
@@ -167,6 +192,7 @@ class Main extends React.Component{
                             }
                         }
                     </Transition>
+
                 </React.Fragment>
             ):'...loading';
     }

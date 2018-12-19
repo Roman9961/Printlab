@@ -2,6 +2,17 @@
 .custom-select {
   position: relative;
   width:160px;
+  &.call{
+    width: auto;
+    .select-items {
+      height: 172px;
+      overflow: auto;
+    }
+    .select-selected{
+      width: auto;
+      padding: 8px 30px 8px 8px;
+    }
+  }
 }
 
 .custom-select select {

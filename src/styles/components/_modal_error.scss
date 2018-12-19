@@ -53,6 +53,12 @@
     transition: all .3s ease-in-out;
   }
 }
+.modal-call{
+  &.exited{
+    transform: scale(1);
+    transition: all .3s ease-in-out;
+  }
+}
 .modal-error__close{
   position: absolute;
   height: 14px;

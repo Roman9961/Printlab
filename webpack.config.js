@@ -85,7 +85,6 @@ module.exports = (env) => {
                 'process.env.LIQPAY_PRIVATE_KEY': JSON.stringify(process.env.LIQPAY_PRIVATE_KEY)
             })
         ],
-        devtool: isProduction? 'source-map' : 'inline-source-map',
         devServer: {
             contentBase:  path.join(__dirname, 'public'),
             historyApiFallback: true,

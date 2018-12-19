@@ -76,7 +76,7 @@
   background-color: #F79258;
   padding: $m-size 4.2rem $s-size;
   right:0;
-  top:300px;
+  top:190px;
   float: right;
   box-shadow: 0 10px 25px 0 rgba(0,0,0,0.1);
   border-radius: 0.5rem 0 0 0.5rem;
@@ -383,6 +383,14 @@
 .modal-block__content_item__checkbox-container__checkboxes{
   display: flex;
   margin-bottom: $s-size;
+  @media (max-width: 767px){
+    &.mobile-column {
+      flex-direction: column;
+      label {
+        padding: 20px 0 0;
+      }
+    }
+  }
 }
 
 .modal-block__content_item .modal-block__content_item__label{

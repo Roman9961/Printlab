@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import firebase from 'firebase';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ModalCalculator from './ModalCalculator';
+import ModalComment from './ModalComment';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import {Icon} from 'react-fa';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -95,6 +96,9 @@ class AdminOrders extends React.Component{
             in_processing:'В работе',
             canceled: 'Отменен'
         },
+        modalComment: false,
+        managerComment: '',
+        currentOrder: null,
         calendarFocused: null,
         startDate: moment().startOf('month'),
         endDate: moment().endOf('month'),
@@ -127,9 +131,7 @@ class AdminOrders extends React.Component{
                                     window.localStorage.setItem("orders", JSON.stringify(orders));
                                     window.localStorage.setItem("versionAdminStorage", JSON.stringify(versionAdmin));
                                     window.localStorage.setItem("versionOrdersStorage", JSON.stringify(ov));
-                                    const ordersData = orders.filter((order)=> {
-                                        return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
-                                    })
+                                    let ordersData = this.sortOrders(orders);
                                     this.setState(state=>({...state, orders, ordersData}));
                                 }
                             });
@@ -170,9 +172,8 @@ class AdminOrders extends React.Component{
                                 }
                                 update(changed, sameOrder).then(res=>{
                                     orders = res;
-                                    const ordersData = orders.filter((order)=> {
-                                        return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
-                                    });
+                                    let ordersData = this.sortOrders(orders);
+
                                     window.localStorage.setItem("orders", JSON.stringify(orders));
                                     window.localStorage.setItem("versionAdminStorage", JSON.stringify(versionAdmin));
                                     window.localStorage.setItem("versionOrdersStorage", JSON.stringify(versionAdmin));
@@ -185,10 +186,8 @@ class AdminOrders extends React.Component{
                     }
             }else{
                 let orders = JSON.parse(localStorage.getItem("orders"));
+                let ordersData = this.sortOrders(orders);
 
-                const ordersData = orders.filter((order)=> {
-                    return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
-                });
                 this.setState(state=>({...state, orders, ordersData}));
             }
         }
@@ -233,6 +232,36 @@ class AdminOrders extends React.Component{
                 }
             }
         );
+    }
+
+    sortOrders = (orders)=>{
+        let ordersData = orders.filter((order)=> {
+            return moment(order.dateCreate).isAfter(this.state.startDate) && moment(order.dateCreate).isBefore(this.state.endDate);
+        });
+        ordersData = ordersData.sort(function (a,b) {
+            let atime = parseInt(a.calcProp.print_time);
+            let  btime = parseInt(b.calcProp.print_time);
+            return atime > btime;
+        });
+        ordersData = ordersData.sort(function (a,b) {
+            var ORDER = { done: 1 };
+            return (ORDER[a.status] || 0) - (ORDER[b.status] || 0);
+        });
+        return ordersData;
+    }
+    handleComment = (event)=>{
+        let managerComment = event.currentTarget.value;
+        this.setState(state=>({
+            ...state,
+            managerComment
+        }))
+    }
+
+    handleCommentlModal = ()=> {
+        this.setState(state=>({
+            ...state,
+            modalComment: !state.modalComment
+        }));
     }
 
     logOut = async () =>{
@@ -302,6 +331,7 @@ class AdminOrders extends React.Component{
                 if(uploadErrors.length > 0 || totalSize>1000000000) {
                     alert(errorMessage)
                 } else {
+
 
         
                 for (let i = 0; i < data.files.length; i++) {
@@ -452,9 +482,13 @@ class AdminOrders extends React.Component{
              editable:false,
              sort: true
          }, {
-             dataField: 'dateCreate',
+             dataField: 'dateUpdate',
              text: 'Date',
              editable:false,
+             formatter: (cell,row)=>{
+
+                 return (<React.Fragment><div>{row.dateCreate}</div><div style={{color:'#d8d8d8'}}>{cell}</div></React.Fragment>) ;
+             },
              sort: true
          }, {
              dataField: 'status',
@@ -479,30 +513,45 @@ class AdminOrders extends React.Component{
              })
          }
          columns.push({
-             dataField: 'manager',
-             text: 'Manager',
+             dataField: 'user.name',
+             text: 'Заказчик',
              sort: true,
              formatter: (cell,row)=>{
                  let thisManager =  users.filter(e => e.email === cell)[0];
 
-                 return typeof thisManager !=='undefined' ?`${thisManager.name}(${thisManager.email})`:'Не назначен';
+                 return typeof  row.user.name !=='undefined' ?`${row.user.name}`:'Не назначен';
              },
              editable:false
          });
          if(isManager){
              columns.push({
-                 dataField: 'worker',
-                 text: 'Worker',
+                 dataField: 'calcProp.price',
+                 text: 'Сумма',
                  sort: true,
                  formatter: (cell,row)=>{
+                     let thisManager =  users.filter(e => e.email === cell)[0];
 
-                     const worker =  workers.filter(e => e.email == cell);
-                     return worker.length>0?`${worker[0].name}(${worker[0].email})`:'Не назначен'
+                     return typeof  row.user.name !=='undefined' ?`${row.calcProp.price} грн.`:'--';
                  },
-                 editor: {
-                     type: Type.SELECT,
-                     options: workers.map(worker=>({value:worker.email, label:worker.name+'/'+worker.email}))
-                 }
+                 editable:false
+             });
+             columns.push({
+                 dataField: 'manager_comment',
+                 text: 'Комментарий',
+                 sort: true,
+                 formatter: (cell,row)=>{
+                     let thisManager =  users.filter(e => e.email === cell)[0];
+
+                     return <button  onClick={()=>{
+                         this.setState(state=>({
+                             ...state,
+                             currentOrder: row,
+                             managerComment: row.manager_comment
+                         }));
+                         this.handleCommentlModal()
+                     }}>{row.manager_comment ? 'Показать комментарий': 'Добавить комментарий'}</button>;
+                 },
+                 editable:false
              });
              columns.push({
                  dataField: 'key',
@@ -534,6 +583,7 @@ class AdminOrders extends React.Component{
                          })
 
                      }}>Delete</button>
+
                      <button onClick={()=>{
                          this.handleModal(row)
                      }}>Edit</button>
@@ -555,7 +605,7 @@ let mailfiles ='';
      mailfiles+= file.url+'\n';
  });
 const mail=`
-Основа:${row.calcProp.basis}
+Основа:${row.calcProp.basis}/${trans[row.calcProp.basis_param]}
 Порезка: ${row.calcProp.cut_form}
 Высота: ${row.calcProp.height}
 Ширина: ${row.calcProp.width}
@@ -580,7 +630,7 @@ ${mailfiles}
                                    <p><b>Тип печати: </b>{ row.calcProp.print_type }</p>
                                    <p><b>Основа: </b> {row.calcProp.basis} / {trans[row.calcProp.basis_param]} </p>
                                    <p><b>Контур порезки: </b>{trans[row.calcProp.cut_form] }</p>
-                                   {row.calcProp.lamination?<p><b>Ламинация: </b>{trans[row.calcProp.lamination]}</p>:''}
+                                   {row.calcProp.lamination?<p><b style={{color:'red'}}>Ламинация: </b>{trans[row.calcProp.lamination]}</p>:''}
                                    <p><b>Дизайн: </b>{
                                        row.calcProp.design=='design-outline'?
                                        trans[row.calcProp.design]+' '+ (trans[row.calcProp.outline]!==undefined?trans[row.calcProp.outline]:"Прямоугольная"):
@@ -657,26 +707,14 @@ ${mailfiles}
              return classes;
          };
          const {trans} = this.state;
-         let data = this.state.ordersData.sort(function (a,b) {
-             let atime = parseInt(a.calcProp.print_time);
-             let  btime = parseInt(b.calcProp.print_time);
-             return atime > btime;
-         });
-         data = data.sort(function (a,b) {
-             var ORDER = { done: 1 };
-             return (ORDER[a.status] || 0) - (ORDER[b.status] || 0);
-         });
-         if(this.state.filter){
-             data = data.filter(e=>e.manager==this.state.uid);
-         }
+         let data = this.state.ordersData;
+
          if(isWorker){
              data = data.filter(order=>(order.worker===this.state.uid&&(order.status=='accepted'||order.status=='processing'))).sort(function(a,b){
                     if( a.status=='accepted' &&  b.status=='accepted'){
                         return a.dateCreate - b.dateCreate;
                     }
                      return a.status=='processing';
-
-
              });
          }
             return (
@@ -713,8 +751,6 @@ ${mailfiles}
                         />
                     </div>
                     </div>
-
-
 
                     <BootstrapTable
                         keyField='key'
@@ -795,6 +831,7 @@ ${mailfiles}
                         rowClasses={ rowClasses }
                     />
                     <ModalCalculator isOpen = {this.state.modal} handleModal = {this.handleModal} calcProp={{}} editOrder = {this.state.editOrder}/>
+                    <ModalComment isOpen = {this.state.modalComment} handleComment = {this.handleComment} handleModal = {this.handleCommentlModal} currentOrder = {this.state.currentOrder} managerComment = {this.state.managerComment}/>
                 </div>
             );
         }

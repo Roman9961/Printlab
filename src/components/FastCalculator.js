@@ -32,9 +32,9 @@ class FastCalculator extends React.Component{
         customSizes: false,
         customAmount: false,
         title:{
-            rectangle:'Наклейки прямоугольные',
-            simple:'Наклейки простой формы',
-            hard:'Наклейки сложной формы',
+            rectangle:'Прямоугольные наклейки',
+            simple:'Простые формы',
+            hard:'Сложные формы',
             roll:'Рулонная цифровая печать'
         }
     };
@@ -60,14 +60,13 @@ class FastCalculator extends React.Component{
                 this.updatecalcProp('form', 'Рулонная');
                 break;
         }
-        customSelect();
+        customSelect('custom-select');
     }
 
     componentDidUpdate(){
             let price = calc(this.state);
             if(this.state.calcProp.form === 'Рулонная' && price<750){
                 price = 750;
-                price =price.toFixed(2);
             }
             if(price!=this.state.calcProp.price){
                 this.setState((state)=>({
@@ -245,7 +244,7 @@ class FastCalculator extends React.Component{
                     
                 </div>
                 <div className="express-calculator__item">
-                    <span className="description top">Размеры</span>
+                    <span className="description top">Размеры, мм </span>
                     <div className="custom-select">
                         <select name="sizes" onChange={this.selectHandleChange}>
                             <option value='{"width":40,"height":40}'>40x40</option>
@@ -271,10 +270,10 @@ class FastCalculator extends React.Component{
                     <span className="description top">Количество</span>
                     <div className="custom-select">
                         <select name="quantity" onChange={this.selectQuantityHandleChange}>
-                            <option value="100">100шт.</option>
-                            <option value="200">200шт.</option>
-                            <option value="500">500шт.</option>
-                            <option value="1000">1000шт.</option>
+                            <option value="100">100 шт.</option>
+                            <option value="200">200 шт.</option>
+                            <option value="500">500 шт.</option>
+                            <option value="1000">1000 шт.</option>
                             <option value="custom">Другое</option>
                         </select>
                     </div>
@@ -291,7 +290,7 @@ class FastCalculator extends React.Component{
                 }
 
                 <div className="express-calculator__item">
-                    <span className="description top">Материал</span>
+                    <span className="description top">Материал основы</span>
                     <div className="custom-select">
                         <select name="basis" onChange={this.handleChange}>
                             <option value="Пластиковая">Пленка</option>

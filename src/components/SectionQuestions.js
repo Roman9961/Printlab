@@ -30,7 +30,7 @@ class SectionQuestions extends React.Component{
                                    </div>
                                    <div className="section-block__content">
                                        <div className={`section-block__item__description section-block__item__description--question ${this.state.open===1?'open':'closed'}`}>
-                                           Это цветовая схема, которая используется в полиграфии для стандартной триадной печати Cyan, Magenta, Yellow и Black
+                                           Это цветовая схема, которая используется в полиграфии для стандартной триадной печати Cyan, Magenta, Yellow и Black для точного соответствия цветов макета готовому изделию.
                                        </div>
                                    </div>
                                </div>
@@ -41,12 +41,14 @@ class SectionQuestions extends React.Component{
                                            <div className={`arrows down ${this.state.open===2?'up':''}`}></div>
                                        </div>
                                        <div className="section-block__title section-block__title__postprint">
-                                           <div>Какой у вас вид печати?</div>
+                                           <div>Как вы печатаете?</div>
                                        </div>
                                    </div>
                                    <div className="section-block__content">
                                        <div className={`section-block__item__description section-block__item__description--question ${this.state.open===2?'open':'closed'}`}>
-                                           Мы печатаем на цифровом листовом и рулонном оборудовании. В зависимости от поставленной задачи и требований мы выбираем тот или иной способ печати.
+                                           Небольшие тиражи до формата А3 включительно печатаем на цифровой листовой машине.
+                                           Большие тиражи - от 500 оттисков формата А3 и больше печатаем на рулонной офсетной машине.
+                                           Изделия, напечатанные разными способами, отличаются.
                                        </div>
                                    </div>
                                </div>
@@ -57,13 +59,15 @@ class SectionQuestions extends React.Component{
                                            <div className={`arrows down ${this.state.open===3?'up':''}`}></div>
                                        </div>
                                        <div className="section-block__title section-block__title__postprint">
-                                           <div>В каком виде я получу наклейки?</div>
+                                           <div>Как я получу наклейки?</div>
                                        </div>
                                    </div>
                                    <div className="section-block__content">
                                        <div className={`section-block__item__description section-block__item__description--question ${this.state.open===3?'open':'closed'}`}>
-                                           При выборе квадратных или прямоугольных наклеек размером больше, чем 40х40 мм порезка осуществляем на гильотине, поэтому вы получите стопку наклеек.
-                                           Если размер меньше 40х40 мм или форма не квадратная, мы будем резать наклейки на плоттере. В нашей типографии есть вариант цифровой планшетной высечки, вы сможете получить наклейки как на листе формата SRA3 (32х45см) так и каждую наклейку отдельно.
+                                           При выборе квадратных или прямоугольных наклеек размером больше, чем 40х40 мм порезка делается на гильотине, поэтому вы получите стопку наклеек.
+                                           Если размер меньше 40х40 мм, или форма не прямоугольная (квадратная), тогда контуры наклеек будут прорезаны на специальной машине - плоттере. Тираж будет отгружен в листах.
+
+                                           Если получать тираж в листах вам будет неудобно, укажите в комментарии, и листы будут порезаны на гильотине.
                                        </div>
                                    </div>
                                </div>
@@ -95,8 +99,9 @@ class SectionQuestions extends React.Component{
                                    </div>
                                    <div className="section-block__content">
                                        <div className={`section-block__item__description section-block__item__description--question ${this.state.open===5?'open':'closed'}`}>
-                                           Как правило срок изготовления не превышает 24 часов с моменты запуска в работу, если тираж более 500 листов или 500 м.п срок увеличивается до 2-3 рабочих дней.
-                                           Мы всегда стараемся идти навстречу на клиентам, поэтому с нами можно договориться попечатать на выходных и в ночное время.
+                                           Стандартный срок печати тиража не превышает четырех рабочих дней.
+                                           Срочный тираж напечатаем за 2 рабочих дня.
+                                           Мы всегда стараемся идти навстречу нашим клиентам. Если вам нужно "на вчера", с нами можно договориться о печати на выходных или ночью.
                                        </div>
                                    </div>
                                </div>
@@ -107,7 +112,7 @@ class SectionQuestions extends React.Component{
                                            <div className={`arrows down ${this.state.open===6?'up':''}`}></div>
                                        </div>
                                        <div className="section-block__title section-block__title__postprint">
-                                           <div>А какое поле запечатки для плоттерной порезки?</div>
+                                           <div>Какой размер бумаги/пленки для печати?</div>
                                        </div>
                                    </div>
                                    <div className="section-block__content">
@@ -123,32 +128,15 @@ class SectionQuestions extends React.Component{
                                            <div className={`arrows down ${this.state.open===7?'up':''}`}></div>
                                        </div>
                                        <div className="section-block__title section-block__title__postprint">
-                                           <div>Если у меня нет макета или он не соответствует вашим требованиям?</div>
+                                           <div>У меня нет макета или он не соответствует вашим требованиям.</div>
                                        </div>
                                    </div>
                                    <div className="section-block__content">
                                        <div className={`section-block__item__description section-block__item__description--question ${this.state.open===7?'open':'closed'}`}>
-                                           Для вас мы разработаем индивидуальный дизайн наклеек, в нашем штате трудится три отличных дизайнера, один из них иллюстратор, поэтому вы можете не переживать, справимся с любой поставленной задачей.
-                                           Обратитесь к нашим менеджерам и расскажите какие наклейки вас интересуют
-                                           Нет макета – не проблема, мы можем его сделать для вас! Мы делаем отличный дизайн. Можем просто разместить ваш логотип, а можем сделать индивидуальную иллюстрацию – мы справимся с любой задачей! Если вам нужен
-                                       </div>
-                                   </div>
-                               </div>
-
-                               <div className={`section-block section-block--question ${this.state.open===8?'open':'closed'}`}>
-                                   <div className={`section-block__header section-block__header__question ${this.state.open===8?'':'closed'}`} onClick={()=>{this.handleRollup(8)}}>
-                                       <div className={`open-icon ${this.state.open===8?'up':''}`} >
-                                           <div className={`arrows down ${this.state.open===8?'up':''}`}></div>
-                                       </div>
-                                       <div className="section-block__title section-block__title__postprint">
-                                           <div>Есть ли у вас особенные технологии печати?</div>
-                                       </div>
-                                   </div>
-                                   <div className="section-block__content">
-                                       <div className={`section-block__item__description section-block__item__description--question ${this.state.open===8?'open':'closed'}`}>
-                                           Для вас мы разработаем индивидуальный дизайн наклеек, в нашем штате трудится три отличных дизайнера, один из них иллюстратор, поэтому вы можете не переживать, справимся с любой поставленной задачей.
-                                           Обратитесь к нашим менеджерам и расскажите какие наклейки вас интересуют
-                                           Нет макета – не проблема, мы можем его сделать для вас! Мы делаем отличный дизайн. Можем просто разместить ваш логотип, а можем сделать индивидуальную иллюстрацию – мы справимся с любой задачей! Если вам нужен
+                                           Если у вас нет макета, мы можем разработать индивидуальный дизайн наклеек.
+                                           У нас трудится три дизайнера, один иллюстратор. Мы готовы справиться с любой поставленной задачей.
+                                           Обратитесь к нашим менеджерам и расскажите какие наклейки вас интересуют.
+                                           Если ваш макет не соответствует требованиям, укажите в комментарии, мы приведем его в чувство.
                                        </div>
                                    </div>
                                </div>

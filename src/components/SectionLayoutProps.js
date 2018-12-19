@@ -1,4 +1,5 @@
 import React from 'react';
+import Scroll from 'react-scroll-to-element';
 
 const SectionLayoutProps = ()=>{
            return (
@@ -9,9 +10,8 @@ const SectionLayoutProps = ()=>{
                            <div className="section-block__container section-block__container--layout-props">
                                <div className="section-block section-block--layout-props left">
                                    <div className="layout-props__side-content">
-                                       <div>Чтобы наклейки получились классные, а главное соответствовали ожиданиям, соблюдайте наши требования к макетам</div>
-                                       <div><a href="/images/printlab_requirements.pdf"  rel="nofollow" className="button button--pdf" download >Скачать PDF</a></div>
-                                       <div>В любом случае бояться нечего, мы вам поможем ;)</div>
+                                       <div><a href="/images/printlab_requirements.pdf"  rel="nofollow" className="button button--pdf" download >Требования к макетам</a></div>
+                                       <div>Если будут вопросы - <Scroll type="class" element="section-container--feedback"><a href="javascript:;">напишите</a></Scroll> нам</div>
                                    </div>
                                    <div className="layout-props__side-content layout-props__side-content--gray">
                                        <div className="section-block__header">
@@ -35,8 +35,8 @@ const SectionLayoutProps = ()=>{
                                            <img src="images/layout-props_1.svg" alt=""/>
                                        </div>
                                        <div className="layout-props__block__content">
-                                           <div className="layout-props__block__content__title">Делайте фон больше</div>
-                                           <div className="layout-props__block__content__description">Фон большего размера нужен для того чтобы не обрезать лишнего. Делайте фон больше, чем готовая наклейка минимум на 1 мм с каждой стороны.</div>
+                                           <div className="layout-props__block__content__title">Фон больше на 1 мм</div>
+                                           <div className="layout-props__block__content__description">Дополнительные вылеты фона нужны для правильной обрезки готового изделия.</div>
                                        </div>
                                    </div>
                                    <div className="layout-props__block">
@@ -44,8 +44,8 @@ const SectionLayoutProps = ()=>{
                                            <img src="images/layout-props_2.svg" alt=""/>
                                        </div>
                                        <div className="layout-props__block__content">
-                                           <div className="layout-props__block__content__title">Используйте CMYK</div>
-                                           <div className="layout-props__block__content__description">Цветовую модель CMYK (цмик) используют печатные машины, они понимают только этот язык цвета. Обязательно переводите ваш макет в CMYK, если не хотите видеть вашего попугая грязным и блёклым.</div>
+                                           <div className="layout-props__block__content__title">Цветовой профиль - СMYK</div>
+                                           <div className="layout-props__block__content__description">Чтобы готовое изделие получилось таким, как вы его задумали, обязательно используйте цветовой профиль CMYK.</div>
                                        </div>
                                    </div>
                                    <div className="layout-props__block">
@@ -54,7 +54,8 @@ const SectionLayoutProps = ()=>{
                                        </div>
                                        <div className="layout-props__block__content">
                                            <div className="layout-props__block__content__title">Разрешение макета – 300 dpi</div>
-                                           <div className="layout-props__block__content__description">Для качественной печати разрешение вашего макета должно быть 300 dpi. Чем меньше точек на дюйм, тем более размытое изображение получается. Корректируйте ваш макет, используйте файлы с достаточным разрешением, если не хотите размытого попугайчика.</div>
+                                           <div className="layout-props__block__content__description">Размер имеет значение. Меньше разрешение - менее четкое изображение на печати.
+                                               Для четкого, резкого изображения, разрешение макета должно быть не менее 300 dpi (точек на дюйм)</div>
                                        </div>
                                    </div>
                                    <div className="layout-props__block">
@@ -63,7 +64,9 @@ const SectionLayoutProps = ()=>{
                                        </div>
                                        <div className="layout-props__block__content">
                                            <div className="layout-props__block__content__title">Контур порезки наклеек</div>
-                                           <div className="layout-props__block__content__description">Для того чтобы плоттер порезал наклейки, ему необходима траектория движения ножа. Это должен быть замкнутый контур, который размещён на отдельном слое или в отдельном файле.</div>
+                                           <div className="layout-props__block__content__description">Чтобы вырезать наклейку, нужен контур.
+                                               Контур - это замкнутая фигура, направляющая нож режущей машины по бумаге.
+                                               Контур должен быть размещен в отдельном слое макета или приложен к макету в отдельном файле.</div>
                                        </div>
                                    </div>
                                </div>

@@ -20,7 +20,7 @@ const ModalHeader = (props)=> {
                             deliver:false
                         })}}>
                             <div className="modal__check-icon active"></div>
-                            <div className="modal-header__bookmarks__item__title active">Печать</div>
+                            <div className="modal-header__bookmarks__item__title active">Печать и основа</div>
                         </div>
                         <div className="modal-header__bookmarks__item" onClick={()=>{props.handleBookmark({
                             print:false,
@@ -31,7 +31,7 @@ const ModalHeader = (props)=> {
                                 {status=>(
                                     <React.Fragment>
                                         <div className={`modal__check-icon ${status}`}></div>
-                                        <div className={`modal-header__bookmarks__item__title ${status}`}>Дизайн</div>
+                                        <div className={`modal-header__bookmarks__item__title ${status}`}>Дизайн и макет</div>
                                     </React.Fragment>
                                 )}
                             </Transition>

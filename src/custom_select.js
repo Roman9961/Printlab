@@ -1,7 +1,7 @@
-const customSelect = ()=>{
+const customSelect = (selector)=>{
     var x, i, j, selElmnt, a, b, c;
     /*look for any elements with the class "custom-select":*/
-    x = document.getElementsByClassName("custom-select");
+    x = document.getElementsByClassName(selector);
     Array.prototype.forEach.call(x, function(el) {
         const it =el.getElementsByClassName("select-items");
         const ss = el.getElementsByClassName("select-selected");

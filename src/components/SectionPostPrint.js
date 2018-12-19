@@ -14,35 +14,18 @@ class SectionPostPrint extends React.Component{
                            <div className="section-postprint">
                            <h1 className="section__title">Послепечатная обработка наклеек</h1>
                            <div className="section-block__container section-block__container__postprint">
-                               <div className="section-block section-block__postprint">
-                                   <div className="section-block__header section-block__header__postprint">
-                                       <div className="section-block__title section-block__title__postprint">
-                                           <img src="images/lamination-icon.svg" alt=""/>
-                                           <div>Ламинация</div>
-                                       </div>
-                                       <a className="info info--lamination info--postprint" data-for="lamination" data-tip />
-                                       <ReactTooltip className="tooltip_custom" id="lamination" type="light" globalEventOff={ isMobile ? 'touchstart' : undefined }>
-                                           <div className="tooltip__container">
-                                               <div className="tooltip__description">Ламинация – это покрытие листа тонким слоем прозрачной пленки, он соединяется с отпечатанной основой при помощи температуры и давления (горячая ламинация).</div>
-                                           </div>
-                                       </ReactTooltip>
-
-                                   </div>
-                                   <div className="section-block__content ">
-                                       <div className="section-block__item__description">
-                                       </div>
-                                   </div>
-                               </div>
                                <div className="section-block section-block__postprint" >
                                    <div className="section-block__header section-block__header__postprint">
                                        <div className="section-block__title section-block__title__postprint">
                                            <img src="images/uv-icon.svg" alt=""/>
-                                           <div>УФ-лак</div>
+                                           <div>Глянец</div>
                                        </div>
                                        <a className="info info--uv info--postprint" data-for="uv" data-tip />
                                        <ReactTooltip className="tooltip_custom" id="uv" type="light" globalEventOff={ isMobile ? 'touchstart' : undefined }>
                                            <div className="tooltip__container">
-                                               <div className="tooltip__description">По технологии изготовления – это нанесение специального лака с целью придание печатной продукции глянца. Он выполняет одновременно защитную и декоративную функцию.</div>
+                                               <div className="tooltip__description">Другое название - УФ-лак. Покрытие УФ-лаком может быть полным или выборочным для некоторых элементов на изделии.
+                                                   Лак защищает от воды, царапин, украшает или выделяет нужные дизайнерские элементы.
+                                                   После нанесения лака на нужные элементы, он твердеет под ультафиолетовой лампой.</div>
                                            </div>
                                        </ReactTooltip>
 
@@ -61,7 +44,7 @@ class SectionPostPrint extends React.Component{
                                        <a className="info info--emboss info--postprint" data-for="emboss" data-tip />
                                        <ReactTooltip className="tooltip_custom" id="emboss" type="light" globalEventOff={ isMobile ? 'touchstart' : undefined }>
                                            <div className="tooltip__container">
-                                               <div className="tooltip__description">Тиснение фольгой – это нанесение блестящей металлической фольги в виде отдельных букв, рисунка или подложкие. Представляет собой процесс переноса на поверхность материала слоя металлической фольги путем штамповки.</div>
+                                               <div className="tooltip__description">Тиснение делается специальным штампом и металлической фольгой для получения ярких, выделяющихся элементов на изделии.</div>
                                            </div>
                                        </ReactTooltip>
 
@@ -71,11 +54,32 @@ class SectionPostPrint extends React.Component{
                                        </div>
                                    </div>
                                </div>
+                               <div className="section-block section-block__postprint">
+                                   <div className="section-block__header section-block__header__postprint">
+                                       <div className="section-block__title section-block__title__postprint">
+                                           <img src="images/lamination-icon.svg" alt=""/>
+                                           <div>Ламинирование</div>
+                                       </div>
+                                       <a className="info info--lamination info--postprint" data-for="lamination" data-tip />
+                                       <ReactTooltip className="tooltip_custom" id="lamination" type="light" globalEventOff={ isMobile ? 'touchstart' : undefined }>
+                                           <div className="tooltip__container">
+                                               <div className="tooltip__description">Ламинирование - это покрытие изделия пленкой. Ламинирование нужно для защиты изделия от внешних воздействий - царапин, влаги, надписей.
+                                                   Главный недостаток ламинирования - нельзя частично заламинировать изделие.
+                                                   Мы ламинируем изделия горячим способом с одной или двух сторон.</div>
+                                           </div>
+                                       </ReactTooltip>
+
+                                   </div>
+                                   <div className="section-block__content ">
+                                       <div className="section-block__item__description">
+                                       </div>
+                                   </div>
+                               </div>
                            </div>
                        </div>
                        </div>
                    </div>
-                   <div className="section-bg__top postprint__bg"></div>
+
                </section>
            )
         }

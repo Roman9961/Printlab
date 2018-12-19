@@ -85,7 +85,7 @@ const calc = function (state) {
                     totalpricehrncom += 50;
             if((calcProp.outline=='cloud'|| calcProp.outline=='chopped'||calcProp.outline=='accent')&& totalpricehrncom>0)
                 totalpricehrncom += 100;
-                return totalpricehrncom.toFixed(2);
+                return Math.ceil(totalpricehrncom);
         }
 
         return printResults();
@@ -448,85 +448,6 @@ const calc = function (state) {
         }
     }
 
-
-    //Управление попапом калькулятора
-
-    // the location of server-side upload handler:
-
-
-    //Шаги формы
-    function switchStep(step){
-        $('#part-1, #part-2, #part-3').css('display','none');
-        $('.form-step-wrapper').each(function () {
-            if(parseInt($(this).children('.btn-step').attr('data-step'))>step) $(this).removeClass('active');
-        });
-        $('i.btn-step[data-step*='+step+']').parent().addClass('active');
-        $('#part-'+step).show();
-    }
-    $('.btn-step').each(function () {
-        $(this).click(function(){
-            var step = parseInt($(this).attr('data-step'));
-            console.log(step+' шаг');
-            switch (step){
-                case 1:
-                    switchStep(1);
-                    break;
-                case 2:
-                    switchStep(2);
-                    break;
-                case 3:
-                    switchStep(3);
-                    break;
-            }
-
-        });
-    });
-
-    //Показываем поля доставки при выбранном пункте
-    function switchDelivery() {
-        if (DEBUG) console.log('function run');
-
-        var $form_delivery = $('#form_delivery'),
-            $form_contacts = $('#form_contacts');
-        if(calcProp.user_delivery === 'Новая Почта'){
-            $form_delivery.hide();
-            $form_contacts.show();
-        }
-        else if(calcProp.user_delivery === 'Доставка по Одессе'){
-            $form_delivery.show();
-            $form_contacts.show();
-        } else if (calcProp.user_delivery === 'Самовывоз'){
-            $form_delivery.hide();
-            $form_contacts.hide();
-        }
-    }
-
-    // Переключаем скрытые поля у радиобаттонов, при их выборе
-
-    $("#form-calculator #part-2 .frm_opt_container > .col-sm-4 .designselector").click(function(){
-        var $this = $(this);
-
-        $('#form-calculator #part-2 .frm_opt_container > .col-sm-4 .designselector').not($this).each(function(){
-            var $other = $(this);
-            $other.removeClass('active');
-        });
-
-        $this.addClass('active');
-    });
-
-
-    //notification if something goes wrong
-    function notifyme(Calc) {
-        var $calc = Calc;
-        if($calc.form === 'Прямоугольная' && ($calc.width >308 || $calc.height > 438)){
-            $.notify("Размер наклеек прямоугольной формы не может превышать 438х308мм", "warn",{position:"top left"});
-        }
-        if(($calc.form === 'Простая форма' || $calc.form === 'Сложная форма') && ($calc.width > 278 || $calc.height > 378)){
-            $.notify("Размер наклеек простой и сложной формы не может превышать 378х278мм. Попрбуйте прямоугольные наклейки", "warn", {position:"top left"});
-        }
-    }
-
-    switchDelivery();
     calculateStickersOnList();
     return calculateTotal();
 

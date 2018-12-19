@@ -334,10 +334,10 @@ class Section1 extends React.Component{
         calcProp:{
             "basis" : "Пластиковая",
             "basis_param":"white",
-            "print_type" : "",
+            "print_type" : "Листовая",
             "cut_form" : "simple",
-            "design" : "",
-            "form" : "",
+            "design" : "design-all",
+            "form" : "Простая форма",
             "height" : 50,
             "lamination" : "",
             "numberoflist" : "",
@@ -372,7 +372,8 @@ class Section1 extends React.Component{
             warehouses:[],
         },
         delivery:{
-            phone:'+380'
+            phone:'+380',
+            method: 'self'
         },
         isEditOrder:false,
         files:[],
@@ -546,8 +547,7 @@ class Section1 extends React.Component{
         if(Object.keys(this.state.calculator).length>0 && this.state.calcProp != data.calcProp) {
             let price = calc(this.state);
             if(this.state.calcProp.form === 'Рулонная' && price<750){
-                price = 750.00;
-                price =price.toFixed(2);
+                price = 750;
             }
             if (price != this.state.calcProp.price) {
                 this.setState((state)=>({
@@ -956,21 +956,16 @@ class Section1 extends React.Component{
         <div className="close-popup btn-close-popup"><i className="icon-cross"></i></div>
         <div id="final-price-main" className="price-wrapper">
             <div>Сумма заказа:</div>
-            <span>{this.state.calcProp.price} грн.</span>
+            <span>{this.state.calcProp.price} грн</span>
         </div>
-            <div className="wrapper-container wrapper-container--modal">
-                <div className="container container--modal-info">
-                    <div className="modal-info__title">{!this.state.isEditOrder ? 'Укажите, на что хотите печатать наклейки:': 'Редактирование заказа №'+this.state.currentOrder.id}</div>
-                    {!this.state.isEditOrder && <div><input className="modal-info__field" type="text" maxLength={50} placeholder="на банки"/></div>}
-                </div>
-            </div>
+
 
 
                 <div className="row">
                     <div className="col-xs-12">
                         <form id="sendorder" onSubmit={this.validateForm}>
 
-                            <div id="part-1" className={`${!this.props.state.print?'hidden-part':''}`}>
+                            <div id="print" className={`${!this.props.state.print?'hidden-part':''}`}>
                                 <div className="wrapper-container wrapper-container--modal-grey">
                                 <div className="container container--modal-info">
                                     <div className="modal-block modal-block--radio">
@@ -985,7 +980,7 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <div className="modal-block__content_item__icon modal-block__content_item__icon--rect"></div>
-                                                <span>Прямоугольная(без скругления)</span>
+                                                <span>Прямоугольная (без скругленных углов)</span>
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
@@ -1121,7 +1116,6 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal-grey">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--radio">
-                                            <div className="modal-block__title">Тип печати:</div>
                                             <div className="modal-block__content">
                                             <div className="modal-block__content_item">
                                                 <label htmlFor="field_profile-09" className= {`${this.state.calcProp.type=='Цветная'?'active':''}`}>
@@ -1131,7 +1125,7 @@ class Section1 extends React.Component{
                                                             <div className={`modal__check-icon--form ${status}`}></div>
                                                         )}
                                                     </Transition>
-                                                    <span>Цветная</span>
+                                                    <span>Цветная печать (CMYK)</span>
                                                 </label>
                                             </div>
                                             <div className="modal-block__content_item">
@@ -1142,7 +1136,7 @@ class Section1 extends React.Component{
                                                             <div className={`modal__check-icon--form ${status}`}></div>
                                                         )}
                                                     </Transition>
-                                                    <span>Черно-белая</span>
+                                                    <span>Черно-белая печать</span>
                                                 </label>
                                             </div>
                                         </div>
@@ -1154,7 +1148,7 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--radio">
-                                            <div className="modal-block__title">Основа:</div>
+                                            <div className="modal-block__title">Материал основы:</div>
                                             <div className="modal-block__content">
                                                 <div className="modal-block__content_item">
                                                     <label htmlFor="field_profile-11" className= {`${this.state.calcProp.basis=='Бумажная'?'active':''}`}>
@@ -1164,7 +1158,7 @@ class Section1 extends React.Component{
                                                                 <div className={`modal__check-icon--form ${status}`}></div>
                                                             )}
                                                         </Transition>
-                                                        <div className="modal-block__content_item__icon--paper modal-block__content_item__icon"></div>
+                                                        <div className="modal-block__content_item__icon--rect modal-block__content_item__icon"></div>
                                                         <span>Самоклеящаяся бумага</span>
                                                     </label>
                                                 </div>
@@ -1191,7 +1185,7 @@ class Section1 extends React.Component{
                                                                     )}
                                                                 </Transition>
                                                                 <div className="modal-block__content_item__icon--transparent modal-block__content_item__icon"></div>
-                                                                <span>Прозрачная основа</span>
+                                                                <span>Прозрачная пленка</span>
                                                                 <div className="modal-block__content_item__description">
                                                                     Для лучшего качества печати на прозрачной основе
                                                                     используется рулонная цифровая или УФ печать, предварительно печатается слой белой краски (белила) для обеспечения более насыщенного основного изображения
@@ -1207,7 +1201,7 @@ class Section1 extends React.Component{
                                                                     )}
                                                                 </Transition>
                                                                 <div className="modal-block__content_item__icon--white modal-block__content_item__icon"></div>
-                                                                <span>Белая основа</span>
+                                                                <span>Белая пленка</span>
                                                             </label>
                                                         </div>
                                                     </React.Fragment>
@@ -1223,56 +1217,56 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal-grey">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--radio">
-                                            <div className="modal-block__title">Дополнительная обработка:</div>
+                                            <div className="modal-block__title">Постпечатная обработка:</div>
                                             <div className="modal-block__content">
                                                 <div className="modal-block__content_item">
                                                     <div className="modal-block__content_item__checkbox-container">
-                                                        <div className="modal-block__content_item__checkbox-container__checkboxes">
+                                                        <div className="modal-block__content_item__checkbox-container__checkboxes mobile-column">
                                                             <label htmlFor="field_profile-16">
                                                                 <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.lamination=='matt'?'active':''}`}>
                                                                     <div className="modal-checkbox"></div>
                                                                 </div>
                                                                 <input type="checkbox" name="lamination" id="field_profile-16" value="matt" checked ={this.state.calcProp.lamination=='matt'}  onClick={this.handleChange}/>
-                                                                <div className="modal-checkbox__title">Матовая ламинация</div>
+                                                                <div className="modal-checkbox__title">Матовое ламинирование</div>
                                                             </label>
                                                             <label htmlFor="field_profile-15">
                                                             <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.lamination=='gloss'?'active':''}`}>
                                                                 <div className="modal-checkbox"></div>
                                                             </div>
                                                             <input type="checkbox" name="lamination" id="field_profile-15" value="gloss" checked ={this.state.calcProp.lamination=='gloss'} onClick={this.handleChange}/>
-                                                            <div className="modal-checkbox__title">Глянцевая ламинация</div>
+                                                            <div className="modal-checkbox__title">Глянцевое ламинирование</div>
                                                         </label>
                                                         </div>
                                                         <hr/>
                                                         <div className="modal-block__content_item__description">
-                                                            Советуем ламинировать наклейки для часто используемых поверхностей (ноутбук, телефон, флакон, чемодан).
+                                                            Ламинируйте бумажные наклейки, тогда они дольше сохранят товарный вид.
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="modal-block__content_item">
-                                                    <div className="modal-block__content_item__checkbox-container">
-                                                        <div className="modal-block__content_item__checkbox-container__checkboxes">
-                                                            <label htmlFor="field_profile-17" className="disable">
-                                                                <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.stamping?'active':''}`}>
-                                                                    <div className="modal-checkbox disable"></div>
-                                                                </div>
-                                                                <input type="checkbox" disabled name="stamping" id="field_profile-17" value={false} checked ={this.state.calcProp.stamping}  onClick={this.handleChange}/>
-                                                                <div className="modal-checkbox__title">Тиснение</div>
-                                                            </label>
-                                                            <label htmlFor="field_profile-18" className="disable">
-                                                                <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.varnish?'active':''}`}>
-                                                                    <div className="modal-checkbox disable"></div>
-                                                                </div>
-                                                                <input type="checkbox" disabled name="varnish" id="field_profile-18" value={false} checked ={this.state.calcProp.varnish} onClick={this.handleChange}/>
-                                                                <div className="modal-checkbox__title">УФ-лак</div>
-                                                            </label>
-                                                        </div>
-                                                        <hr/>
-                                                        <div className="modal-block__content_item__description">
-                                                            Эта опция пока недоступна в калькуляторе, обратитесь за просчетом к нашим сотрудникам.
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                {/*<div className="modal-block__content_item">*/}
+                                                    {/*<div className="modal-block__content_item__checkbox-container">*/}
+                                                        {/*<div className="modal-block__content_item__checkbox-container__checkboxes">*/}
+                                                            {/*<label htmlFor="field_profile-17" className="disable">*/}
+                                                                {/*<div className= {`modal-block__content_item__checkbox ${this.state.calcProp.stamping?'active':''}`}>*/}
+                                                                    {/*<div className="modal-checkbox disable"></div>*/}
+                                                                {/*</div>*/}
+                                                                {/*<input type="checkbox" disabled name="stamping" id="field_profile-17" value={false} checked ={this.state.calcProp.stamping}  onClick={this.handleChange}/>*/}
+                                                                {/*<div className="modal-checkbox__title">Тиснение</div>*/}
+                                                            {/*</label>*/}
+                                                            {/*<label htmlFor="field_profile-18" className="disable">*/}
+                                                                {/*<div className= {`modal-block__content_item__checkbox ${this.state.calcProp.varnish?'active':''}`}>*/}
+                                                                    {/*<div className="modal-checkbox disable"></div>*/}
+                                                                {/*</div>*/}
+                                                                {/*<input type="checkbox" disabled name="varnish" id="field_profile-18" value={false} checked ={this.state.calcProp.varnish} onClick={this.handleChange}/>*/}
+                                                                {/*<div className="modal-checkbox__title">УФ-лак</div>*/}
+                                                            {/*</label>*/}
+                                                        {/*</div>*/}
+                                                        {/*<hr/>*/}
+                                                        {/*<div className="modal-block__content_item__description">*/}
+                                                            {/*Эта опция пока недоступна в калькуляторе, обратитесь за просчетом к нашим сотрудникам.*/}
+                                                        {/*</div>*/}
+                                                    {/*</div>*/}
+                                                {/*</div>*/}
                                         </div>
                                     </div>
                                     <div className="clearfix"></div>
@@ -1282,20 +1276,8 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--radio">
-                                            <div className="modal-block__title">Срок печати:</div>
+                                            <div className="modal-block__title">Срок изготовления заказа:</div>
                                             <div className="modal-block__content">
-                                                <div className="modal-block__content_item">
-                                                    <label htmlFor="field_profile-19" className= {`${this.state.calcProp.print_time=='2'?'active':''}`}>
-                                                        <input className="radio-input" type="radio" name="print_time" id="field_profile-19" value="2" onClick={this.handleChange}/>
-                                                        <Transition in={this.state.calcProp.print_time=='2'} timeout={200}>
-                                                            {status=>(
-                                                                <div className={`modal__check-icon--form ${status}`}></div>
-                                                            )}
-                                                        </Transition>
-                                                        <div className="modal-block__content_item__icon--paper modal-block__content_item__icon"></div>
-                                                        <span>2дня (+20%)</span>
-                                                    </label>
-                                                </div>
                                                 <div className="modal-block__content_item">
                                                     <label htmlFor="field_profile-20" className= {`${this.state.calcProp.print_time=='4'?'active':''}`}>
                                                         <input className="radio-input" type="radio" name="print_time" id="field_profile-20" defaultChecked value="4" onClick={this.handleChange}/>
@@ -1305,7 +1287,19 @@ class Section1 extends React.Component{
                                                             )}
                                                         </Transition>
                                                         <div className="modal-block__content_item__icon--plastic modal-block__content_item__icon"></div>
-                                                        <span>4 дня</span>
+                                                        <span>Несрочная печать - 4 дня</span>
+                                                    </label>
+                                                </div>
+                                                <div className="modal-block__content_item">
+                                                    <label htmlFor="field_profile-19" className= {`${this.state.calcProp.print_time=='2'?'active':''}`}>
+                                                        <input className="radio-input" type="radio" name="print_time" id="field_profile-19" value="2" onClick={this.handleChange}/>
+                                                        <Transition in={this.state.calcProp.print_time=='2'} timeout={200}>
+                                                            {status=>(
+                                                                <div className={`modal__check-icon--form ${status}`}></div>
+                                                            )}
+                                                        </Transition>
+                                                        <div className="modal-block__content_item__icon--paper modal-block__content_item__icon"></div>
+                                                        <span>Срочная печать - 2 дня (+ 20%)</span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -1333,13 +1327,13 @@ class Section1 extends React.Component{
 
                             </div>
 
-                            <div id="part-2" className={`${!this.props.state.design?'hidden-part':''}`}>
+                            <div id="design" className={`${!this.props.state.design?'hidden-part':''}`}>
 
 
                                 <div className="wrapper-container wrapper-container--modal-grey">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--design">
-                                            <div className="modal-block__title">Дизайн и контур порезки:</div>
+                                            <div className="modal-block__title">Макет:</div>
                                             <div className="modal-block__content modal-block__content--design">
                                                 <div className="modal-block__content_item">
                                                     <label htmlFor="field_profile-21" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.design=='design-all'?'active':''}`}>
@@ -1350,13 +1344,13 @@ class Section1 extends React.Component{
                                                                     <div className={`modal__check-icon--form ${status}`}></div>
                                                                 )}
                                                             </Transition>
-                                                            <span>У меня есть макет и контур порезки</span>
+                                                            <span>Есть макет с контуром порезки</span>
                                                         </div>
                                                         <Transition in={this.state.calcProp.design=='design-all'} timeout={200}>
                                                             {status=>(
                                                             <div className={`file-upload-container ${status}`}>
                                                                 <div className="modal-block__content_item__description">
-                                                                    {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>Если ваш макет соответствует требованиям к макету , то загрузите его:</span>)}
+                                                                    {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>Выберите один или несколько файлов макетов и порезки для загрузки</span>)}
                                                                     {this.state.files&&this.state.files.length>0&&!this.state.fileError&&(
                                                                          this.state.files.map((file,key)=>{
                                                                              return <React.Fragment key={key}>
@@ -1372,7 +1366,7 @@ class Section1 extends React.Component{
                                                                 <label htmlFor="upload1" className="file-upload">
                                                                     <div className="fileform">
                                                                         <div className="button button--design js-maket-download">
-                                                                            <span>Загрузить макет</span>
+                                                                            <span>Загрузить макет и контур</span>
                                                                         </div>
                                                                         <input className="upload23"  id="upload1" type="file" name="files[]" multiple onClick={this.handleFiles} />
                                                                         <div className="requirements-info">*cуммарный объем файлов не должен превышать 1Гб</div>
@@ -1408,7 +1402,7 @@ class Section1 extends React.Component{
                                                                     <div className={`modal__check-icon--form ${status}`}></div>
                                                                 )}
                                                             </Transition>
-                                                            <span>У меня есть макет, но мне нужен контур порезки</span>
+                                                            <span>Есть макет, но нужен контур порезки</span>
                                                         </div>
                                                         <Transition in={this.state.calcProp.design=='design-outline'} timeout={200}>
                                                             {status=>(
@@ -1443,10 +1437,10 @@ class Section1 extends React.Component{
                                                                                 <div className="outline-description">Овал</div>
                                                                                 <input className="radio-input" id="outline5" type="radio" name="outline"  value="ellipse" onClick={this.handleChange}/>
                                                                             </label>
-                                                                            <label htmlFor="outline6" className={`outline-item outline-item--centered ${this.state.calcProp.outline=='circle'?'active':''}`}>
-                                                                                <div className="outline-icon outline-icon--circle"></div>
-                                                                                <div className="outline-description">Круг</div>
-                                                                                <input className="radio-input" id="outline6" type="radio" name="outline"  value="circle" onClick={this.handleChange}/>
+                                                                            <label htmlFor="outline9" className={`outline-item ${this.state.calcProp.outline=='chopped'?'active':''}`}>
+                                                                                <div className="outline-icon-draw outline-icon-draw--chopped"></div>
+                                                                                <div className="outline-description outline-description--draw">“Рубленый” +100 грн</div>
+                                                                                <input className="radio-input" id="outline9" type="radio" name="outline"  value="chopped" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline7" className={`outline-item ${this.state.calcProp.outline=='star'?'active':''}`}>
                                                                                 <div className="outline-icon-draw outline-icon-draw--star"></div>
@@ -1458,10 +1452,10 @@ class Section1 extends React.Component{
                                                                                 <div className="outline-description outline-description--draw">“Облако” + 100 грн</div>
                                                                                 <input className="radio-input" id="outline8" type="radio" name="outline"  value="cloud" onClick={this.handleChange}/>
                                                                             </label>
-                                                                            <label htmlFor="outline9" className={`outline-item ${this.state.calcProp.outline=='chopped'?'active':''}`}>
-                                                                                <div className="outline-icon-draw outline-icon-draw--chopped"></div>
-                                                                                <div className="outline-description outline-description--draw">“Рубленый” +100 грн</div>
-                                                                                <input className="radio-input" id="outline9" type="radio" name="outline"  value="chopped" onClick={this.handleChange}/>
+                                                                            <label htmlFor="outline6" className={`outline-item outline-item--centered ${this.state.calcProp.outline=='circle'?'active':''}`}>
+                                                                                <div className="outline-icon outline-icon--circle"></div>
+                                                                                <div className="outline-description">Круг</div>
+                                                                                <input className="radio-input" id="outline6" type="radio" name="outline"  value="circle" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline10" className={`outline-item ${this.state.calcProp.outline=='accent'?'active':''}`}>
                                                                                 <div className="outline-icon-draw outline-icon-draw--accent"></div>
@@ -1521,13 +1515,15 @@ class Section1 extends React.Component{
                                                                     <div className={`modal__check-icon--form ${status}`}></div>
                                                                 )}
                                                             </Transition>
-                                                            <span>У меня нет макета, мне нужен дизайн</span>
+                                                            <span>Нет макета, нужен дизайн</span>
                                                         </div>
                                                         <Transition in={this.state.calcProp.design=='design-none'} timeout={200}>
                                                             {status=>(
                                                                 <div className={`file-upload-container ${status}`}>
                                                                     <div className="modal-block__content_item__description">
-                                                                        {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна. Cтоимость дизайна от 300 грн.</span>)}
+                                                                        {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>Разработаем индивидуальный дизайн наклеек с учетом ваших пожеланий. Наш сотрудник свяжется с вами для уточнения деталей.
+                                                                            Cтоимость дизайна -- от 300 грн.
+                                                                            Вы можете загрузить исходные материалы или примеры через форму.</span>)}
                                                                         {this.state.files&&this.state.files.length>0&&!this.state.fileError&&(
                                                                             this.state.files.map((file,key)=>{
                                                                                 return <React.Fragment key={key}>
@@ -1597,14 +1593,14 @@ class Section1 extends React.Component{
                                 </div>
                     </div>
 
-                    <div id="part-3" className={`${!this.props.state.deliver?'hidden-part':''}`}>
+                    <div id="order" className={`${!this.props.state.deliver?'hidden-part':''}`}>
 
                         <div className="wrapper-container wrapper-container--modal-grey">
                             <div className="container container--modal-info">
                                 <div className="modal-block modal-block--radio">
                                     <div className="modal-block__content modal-block__content--order">
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="name">Ваше имя:</label>
+                                            <label className="feedback-form__label" htmlFor="name">Имя:</label>
                                             <Textbox
                                                 classNameInput="validation_input"
                                                 classNameWrapper="validation_wrapper"
@@ -1638,7 +1634,7 @@ class Section1 extends React.Component{
                                         </div>
 
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="phone">Ваш телефон:</label>
+                                            <label className="feedback-form__label" htmlFor="phone">Телефон:</label>
                                             <Textbox
                                                 classNameInput="validation_input"
                                                 classNameWrapper="validation_wrapper"
@@ -1693,7 +1689,7 @@ class Section1 extends React.Component{
                                         </div>
 
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="email">Ваш email:</label>
+                                            <label className="feedback-form__label" htmlFor="email">email:</label>
                                                 <Textbox
                                                 classNameInput="validation_input"
                                                 classNameWrapper="validation_wrapper"
@@ -1802,6 +1798,38 @@ class Section1 extends React.Component{
                                     <div className="modal-block__title">Способ доставки:</div>
                                     <div className="modal-block__content">
                                         <div className="modal-block__content_item">
+                                            <label htmlFor="field_profile-28" className= {`modal-block__content_item__label ${this.state.delivery.method=='self'?'active':''}`}>
+                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-28" value="self"
+                                                       onClick={
+                                                           (method)=>this.setState(
+                                                               (state)=>(
+                                                               {
+                                                                   ...state,
+                                                                   calcProp:{
+                                                                       ...state.calcProp,
+                                                                       delivery:false
+                                                                   },
+                                                                   delivery:{
+                                                                       ...state.delivery,
+                                                                       method:'self'
+                                                                   },
+                                                                   deliveryNameError:false,
+                                                                   deliveryPhoneError:false
+                                                               }
+                                                               )
+                                                           )
+                                                       }/>
+                                                <Transition in={this.state.delivery.method=='self'} timeout={200}>
+                                                    {status=>(
+                                                        <div className={`modal__check-icon--form ${status}`}></div>
+                                                    )}
+                                                </Transition>
+                                                <span>Самовывоз</span>
+                                                <a target="_blank" href="https://www.google.com.ua/maps/place/Okprint+%D1%86%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%B0+%D0%B4%D1%80%D1%83%D0%BA%D0%B0%D1%80%D0%BD%D1%8F,+%D0%A2%D0%9E%D0%92+%22%D0%9E%D0%9A%D0%9F%22/@50.434453,30.47855,17z/data=!3m1!4b1!4m5!3m4!1s0x40d4cc5bba581715:0x88f7cd84dcfec18c!8m2!3d50.434453!4d30.480744">
+                                                <div className="modal-block__content_item__description">г. Киев, ул. Патриарха Мстислава Скрипника, 40</div></a>
+                                            </label>
+                                        </div>
+                                        <div className="modal-block__content_item">
                                             <label htmlFor="field_profile-26" className= {`${this.state.delivery.method=='np'?'active':''}`}>
                                                 <input className="radio-input" type="radio" name="user_delivery" id="field_profile-26" value="np"
                                                        onClick={
@@ -1859,38 +1887,7 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <span>Доставка по Киеву</span>
-                                                <div className="modal-block__content_item__description">+50 грн в любую точку города</div>
-                                            </label>
-                                        </div>
-                                        <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-28" className= {`modal-block__content_item__label ${this.state.delivery.method=='self'?'active':''}`}>
-                                                <input className="radio-input" type="radio" name="user_delivery" id="field_profile-28" value="self"
-                                                       onClick={
-                                                           (method)=>this.setState(
-                                                               (state)=>(
-                                                                        {
-                                                                            ...state,
-                                                                            calcProp:{
-                                                                                ...state.calcProp,
-                                                                                delivery:false
-                                                                            },
-                                                                            delivery:{
-                                                                                ...state.delivery,
-                                                                                method:'self'
-                                                                            },
-                                                                            deliveryNameError:false,
-                                                                            deliveryPhoneError:false
-                                                                        }
-                                                                    )
-                                                           )
-                                                       }/>
-                                                <Transition in={this.state.delivery.method=='self'} timeout={200}>
-                                                    {status=>(
-                                                        <div className={`modal__check-icon--form ${status}`}></div>
-                                                    )}
-                                                </Transition>
-                                                <span>Самовывоз</span>
-                                                <div className="modal-block__content_item__description">г. Киев, ул. Патриарха Мстислава Скрипника 40</div>
+                                                <div className="modal-block__content_item__description">+50 грн, в любую точку города</div>
                                             </label>
                                         </div>
                                     </div>
@@ -2054,7 +2051,7 @@ class Section1 extends React.Component{
                                                 }}
                                             />
                                         </div>
-                                        <div className="terms">*отправляя заказ Вы принимаете <Link to="/terms" target="_blank" >Договор оказания услуг</Link></div>
+                                        <div className="terms">*отправляя заказ, Вы принимаете <Link to="/terms" target="_blank" >Договор оказания услуг</Link></div>
                                     </div>
                                 </div>
                             </div>

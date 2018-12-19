@@ -1,8 +1,7 @@
 .wrapper-container--modal-header{
   background-color: #333333;
-  margin-bottom: 10rem;
   @media (max-width: 767px){
-    margin-bottom:0;
+    margin-bottom:-50px;
   }
 }
 .modal-header__close{
@@ -42,6 +41,7 @@
 }
 .modal-header__bookmarks__item{
   align-items: center;
+  position: relative;
   background-color: white;
   box-shadow: 0 5px 5px 0 rgba(0,0,0,0.1);
   color: #595959;

@@ -1,5 +1,6 @@
 import React from 'react';
 import Scroll from 'react-scroll-to-element';
+import Modal from 'react-modal';
 
 const stickyMenuOpen =()=>{
     document.getElementsByClassName('sticky-header')[0].classList.add('sticky-hover');
@@ -11,21 +12,25 @@ const stickyMenuClose =()=>{
 const Header = (props) => (
     <header>
         <div className="wrapper-container">
-            <div className="container">
+            <div className="container main-header">
                 <div  className="header">
                     <div className="header__logo">
                     </div>
                     <div className="mobile-contacts">
                         <div className="header__contacts__phone__icon">
-                            <a href="tel:+380678283212" onClick={()=>{gtag('event', 'Позвонить', {'event_category': 'Кнопка','event_label' : 'Pop-up позвонить'})}}> <img alt="Наклейки" title="Наклейки" src="images/call.svg"/> </a>
+                            <div className="phone-container">
+                                <a href="tel:+380678283212" onClick={()=>{gtag('event', 'Позвонить', {'event_category': 'Кнопка','event_label' : 'Pop-up позвонить'})}} >
+                                    <img className="phone" alt="Наклейки" title="Наклейки" src="images/call.svg"/>
+                                </a>
+                            </div>
                         </div>
                         <div className="header__contacts__phone__icon">
                             <a href="mailto:zakaz@okprint.com.ua"> <img style={{height:'97%'}} alt="Наклейки" title="Наклейки" src="images/email@1x.svg"/> </a>
                         </div>
                     </div>
                     <div className="header__menu">
-                        <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
                         <Scroll type="class" element="requairements"><div className="header__menu__item">Требования к макетам <br className="hidden-xs"/></div></Scroll>
+                        <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
                         <Scroll type="class" element="delivery__top"><div className="header__menu__item">Оплата и доставка</div></Scroll>
                     </div>
                     <div className="header__contacts">
@@ -45,8 +50,8 @@ const Header = (props) => (
                     }}><i></i>
                     </div>
                     <div className="menu">
-                        <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
                         <Scroll type="class" element="requairements"><div className="header__menu__item">Требования к макетам</div></Scroll>
+                        <Scroll type="class" element="prices"><div className="header__menu__item">Цены</div></Scroll>
                         <Scroll type="class" element="design"><div className="header__menu__item">Дизайн</div></Scroll>
                         <Scroll type="class" element="delivery__top"><div className="header__menu__item">Оплата и доставка</div></Scroll>
                     </div>
@@ -74,7 +79,7 @@ const Header = (props) => (
                         <img alt="Наклейки" title="Наклейки" src="images/orange_path.svg"/>
                     </div>
                     <div className="col-md-6">
-                        <a href="javascript:;" rel="nofollow" className="button button--calculator" onClick={()=>{gtag('event', 'Посчитать цену', {'event_category': 'Кнопка','event_label' : 'Просчет'}); props.handleModal({})}}>Посчитать цену</a>
+                        <a href="javascript:;" rel="nofollow" className="button button--calculator" onClick={()=>{gtag('event', 'Посчитать цену', {'event_category': 'Кнопка','event_label' : 'Просчет'}); props.handleModal({})}}>Узнать цену</a>
                     </div>
                 </div>
             </div>
@@ -90,7 +95,9 @@ const Header = (props) => (
                     <div className="col-md-6 col-md-offset-1 col-sm-7 col-sm-offset-0">
                         <div className="wrapper-flex">
                             <div className="header__contacts__phone__icon">
-                                <img alt="Наклейки" title="Наклейки" src="images/call.svg"/>
+                                <div className="phone-container" onClick={props.handleCallModal}>
+                                <img className="phone" alt="Наклейки" title="Наклейки" src="images/call.svg"/>
+                                </div>
                             </div>
                             <div className="header__contacts header__contacts__phone__block">
                                 <a href="tel:+380678283212" onClick={()=>{gtag('event', 'Позвонить', {'event_category': 'Кнопка','event_label' : 'Pop-up позвонить'})}}> (067) 828 32 12</a>
@@ -102,8 +109,8 @@ const Header = (props) => (
                             e.currentTarget.classList.toggle('open');
                         }}><i></i></div>
                         <div className={`header__menu sticky-header--menu ${props.stickyMenu?'open':''}`}>
-                            <Scroll type="class" element="prices"><div className="header__menu__item"><a href="javascript:;">Цены</a></div></Scroll>
                             <Scroll type="class" element="requairements"><div className="header__menu__item"><a href="javascript:;">Требования к макетам</a></div></Scroll>
+                            <Scroll type="class" element="prices"><div className="header__menu__item"><a href="javascript:;">Цены</a></div></Scroll>
                             <Scroll type="class" element="design"><div className="header__menu__item"><a href="javascript:;">Дизайн</a></div></Scroll>
                             <Scroll type="class" element="delivery__top"><div className="header__menu__item"><a href="javascript:;">Оплата и доставка</a></div></Scroll>
                         </div>
