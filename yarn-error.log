@@ -1,14 +1,14 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn dev-server
+  /home/webintern/.nvm/versions/node/v10.15.3/bin/node /usr/local/bin/yarn
 
 PATH: 
-  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
+  /home/webintern/.nvm/versions/node/v10.15.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
 
 Yarn version: 
   1.5.1
 
 Node version: 
-  9.2.0
+  10.15.3
 
 Platform: 
   linux x64
@@ -9275,16 +9275,458 @@ Lockfile:
       toposort "^2.0.2"
 
 Trace: 
-  Error: Command failed.
-  Exit signal: SIGHUP
+  Error: /home/webintern/websites/St/node_modules/grpc: Command failed.
+  Exit code: 1
   Command: sh
-  Arguments: -c webpack-dev-server --content-base src --hot --inline
-  Directory: /home/webintern/websites/St
+  Arguments: -c ./node_modules/.bin/node-pre-gyp install --fallback-to-build --library=static_library
+  Directory: /home/webintern/websites/St/node_modules/grpc
   Output:
-  
+  node-pre-gyp info it worked if it ends with ok
+  node-pre-gyp info using node-pre-gyp@0.7.0
+  node-pre-gyp info using node@10.15.3 | linux | x64
+  node-pre-gyp info check checked for "/home/webintern/websites/St/node_modules/grpc/src/node/extension_binary/node-v64-linux-x64-glibc/grpc_node.node" (not found)
+  node-pre-gyp http GET https://storage.googleapis.com/grpc-precompiled-binaries/node/grpc/v1.10.1/node-v64-linux-x64-glibc.tar.gz
+  node-pre-gyp http 403 https://storage.googleapis.com/grpc-precompiled-binaries/node/grpc/v1.10.1/node-v64-linux-x64-glibc.tar.gz
+  node-pre-gyp ERR! Tried to download(403): https://storage.googleapis.com/grpc-precompiled-binaries/node/grpc/v1.10.1/node-v64-linux-x64-glibc.tar.gz 
+  node-pre-gyp ERR! Pre-built binaries not found for grpc@1.10.1 and node@10.15.3 (node-v64 ABI, glibc) (falling back to source compile with node-gyp) 
+  node-pre-gyp http 403 status code downloading tarball https://storage.googleapis.com/grpc-precompiled-binaries/node/grpc/v1.10.1/node-v64-linux-x64-glibc.tar.gz 
+  node-pre-gyp ERR! Pre-built binaries not installable for grpc@1.10.1 and node@10.15.3 (node-v64 ABI, glibc) (falling back to source compile with node-gyp) 
+  node-pre-gyp ERR! Hit error Connection closed while downloading tarball file 
+  gyp info it worked if it ends with ok
+  gyp info using node-gyp@3.7.0
+  gyp info using node@10.15.3 | linux | x64
+  gyp info it worked if it ends with ok
+  gyp info using node-gyp@3.7.0
+  gyp info using node@10.15.3 | linux | x64
+  gyp info ok 
+  gyp info ok 
+  gyp info it worked if it ends with ok
+  gyp info using node-gyp@3.7.0
+  gyp info using node@10.15.3 | linux | x64
+  gyp WARN download NVM_NODEJS_ORG_MIRROR is deprecated and will be removed in node-gyp v4, please use NODEJS_ORG_MIRROR
+  gyp info it worked if it ends with ok
+  gyp info using node-gyp@3.7.0
+  gyp info using node@10.15.3 | linux | x64
+  gyp WARN download NVM_NODEJS_ORG_MIRROR is deprecated and will be removed in node-gyp v4, please use NODEJS_ORG_MIRROR
+  gyp WARN download NVM_NODEJS_ORG_MIRROR is deprecated and will be removed in node-gyp v4, please use NODEJS_ORG_MIRROR
+  gyp http GET https://nodejs.org/dist/v10.15.3/node-v10.15.3-headers.tar.gz
+  gyp WARN download NVM_NODEJS_ORG_MIRROR is deprecated and will be removed in node-gyp v4, please use NODEJS_ORG_MIRROR
+  gyp http GET https://nodejs.org/dist/v10.15.3/node-v10.15.3-headers.tar.gz
+  gyp http 200 https://nodejs.org/dist/v10.15.3/node-v10.15.3-headers.tar.gz
+  gyp http 200 https://nodejs.org/dist/v10.15.3/node-v10.15.3-headers.tar.gz
+  gyp http GET https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
+  gyp http 200 https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
+  gyp info spawn /usr/bin/python2
+  gyp info spawn args [ '/home/webintern/websites/St/node_modules/node-gyp/gyp/gyp_main.py',
+  gyp info spawn args   'binding.gyp',
+  gyp info spawn args   '-f',
+  gyp info spawn args   'make',
+  gyp info spawn args   '-I',
+  gyp info spawn args   '/home/webintern/websites/St/node_modules/grpc/build/config.gypi',
+  gyp info spawn args   '-I',
+  gyp info spawn args   '/home/webintern/websites/St/node_modules/node-gyp/addon.gypi',
+  gyp info spawn args   '-I',
+  gyp info spawn args   '/home/webintern/.node-gyp/10.15.3/include/node/common.gypi',
+  gyp info spawn args   '-Dlibrary=shared_library',
+  gyp info spawn args   '-Dvisibility=default',
+  gyp info spawn args   '-Dnode_root_dir=/home/webintern/.node-gyp/10.15.3',
+  gyp info spawn args   '-Dnode_gyp_dir=/home/webintern/websites/St/node_modules/node-gyp',
+  gyp info spawn args   '-Dnode_lib_file=/home/webintern/.node-gyp/10.15.3/<(target_arch)/node.lib',
+  gyp info spawn args   '-Dmodule_root_dir=/home/webintern/websites/St/node_modules/grpc',
+  gyp info spawn args   '-Dnode_engine=v8',
+  gyp info spawn args   '--depth=.',
+  gyp info spawn args   '--no-parallel',
+  gyp info spawn args   '--generator-output',
+  gyp info spawn args   'build',
+  gyp info spawn args   '-Goutput_dir=.' ]
+  gyp http GET https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
+  gyp http 200 https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
+  gyp info spawn /usr/bin/python2
+  gyp info spawn args [ '/home/webintern/websites/St/node_modules/node-gyp/gyp/gyp_main.py',
+  gyp info spawn args   'binding.gyp',
+  gyp info spawn args   '-f',
+  gyp info spawn args   'make',
+  gyp info spawn args   '-I',
+  gyp info spawn args   '/home/webintern/websites/St/node_modules/grpc/build/config.gypi',
+  gyp info spawn args   '-I',
+  gyp info spawn args   '/home/webintern/websites/St/node_modules/node-gyp/addon.gypi',
+  gyp info spawn args   '-I',
+  gyp info spawn args   '/home/webintern/.node-gyp/10.15.3/include/node/common.gypi',
+  gyp info spawn args   '-Dlibrary=shared_library',
+  gyp info spawn args   '-Dvisibility=default',
+  gyp info spawn args   '-Dnode_root_dir=/home/webintern/.node-gyp/10.15.3',
+  gyp info spawn args   '-Dnode_gyp_dir=/home/webintern/websites/St/node_modules/node-gyp',
+  gyp info spawn args   '-Dnode_lib_file=/home/webintern/.node-gyp/10.15.3/<(target_arch)/node.lib',
+  gyp info spawn args   '-Dmodule_root_dir=/home/webintern/websites/St/node_modules/grpc',
+  gyp info spawn args   '-Dnode_engine=v8',
+  gyp info spawn args   '--depth=.',
+  gyp info spawn args   '--no-parallel',
+  gyp info spawn args   '--generator-output',
+  gyp info spawn args   'build',
+  gyp info spawn args   '-Goutput_dir=.' ]
+  gyp info ok 
+  gyp info ok 
+  gyp info it worked if it ends with ok
+  gyp info using node-gyp@3.7.0
+  gyp info using node@10.15.3 | linux | x64
+  gyp WARN download NVM_NODEJS_ORG_MIRROR is deprecated and will be removed in node-gyp v4, please use NODEJS_ORG_MIRROR
+  gyp info it worked if it ends with ok
+  gyp info using node-gyp@3.7.0
+  gyp info using node@10.15.3 | linux | x64
+  gyp info spawn make
+  gyp info spawn args [ 'BUILDTYPE=Release', '-C', 'build' ]
+  make: вход в каталог «/home/webintern/websites/St/node_modules/grpc/build»
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/init.o
+  gyp WARN download NVM_NODEJS_ORG_MIRROR is deprecated and will be removed in node-gyp v4, please use NODEJS_ORG_MIRROR
+  gyp info spawn make
+  gyp info spawn args [ 'BUILDTYPE=Release', '-C', 'build' ]
+  make: вход в каталог «/home/webintern/websites/St/node_modules/grpc/build»
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/init.o
+  sed: невозможно прочитать ./Release/.deps/Release/obj.target/grpc/deps/grpc/src/core/lib/surface/init.o.d.raw: Нет такого файла или каталога
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/avl/avl.o
+  rm: невозможно удалить './Release/.deps/Release/obj.target/grpc/deps/grpc/src/core/lib/surface/init.o.d.raw': Нет такого файла или каталога
+  grpc.target.mk:394: ошибка выполнения рецепта для цели «Release/obj.target/grpc/deps/grpc/src/core/lib/surface/init.o»
+  make: выход из каталога «/home/webintern/websites/St/node_modules/grpc/build»
+  make: *** [Release/obj.target/grpc/deps/grpc/src/core/lib/surface/init.o] Ошибка 1
+  gyp ERR! build error 
+  gyp ERR! stack Error: `make` failed with exit code: 2
+  gyp ERR! stack     at ChildProcess.onExit (/home/webintern/websites/St/node_modules/node-gyp/lib/build.js:262:23)
+  gyp ERR! stack     at ChildProcess.emit (events.js:189:13)
+  gyp ERR! stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:248:12)
+  gyp ERR! System Linux 4.4.0-142-generic
+  gyp ERR! command "/home/webintern/.nvm/versions/node/v10.15.3/bin/node" "/home/webintern/websites/St/node_modules/node-gyp/bin/node-gyp.js" "build" "--fallback-to-build" "--library=static_library" "--module=/home/webintern/websites/St/node_modules/grpc/src/node/extension_binary/node-v64-linux-x64-glibc/grpc_node.node" "--module_name=grpc_node" "--module_path=/home/webintern/websites/St/node_modules/grpc/src/node/extension_binary/node-v64-linux-x64-glibc"
+  gyp ERR! cwd /home/webintern/websites/St/node_modules/grpc
+  gyp ERR! node -v v10.15.3
+  gyp ERR! node-gyp -v v3.7.0
+  gyp ERR! not ok 
+  node-pre-gyp ERR! build error 
+  node-pre-gyp ERR! stack Error: Failed to execute '/home/webintern/.nvm/versions/node/v10.15.3/bin/node /home/webintern/websites/St/node_modules/node-gyp/bin/node-gyp.js build --fallback-to-build --library=static_library --module=/home/webintern/websites/St/node_modules/grpc/src/node/extension_binary/node-v64-linux-x64-glibc/grpc_node.node --module_name=grpc_node --module_path=/home/webintern/websites/St/node_modules/grpc/src/node/extension_binary/node-v64-linux-x64-glibc' (1)
+  node-pre-gyp ERR! stack     at ChildProcess.<anonymous> (/home/webintern/websites/St/node_modules/grpc/node_modules/node-pre-gyp/lib/util/compile.js:83:29)
+  node-pre-gyp ERR! stack     at ChildProcess.emit (events.js:189:13)
+  node-pre-gyp ERR! stack     at maybeClose (internal/child_process.js:970:16)
+  node-pre-gyp ERR! stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)
+  node-pre-gyp ERR! System Linux 4.4.0-142-generic
+  node-pre-gyp ERR! command "/home/webintern/.nvm/versions/node/v10.15.3/bin/node" "/home/webintern/websites/St/node_modules/grpc/node_modules/.bin/node-pre-gyp" "install" "--fallback-to-build" "--library=static_library"
+  node-pre-gyp ERR! cwd /home/webintern/websites/St/node_modules/grpc
+  node-pre-gyp ERR! node -v v10.15.3
+  node-pre-gyp ERR! node-pre-gyp -v v0.7.0
+  node-pre-gyp ERR! not ok 
+  Failed to execute '/home/webintern/.nvm/versions/node/v10.15.3/bin/node /home/webintern/websites/St/node_modules/node-gyp/bin/node-gyp.js build --fallback-to-build --library=static_library --module=/home/webintern/websites/St/node_modules/grpc/src/node/extension_binary/node-v64-linux-x64-glibc/grpc_node.node --module_name=grpc_node --module_path=/home/webintern/websites/St/node_modules/grpc/src/node/extension_binary/node-v64-linux-x64-glibc' (1)
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/backoff/backoff.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/channel/channel_args.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/channel/channel_stack.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/channel/channel_stack_builder.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/channel/connected_channel.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/channel/handshaker.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/channel/handshaker_factory.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/channel/handshaker_registry.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/compression/compression.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/compression/compression_internal.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/compression/message_compress.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/compression/stream_compression.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/compression/stream_compression_gzip.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/compression/stream_compression_identity.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/debug/stats.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/debug/stats_data.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/http/format_request.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/http/httpcli.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/http/parser.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/call_combiner.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/combiner.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/endpoint.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/endpoint_pair_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/endpoint_pair_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/endpoint_pair_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/error.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/ev_epoll1_linux.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/ev_epollex_linux.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/ev_epollsig_linux.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/ev_poll_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/ev_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/ev_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/exec_ctx.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/executor.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/fork_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/fork_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/gethostname_fallback.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/gethostname_host_name_max.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/gethostname_sysconf.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/iocp_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/iomgr.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/iomgr_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/iomgr_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/iomgr_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/is_epollexclusive_available.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/load_file.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/lockfree_event.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/network_status_tracker.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/polling_entity.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/pollset_set_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/pollset_set_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/pollset_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/pollset_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/resolve_address_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/resolve_address_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/resolve_address_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/resource_quota.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/sockaddr_utils.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/socket_factory_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/socket_mutator.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/socket_utils_common_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/socket_utils_linux.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/socket_utils_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/socket_utils_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/socket_utils_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/socket_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_client_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_client_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_client_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_server_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_server_utils_posix_common.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_server_utils_posix_ifaddrs.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_server_utils_posix_noifaddrs.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_server_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_server_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/tcp_windows.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/time_averaged_stats.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/timer_generic.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/timer_heap.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/timer_manager.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/timer_uv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/udp_server.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/unix_sockets_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/unix_sockets_posix_noop.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/wakeup_fd_cv.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/wakeup_fd_eventfd.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/wakeup_fd_nospecial.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/wakeup_fd_pipe.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/iomgr/wakeup_fd_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/json/json.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/json/json_reader.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/json/json_string.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/json/json_writer.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/slice/b64.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/slice/percent_encoding.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/slice/slice.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/slice/slice_buffer.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/slice/slice_hash_table.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/slice/slice_intern.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/slice/slice_string_helpers.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/api_trace.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/byte_buffer.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/byte_buffer_reader.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/call.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/call_details.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/call_log_batch.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/channel.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/channel_init.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/channel_ping.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/channel_stack_type.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/completion_queue.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/completion_queue_factory.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/event_string.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/lame_client.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/metadata_array.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/server.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/validate_metadata.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/version.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/bdp_estimator.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/byte_stream.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/connectivity_state.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/error_utils.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/metadata.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/metadata_batch.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/pid_controller.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/service_config.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/static_metadata.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/status_conversion.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/timeout_encoding.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/transport.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/transport/transport_op_string.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/debug/trace.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/server/secure/server_secure_chttp2.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/bin_decoder.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/bin_encoder.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/chttp2_plugin.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/chttp2_transport.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/flow_control.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/frame_data.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/frame_goaway.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/frame_ping.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/frame_rst_stream.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/frame_settings.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/frame_window_update.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/hpack_encoder.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/hpack_parser.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/hpack_table.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/http2_settings.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/huffsyms.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/incoming_metadata.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/parsing.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/stream_lists.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/stream_map.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/varint.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/transport/writing.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/alpn/alpn.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/http/client/http_client_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/http/http_filters_plugin.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/http/message_compress/message_compress_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/http/server/http_server_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/http/httpcli_security_connector.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/context/security_context.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/composite/composite_credentials.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/credentials.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/credentials_metadata.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/fake/fake_credentials.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/google_default/credentials_generic.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/google_default/google_default_credentials.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/iam/iam_credentials.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/jwt/json_token.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/jwt/jwt_credentials.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/jwt/jwt_verifier.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/oauth2/oauth2_credentials.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/plugin/plugin_credentials.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/credentials/ssl/ssl_credentials.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/security_connector/security_connector.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/transport/client_auth_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/transport/lb_targets_info.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/transport/secure_endpoint.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/transport/security_handshaker.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/transport/server_auth_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/transport/tsi_error.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/security/util/json_util.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/lib/surface/init_secure.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/tsi/alts_transport_security.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/tsi/fake_transport_security.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/tsi/ssl_transport_security.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/tsi/transport_security_grpc.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/tsi/transport_security.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/tsi/transport_security_adapter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/server/chttp2_server.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/client/secure/secure_channel_create.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/backup_poller.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/channel_connectivity.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/client_channel.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/client_channel_factory.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/client_channel_plugin.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/connector.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/http_connect_handshaker.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/http_proxy.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy_factory.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy_registry.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/parse_address.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/proxy_mapper.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/proxy_mapper_registry.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/resolver.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/resolver_registry.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/retry_throttle.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/subchannel.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/subchannel_index.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/uri_parser.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/deadline/deadline_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/client/chttp2_connector.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/server/insecure/server_chttp2.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/server/insecure/server_chttp2_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/client/insecure/channel_create.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/chttp2/client/insecure/channel_create_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/inproc/inproc_plugin.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/transport/inproc/inproc_transport.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/client_load_reporting_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/grpclb.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/grpclb_channel_secure.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/grpclb_client_stats.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/load_balancer_api.o
+    CC(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy/grpclb/proto/grpc/lb/v1/load_balancer.pb.o
+    CC(target) Release/obj.target/grpc/deps/grpc/third_party/nanopb/pb_common.o
+    CC(target) Release/obj.target/grpc/deps/grpc/third_party/nanopb/pb_decode.o
+    CC(target) Release/obj.target/grpc/deps/grpc/third_party/nanopb/pb_encode.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/resolver/fake/fake_resolver.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy/subchannel_list.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/lb_policy/round_robin/round_robin.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/resolver/dns/c_ares/dns_resolver_ares.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_ev_driver_posix.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper_fallback.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/resolver/dns/native/dns_resolver.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/client_channel/resolver/sockaddr/sockaddr_resolver.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/load_reporting/server_load_reporting_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/load_reporting/server_load_reporting_plugin.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/census/grpc_context.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/max_age/max_age_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/message_size/message_size_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/workarounds/workaround_cronet_compression_filter.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/ext/filters/workarounds/workaround_utils.o
+    CXX(target) Release/obj.target/grpc/deps/grpc/src/core/plugin_registry/grpc_plugin_registry.o
+    AR(target) Release/obj.target/libgrpc.a
+    COPY Release/libgrpc.a
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/alloc.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/arena.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/atm.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/cpu_iphone.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/cpu_linux.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/cpu_posix.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/cpu_windows.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/env_linux.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/env_posix.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/env_windows.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/fork.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/host_port.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/log.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/log_android.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/log_linux.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/log_posix.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/log_windows.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/mpscq.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/murmur_hash.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/string.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/string_posix.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/string_util_windows.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/string_windows.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/sync.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/sync_posix.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/sync_windows.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/thd.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/thd_posix.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/thd_windows.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/time.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/time_posix.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/time_precise.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/time_windows.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/tls_pthread.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/tmpfile_msys.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/tmpfile_posix.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/tmpfile_windows.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/gpr/wrap_memcpy.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/profiling/basic_timers.o
+    CXX(target) Release/obj.target/gpr/deps/grpc/src/core/lib/profiling/stap_timers.o
+    AR(target) Release/obj.target/libgpr.a
+    COPY Release/libgpr.a
+    CXX(target) Release/obj.target/grpc_node/ext/byte_buffer.o
+    CXX(target) Release/obj.target/grpc_node/ext/call.o
+    CXX(target) Release/obj.target/grpc_node/ext/call_credentials.o
+    CXX(target) Release/obj.target/grpc_node/ext/channel.o
+    CXX(target) Release/obj.target/grpc_node/ext/channel_credentials.o
+    CXX(target) Release/obj.target/grpc_node/ext/completion_queue.o
+    CXX(target) Release/obj.target/grpc_node/ext/node_grpc.o
+    CXX(target) Release/obj.target/grpc_node/ext/server.o
+    CXX(target) Release/obj.target/grpc_node/ext/server_credentials.o
+    CXX(target) Release/obj.target/grpc_node/ext/slice.o
+    CXX(target) Release/obj.target/grpc_node/ext/timeval.o
+    SOLINK_MODULE(target) Release/obj.target/grpc_node.node
+    COPY Release/grpc_node.node
+    COPY /home/webintern/websites/St/node_modules/grpc/src/node/extension_binary/node-v64-linux-x64-glibc/grpc_node.node
+    TOUCH Release/obj.target/action_after_build.stamp
+  make: выход из каталога «/home/webintern/websites/St/node_modules/grpc/build»
+  gyp info ok
       at ProcessTermError.MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
       at new ProcessTermError (/usr/local/lib/node_modules/yarn/lib/cli.js:226:113)
       at ChildProcess.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:30281:17)
-      at ChildProcess.emit (events.js:159:13)
-      at maybeClose (internal/child_process.js:943:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:220:5)
+      at ChildProcess.emit (events.js:189:13)
+      at maybeClose (internal/child_process.js:970:16)
+      at Socket.stream.socket.on (internal/child_process.js:389:11)
+      at Socket.emit (events.js:189:13)
+      at Pipe._handle.close (net.js:597:12)

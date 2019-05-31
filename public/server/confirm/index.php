@@ -35,16 +35,18 @@ $mailer = new Mailer();
             if($sign===$signature) {
 
             $payData = json_decode(base64_decode($data), true);
-                $updates = [
-                    'orders/' . $payData['order_id'] . '/pay_status' => $payData['status'],
-                    'orders/' . $payData['order_id'] . '/dateUpdate' => date("Y-m-d H:i:s"),
-                    'ordersVersion/' . $payData['order_id'] . '/ver' => md5(time()),
-                    'versionAdmin'=>md5(time())
-                ];
-                $reference = $db->getReference('orders/' . $payData['order_id']);
-                if($reference->getValue()) {
-                    $db->getReference()// this is the root reference
-                    ->update($updates);
+                if(isset($payData['order_id']) && isset($payData['status'])) {
+                    $updates = [
+                        'orders/' . $payData['order_id'] . '/pay_status' => $payData['status'],
+                        'orders/' . $payData['order_id'] . '/dateUpdate' => date("Y-m-d H:i:s"),
+                        'ordersVersion/' . $payData['order_id'] . '/ver' => md5(time()),
+                        'versionAdmin' => md5(time())
+                    ];
+                    $reference = $db->getReference('orders/' . $payData['order_id']);
+                    if ($reference->getValue()) {
+                        $db->getReference()// this is the root reference
+                        ->update($updates);
+                    }
                 }
             }
         }

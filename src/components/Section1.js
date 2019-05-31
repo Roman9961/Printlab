@@ -72,7 +72,7 @@ class Section1 extends React.Component{
                             'currency': 'UAH',
                             'description': 'заказ наклеек',
                             'order_id': `${generatedKey}`,
-                            'server_url': 'https://stikers.okprint.com.ua/server/confirm/index.php',
+                            'server_url': 'https://printlab.biz.ua/server/confirm/index.php',
                             'version': '3'
                         };
 
@@ -1313,7 +1313,9 @@ class Section1 extends React.Component{
                                         <div className="modal-block modal-block--radio">
                                             <div className="modal-block__content modal-block__content--button">
                                                 <div className="modal-block__content_item">
-                                                        <a rel="nofollow" className="button button--design" onClick={()=>{this.props.handleBookmark({
+                                                        <a rel="nofollow" className="button button--design" onClick={()=>{
+                                                            gtag('event', 'Отправить', {'event_category': 'Кнопка', 'event_label': 'Перейти к дизайну'});
+                                                            this.props.handleBookmark({
                                                             print:false,
                                                             design:true,
                                                             deliver:false
@@ -1581,7 +1583,9 @@ class Section1 extends React.Component{
                                                     })}}><div>Назад</div></a>
                                                 </div>
                                                 <div className="modal-block__content_item">
-                                                    <a rel="nofollow" className="button button--design button--modal" onClick={()=>{this.props.handleBookmark({
+                                                    <a rel="nofollow" className="button button--design button--modal" onClick={()=>{
+                                                        gtag('event', 'Отправить', {'event_category': 'Кнопка', 'event_label': 'Оформить заказ1'} );
+                                                        this.props.handleBookmark({
                                                         print:false,
                                                         design:false,
                                                         deliver:true
@@ -1825,8 +1829,8 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <span>Самовывоз</span>
-                                                <a target="_blank" href="https://www.google.com.ua/maps/place/Okprint+%D1%86%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%B0+%D0%B4%D1%80%D1%83%D0%BA%D0%B0%D1%80%D0%BD%D1%8F,+%D0%A2%D0%9E%D0%92+%22%D0%9E%D0%9A%D0%9F%22/@50.434453,30.47855,17z/data=!3m1!4b1!4m5!3m4!1s0x40d4cc5bba581715:0x88f7cd84dcfec18c!8m2!3d50.434453!4d30.480744">
-                                                <div className="modal-block__content_item__description">г. Киев, ул. Патриарха Мстислава Скрипника, 40</div></a>
+                                                <a target="_blank" href="https://www.google.com.ua/maps/place/%D0%B2%D1%83%D0%BB%D0%B8%D1%86%D1%8F+%D0%A1%D0%BE%D0%BB%D0%BE%D0%BC'%D1%8F%D0%BD%D1%81%D1%8C%D0%BA%D0%B0,+5,+120,+%D0%9A%D0%B8%D1%97%D0%B2,+02000/@50.4291077,30.4728771,17z/data=!3m1!4b1!4m5!3m4!1s0x40d4cec097a3ebdf:0x851409c29a5bffd5!8m2!3d50.4291077!4d30.4750658?hl=ru">
+                                                <div className="modal-block__content_item__description">г. Киев, ул. Соломенская, 5, оф.120</div></a>
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
@@ -2071,7 +2075,11 @@ class Section1 extends React.Component{
                                         <div className="modal-block__content_item">
                                             <div
                                                 className="button button--design button--modal"
-                                                onClick={this.validateForm}
+                                                onClick={()=>{
+                                                    gtag('event', 'Отправить', {'event_category': 'Кнопка', 'event_label': 'Оформить заказ2'} );
+                                                        this.validateForm()
+                                                    }
+                                                }
                                             >
                                                 {!this.state.isEditOrder?'Оформить заказ':'Сохранить правки'}
                                             </div>

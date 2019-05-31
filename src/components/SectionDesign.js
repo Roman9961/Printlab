@@ -40,7 +40,7 @@ class SectionDesign extends React.Component{
                                            Для вас мы разработаем индивидуальный дизайн наклеек.
                                            Цена - от 400 ₴.
                                        </div>
-                                       <a href="javascript:;"  rel="nofollow" className="button button--design" onClick={()=>{gtag('event', 'Заказать', {'event_category': 'Кнопка','event_label' : 'Дизайн'}); this.props.handleModal()}}>Заказать</a>
+                                       <a href="javascript:;"  rel="nofollow" className="button button--design" onClick={()=>{gtag('event', 'Отправить', {'event_category': 'Кнопка', 'event_label': 'Заказать дизайн'} ); this.props.handleModal()}}>Заказать</a>
                                    </div>
                                </div>
                            </div>

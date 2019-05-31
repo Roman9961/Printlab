@@ -36,6 +36,12 @@ class FastCalculator extends React.Component{
             simple:'Простые формы',
             hard:'Сложные формы',
             roll:'Рулонная цифровая печать'
+        },
+        ga_title:{
+            rectangle:'Наклейки прямоугольные',
+            simple:'Наклейки простой формы',
+            hard:'Наклейки сложной формы',
+            roll:'Рулонная цифровая печать'
         }
     };
     componentDidMount(){
@@ -318,7 +324,7 @@ class FastCalculator extends React.Component{
                             <span>{this.state.calcProp.price}</span><span> грн</span>
                         </div>
                     </div>
-                    <div className="express-calculator__basket" onClick={()=>{gtag('event', 'В корзину', {'event_category': 'Кнопка','event_label' : this.state.title[this.props.form]});this.props.handleModal(this.state.calcProp)}}>
+                    <div className="express-calculator__basket" onClick={()=>{gtag('event','Отправить', {'event_category': 'Кнопка', 'event_label':this.state.ga_title[this.props.form]});this.props.handleModal(this.state.calcProp)}}>
                         <img src="images/basket.svg" alt=""/>
                     </div>
                 </div>

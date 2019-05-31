@@ -63,9 +63,9 @@ class SectionPostPrint extends React.Component{
                                        <a className="info info--lamination info--postprint" data-for="lamination" data-tip />
                                        <ReactTooltip className="tooltip_custom" id="lamination" type="light" globalEventOff={ isMobile ? 'touchstart' : undefined }>
                                            <div className="tooltip__container">
-                                               <div className="tooltip__description">Ламинирование - это покрытие изделия пленкой. Ламинирование нужно для защиты изделия от внешних воздействий - царапин, влаги, надписей.
-                                                   Главный недостаток ламинирования - нельзя частично заламинировать изделие.
-                                                   Мы ламинируем изделия горячим способом с одной или двух сторон.</div>
+                                               <div className="tooltip__description">Ламинирование - это покрытие изделия пленкой. Используется для защиты поверхности от внешних воздействий - царапин, влаги, надписей.
+                                                   Главный недостаток этой технологии - нельзя выборочно заламинировать элементы, только все изделие целиком.
+                                                   Мы ламинируем наклейки горячим способом с одной или двух сторон.</div>
                                            </div>
                                        </ReactTooltip>
 

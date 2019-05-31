@@ -160,7 +160,7 @@ class Main extends React.Component{
                     <SectionLayoutProps/>
                     <SectionBase state={ this.state.stickers }/>
                     <SectionPostPrint/>
-                    <SectionQuestions/>
+                    {/*<SectionQuestions/>*/}
                     <SectionFeedback  handleModal = {this.handleModal}/>
                     <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}  editOrder ={{}}/>
                     <ModalDesign isOpen = {this.state.modalDesign} handleModal = {handleModalDesign}/>

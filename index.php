@@ -5,7 +5,7 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 require '../../../vendor/autoload.php';
 
-$serviceAccount = ServiceAccount::fromJsonFile('./../../../config/stickers-9757a-firebase-adminsdk-oe4js-eb703f6cb4.json');
+$serviceAccount = ServiceAccount::fromJsonFile('./../../../config/printlab-cda25-firebase-adminsdk-u4q60-8ae915f183.json');
 
 $filename = date('Y-m-d H-i-s').'.json';
 $backup_dir = getcwd() . '/../../../backups/';
