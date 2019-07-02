@@ -44,8 +44,7 @@ class ExpressCalculation extends React.Component{
                                         handleModal={this.props.handleModal}/>
                         <FastCalculator form="hard" calculator={this.state.calculator}
                                         handleModal={this.props.handleModal}/>
-                        <FastCalculator form="roll" calculator={this.state.calculator}
-                                        handleModal={this.props.handleModal}/>
+                  
                     </div>
                 </div>
             ):'';

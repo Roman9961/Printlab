@@ -562,6 +562,9 @@ class Section1 extends React.Component{
     }
 
     restrictions = (calcProp)=>{
+        if(calcProp.basis_param=='transparent'){
+            calcProp.print_time='4'
+        }
         if(calcProp.basis=='Бумажная'){
             calcProp.basis_param = 'white';
         }
@@ -626,12 +629,81 @@ class Section1 extends React.Component{
         if(calcProp.quantity>9999999){
             calcProp.quantity = 9999999;
         }
+
+        if(calcProp.form === 'Рулонная'){
+            if(parseInt(calcProp.margin)<3){
+                this.state.range=3;
+            }else if(parseInt(calcProp.margin)>500){
+                this.state.range=500;
+            }else if(isNaN(parseInt(calcProp.margin, 10))){
+               this.state.range=3;
+           }else{
+                this.state.range=parseInt(calcProp.margin);
+            }
+            if( calcProp.width>980){
+                calcProp.width =980;
+            }
+            if( calcProp.height>316){
+                calcProp.height =316;
+            }
+        }else if(calcProp.basis_param == 'transparent'){
+            if( calcProp.width>429){
+                calcProp.width =429;
+            }
+            if( calcProp.height>290){
+                calcProp.height =290;
+            }
+        }else{
+            this.state.range=4;
+            if(calcProp.form=='Прямоугольная'){
+                if( calcProp.width>440){
+                    calcProp.width =440;
+                }
+                if( calcProp.height>310){
+                    calcProp.height =310;
+                }
+            }else{
+                if( calcProp.width>378){
+                    calcProp.width =378;
+                }
+                if( calcProp.height>278){
+                    calcProp.height =278;
+                }
+            }
+            if(calcProp.cut_form=='rectangle'){
+                if( calcProp.width<40 || calcProp.height<40){
+                    calcProp.cut_form='simple'
+                }
+            }
+        }
+
+        if(calcProp.basis_param == 'transparent'){
+           if( calcProp.width>429){
+               calcProp.width =429;
+           }
+           if( calcProp.height>290){
+               calcProp.height =290;
+           }
+       }
+        if( calcProp.width<3 ){
+            calcProp.width=3;
+        }
+        if( calcProp.height<3 ){
+            calcProp.height=3;
+        }
+        if( calcProp.quantity<1 ){
+            calcProp.quantity=1;
+        }
+
         return calcProp;
     }
 
     updatecalcProp =  (key, value) =>{
         let calcProp = {...this.state.calcProp};
         calcProp[key] = value;
+        if(calcProp[key]=='transparent' && !calcProp.lamination){
+            calcProp.lamination='gloss';
+        }
         calcProp = this.restrictions(calcProp);
         this.setState((state)=>({
             ...state,
@@ -652,54 +724,7 @@ class Section1 extends React.Component{
 
          calcProp[key] = value;
          calcProp = this.restrictions(calcProp);
-         if(calcProp.form === 'Рулонная'){
-             if(parseInt(calcProp.margin)<3){
-                 this.state.range=3;
-             }else if(parseInt(calcProp.margin)>500){
-                 this.state.range=500;
-             }else if(isNaN(parseInt(calcProp.margin, 10))){
-                this.state.range=3;
-            }else{
-                 this.state.range=parseInt(calcProp.margin);
-             }
-             if( calcProp.width>980){
-                 calcProp.width =980;
-             }
-             if( calcProp.height>316){
-                 calcProp.height =316;
-             }
-         }else{
-             this.state.range=4;
-             if(calcProp.form=='Прямоугольная'){
-                 if( calcProp.width>440){
-                     calcProp.width =440;
-                 }
-                 if( calcProp.height>310){
-                     calcProp.height =310;
-                 }
-             }else{
-                 if( calcProp.width>378){
-                     calcProp.width =378;
-                 }
-                 if( calcProp.height>278){
-                     calcProp.height =278;
-                 }
-             }
-             if(calcProp.cut_form=='rectangle'){
-                 if( calcProp.width<40 || calcProp.height<40){
-                     calcProp.cut_form='simple'
-                 }
-             }
-         }
-         if( calcProp.width<3 ){
-             calcProp.width=3;
-         }
-         if( calcProp.height<3 ){
-             calcProp.height=3;
-         }
-         if( calcProp.quantity<1 ){
-             calcProp.quantity=1;
-         }
+         
          calcProp.margin = parseInt(calcProp.margin);
 
          this.setState((state)=>({
@@ -972,7 +997,7 @@ class Section1 extends React.Component{
                                     <div className="modal-block__title">Форма наклейки:</div>
                                     <div className="modal-block__content">
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-01" className= {`${this.state.calcProp.form=='Прямоугольная'?'active':''}`}>
+                                            <label htmlFor="field_profile-01" className= {`${this.state.calcProp.form=='Прямоугольная'?'active':''} short`}>
                                                 <input className="radio-input" type="radio" name="form" id="field_profile-01" value="Прямоугольная" onClick={this.handleChange}/>
                                                 <Transition in={this.state.calcProp.form=='Прямоугольная'} timeout={200}>
                                                     {status=>(
@@ -984,7 +1009,7 @@ class Section1 extends React.Component{
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-02" className= {`${this.state.calcProp.form=='Простая форма'?'active':''}`}>
+                                            <label htmlFor="field_profile-02" className= {`${this.state.calcProp.form=='Простая форма'?'active':''} short`}>
                                                 <input className="radio-input" type="radio" name="form" id="field_profile-02" value="Простая форма" onClick={this.handleChange}/>
                                                 <Transition in={this.state.calcProp.form=='Простая форма'} timeout={200}>
                                                     {status=>(
@@ -996,7 +1021,7 @@ class Section1 extends React.Component{
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-03" className= {`${this.state.calcProp.form=='Сложная форма'?'active':''}`}>
+                                            <label htmlFor="field_profile-03" className= {`${this.state.calcProp.form=='Сложная форма'?'active':''} short`}>
                                                 <input className="radio-input" type="radio" name="form" id="field_profile-03" value="Сложная форма" onClick={this.handleChange}/>
                                                 <Transition in={this.state.calcProp.form=='Сложная форма'} timeout={200}>
                                                     {status=>(
@@ -1007,18 +1032,7 @@ class Section1 extends React.Component{
                                                 <span>Наклейки сложной формы</span>
                                             </label>
                                         </div>
-                                        <div className="modal-block__content_item">
-                                            <label htmlFor="field_profile-04" className= {`${this.state.calcProp.form=='Рулонная'?'active':''}`}>
-                                                <input className="radio-input" type="radio" name="form" id="field_profile-04" value="Рулонная" onClick={this.handleChange}/>
-                                                <Transition in={this.state.calcProp.form=='Рулонная'} timeout={200}>
-                                                    {status=>(
-                                                        <div className={`modal__check-icon--form ${status}`}></div>
-                                                    )}
-                                                </Transition>
-                                                <div className="modal-block__content_item__icon--roll modal-block__content_item__icon"></div>
-                                                <span>Рулонная цифровая печать</span>
-                                            </label>
-                                        </div>
+                                    
                                     </div>
                                     </div>
                                 </div>
@@ -1290,18 +1304,21 @@ class Section1 extends React.Component{
                                                         <span>Несрочная печать - 4 дня</span>
                                                     </label>
                                                 </div>
-                                                <div className="modal-block__content_item">
-                                                    <label htmlFor="field_profile-19" className= {`${this.state.calcProp.print_time=='2'?'active':''}`}>
-                                                        <input className="radio-input" type="radio" name="print_time" id="field_profile-19" value="2" onClick={this.handleChange}/>
-                                                        <Transition in={this.state.calcProp.print_time=='2'} timeout={200}>
-                                                            {status=>(
-                                                                <div className={`modal__check-icon--form ${status}`}></div>
-                                                            )}
-                                                        </Transition>
-                                                        <div className="modal-block__content_item__icon--paper modal-block__content_item__icon"></div>
-                                                        <span>Срочная печать - 2 дня (+ 20%)</span>
-                                                    </label>
-                                                </div>
+                                                {this.state.calcProp.basis_param!='transparent' &&(
+                                                    <div className="modal-block__content_item">
+                                                        <label htmlFor="field_profile-19" className= {`${this.state.calcProp.print_time=='2'?'active':''}`}>
+                                                            <input className="radio-input" type="radio" name="print_time" id="field_profile-19" value="2" onClick={this.handleChange}/>
+                                                            <Transition in={this.state.calcProp.print_time=='2'} timeout={200}>
+                                                                {status=>(
+                                                                    <div className={`modal__check-icon--form ${status}`}></div>
+                                                                )}
+                                                            </Transition>
+                                                            <div className="modal-block__content_item__icon--paper modal-block__content_item__icon"></div>
+                                                            <span>Срочная печать - 2 дня (+ 20%)</span>
+                                                        </label>
+                                                    </div>
+                                                )}
+                                                
                                             </div>
                                         </div>
                                     </div>

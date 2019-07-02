@@ -92,7 +92,7 @@ const Header = (props) => (
                         <a href="javascript:;" rel="nofollow" data-scrollto="header" className="logo"><img
                             alt="Цифровая печать" title="Цифровая печать" src="images/logo.svg"/></a>
                     </div>
-                    <div className="col-md-6 col-md-offset-1 col-sm-7 col-sm-offset-0">
+                    <div className="col-md-7 col-md-offset-1 col-sm-7 col-sm-offset-0">
                         <div className="wrapper-flex">
                             <div className="header__contacts__phone__icon">
                                 <div className="phone-container" onClick={props.handleCallModal}>
@@ -104,7 +104,7 @@ const Header = (props) => (
                             </div>
                             <a href="javascript:;"  rel="nofollow" className="button button-green" onClick={()=>{ga('send', 'event', 'Кнопка', 'Посчитать наклейки', 'Pop-up посчитать'); props.handleModal({})}}>Посчитать наклейки</a>
                         </div>                </div>
-                    <div className="col-md-3 col-sm-2">
+                    <div className="col-md-2 col-sm-2">
                         <div className="menu-icon" onClick={(e)=>{
                             e.currentTarget.classList.toggle('open');
                         }}><i></i></div>

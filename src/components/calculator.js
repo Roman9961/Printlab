@@ -27,10 +27,10 @@ const calc = function (state) {
         _profitRoll = state.calculator._profitRoll,
         calcProp = state.calcProp,
         rectlistparams = state.calculator.rectlistparams,
-        circuitlistparams = state.calculator.circuitlistparams,
         colorfularr = state.calculator.colorfularr, //Price for print in colors
-        monochromearr = state.calculator.monochromearr; // Price for print in monochrome
-
+        monochromearr = state.calculator.monochromearr, // Price for print in monochrome
+        fastprintarr = state.calculator.fastprintarr;
+    let circuitlistparams = state.calculator.circuitlistparams;
     var formCalc = $('#sendorder'); //Form object
 
 
@@ -184,6 +184,9 @@ const calc = function (state) {
         if (!calcProp.width || !calcProp.height) {
             return;
         }
+        if(calcProp.basis_param == 'transparent') {
+            circuitlistparams = rectlistparams;
+        }
         if(calcProp.print_type === 'Листовая') {
             if (calcProp.width < 30 || calcProp.height < 30) {
                 switch (calcProp.form) {
@@ -239,6 +242,7 @@ const calc = function (state) {
                 }
             }
 
+            
 
             if (calcProp.type === 'Цветная') {
                 for (let i = 0; i < colorfularr.length; i++) {
@@ -269,7 +273,16 @@ const calc = function (state) {
                 }
 
             }
+            if (calcProp.basis_param == 'transparent') {
+                for (let i = 0; i < fastprintarr.length; i++) {
+                    let obj = fastprintarr[i];
+                    if (calcProp.numberoflist >= obj.min && calcProp.numberoflist <= obj.max) {
+                        printpricelist = obj.price;
+                        break;
+                    }
+                }
 
+            }
             printtotal = calcProp.numberoflist * printpricelist;
 
         return printtotal;

@@ -255,6 +255,9 @@
   padding: 2rem;
   width: 530px;
   height:144px;
+  &.short{
+    width: 350px;
+  }
   transition: all .3s ease-in-out;
   &.active{
     border: 4px solid #F79861;
@@ -272,18 +275,19 @@
   }
 
 }
+
 .modal-block__content_item label>*{
   @media (max-width: 767px){
     margin-left: 0;
     margin-right: 15px;
   }
-  margin: 2rem;
+  margin: 1rem;
 }
 .modal-block__content_item__checkbox-container{
   @media (max-width: 767px){
     width: 100%;
   }
-  width: 530px;
+  // width: 350px;
   display:flex;
   flex-direction:column;
   label.disable{
@@ -410,12 +414,10 @@
     height: 14px;
     padding:9px;
   }
-  width: 29px;
-  height: 29px;
   border-radius: 50%;
   border: 2px solid $light-blue;
   margin-right: $m-size;
-  padding:10px;
+  padding:12px;
   transition: all .3s ease-in-out;
   &.entering,&.exiting{
     @media (max-width: 767px){
@@ -447,11 +449,11 @@
 .modal__check-icon--form{
   &.entering,&.exiting{
     @media (max-width: 767px){
-      margin-left: 1.5em;
-      margin-right:0.6rem;
+      // margin-left: 1.5em;
+      margin-right:1.8rem;
     }
-    margin-left: 2.1em;
-    margin-right:3.2rem;
+    // margin-left: 2.1em;
+    margin-right:3.1rem;
   }
 }
 
