@@ -10,6 +10,7 @@
     "webpack-dev-server": "2.5.1"
   },
   "dependencies": {
+    "@babel/runtime": "^7.4.5",
     "autoprefixer-stylus": "0.14.0",
     "babel-cli": "6.24.1",
     "babel-core": "6.25.0",
