@@ -60,6 +60,7 @@ const calc = function (state) {
         totalpricehrn = totalprice * _exchangeRate;
         totalpriceprofit = addProfit(totalpricehrn);
         totalpricehrncom = totalpriceprofit + ((totalpriceprofit / 100) * 3);
+        
         if(calcProp.user_delivery_district){
             totalpricehrncom = totalpricehrncom + calculateDelivery();
         }
