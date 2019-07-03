@@ -1,7 +1,7 @@
 const path = require('path')
 const express = require('express')
 const app = express()
-const pablicPath = path.join(__dirname,'..', 'public')
+const pablicPath = path.join(__dirname,'../', './public')
 const port  = process.env.PORT || 3000
 
 app.use(express.static(pablicPath))
