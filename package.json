@@ -85,6 +85,8 @@
   "scripts": {
     "build:dev": "webpack",
     "build:prod": "webpack -p --env=prod",
-    "dev-server": "webpack-dev-server --content-base src --hot --inline"
+    "dev-server": "webpack-dev-server --content-base src --hot --inline",
+    "start": "node ./server/server.js",
+    "heroku-postbuild": "npm run build:prod"
   }
 }
