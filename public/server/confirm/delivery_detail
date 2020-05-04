@@ -1,0 +1,5 @@
+Способ доставки: %delivery_method%
+Имя получателя:	%delivery_name%
+Тел. получателя: %delivery_phone%
+Город: %delivery_city%
+Отделение НП: %delivery_warehouse%

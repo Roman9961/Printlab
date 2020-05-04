@@ -13,6 +13,7 @@ import 'blueimp-file-upload';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 class SectionDesignOnly extends React.Component{
+ 
     constructor() {
         super();
         this.validateForm = this.validateForm.bind(this);
@@ -141,6 +142,28 @@ class SectionDesignOnly extends React.Component{
         range:4,
         calculator : {
 
+        },
+        translations: {
+            ua:{
+                'title': 'Дизайн:',
+                'helper': 'Ми можемо створити індивідуальний дизайн наклейок з урахуванням всіх Ваших побажань. Наш оператор зв\'яжеться з Вами для уточнення всіх необхідних деталей. Також Ви можете завантажити приклад бажаного дизайну.',
+                'upload_button': 'Завантажити приклад',
+                'button': 'Оформити замовлення',
+                'upload_helper': '*сумарний обсяг файлів не повинен перевищувати 1Гб',
+                'name': 'Ваше ім\'я',
+                'email': 'Ваш email:',
+                'phone': 'Ваш телефон:'
+            },
+            ru:{
+                'title': 'Дизайн:',
+                'helper': 'Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей. Также Вы можете загрузить пример желаемого дизайна.',
+                'upload_button': 'Загрузить пример',
+                'button': 'Оформить заказ',
+                'upload_helper': '*cуммарный объем файлов не должен превышать 1Гб',
+                'name': 'Ваше имя:',
+                'email': 'Ваш email:',
+                'phone': 'Ваш телефон:'
+            }
         },
         calcProp:{
             "basis" : "Пластиковая",
@@ -350,6 +373,10 @@ class SectionDesignOnly extends React.Component{
 
 }
 
+    getTranslation(){
+        return this.state.translations[this.props.locale]
+    }
+
     render(){
         return (
     <section className="form-row">
@@ -365,13 +392,13 @@ class SectionDesignOnly extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal-grey">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--design">
-                                            <div className="modal-block__title">Дизайн:</div>
+                                            <div className="modal-block__title">{this.getTranslation().title}</div>
                                             <div className="modal-block__content modal-block__content--design">
 
                                                 <div className="modal-block__content_item design-only">
                                                     <div className={`file-upload-container`}>
                                                         <div className="modal-block__content_item__description">
-                                                            {this.state.files.length===0&&!this.state.fileError&&(<span>Мы можем создать индивидуальный дизайн наклеек с учетом всех Ваших пожеланий. Наш оператор перезвонит Вам для уточнения всех необходимых деталей.  Также Вы можете загрузить пример желаемого дизайна.</span>)}
+                                                            {this.state.files.length===0&&!this.state.fileError&&(<span>{this.getTranslation().helper}</span>)}
                                                             {this.state.files.length>0&&!this.state.fileError&&(
                                                                 this.state.files.map((file,key)=>{
                                                                     return <React.Fragment key={key}>
@@ -387,10 +414,10 @@ class SectionDesignOnly extends React.Component{
                                                         <label htmlFor="upload3" className="file-upload">
                                                             <div className="fileform">
                                                                 <div className="button button--design">
-                                                                    <span>Загрузить пример</span>
+                                                                    <span>{this.getTranslation().upload_button}</span>
                                                                 </div>
                                                                 <input className="upload"  id="upload3" type="file" name="files[]" multiple onClick={this.handleFiles}/>
-                                                                <div className="requirements-info">*cуммарный объем файлов не должен превышать 1Гб</div>
+                                                                <div className="requirements-info">{this.getTranslation().upload_helper}</div>
                                                             </div>
                                                         </label>
                                                             {this.state.jqXHR&&<Icon  size="2x" name="times" className="abort_upload" onClick={()=>{
@@ -419,7 +446,7 @@ class SectionDesignOnly extends React.Component{
                                         <div className="modal-block modal-block--radio">
                                             <div className="modal-block__content modal-block__content--order">
                                                 <div className="feedback-form__input-block">
-                                                    <label className="feedback-form__label" htmlFor="name">Ваше имя:</label>
+                                                    <label className="feedback-form__label" htmlFor="name">{this.getTranslation().name}</label>
                                                     <Textbox
                                                         classNameInput="validation_input"
                                                         classNameWrapper="validation_wrapper"
@@ -453,7 +480,7 @@ class SectionDesignOnly extends React.Component{
                                                 </div>
 
                                                 <div className="feedback-form__input-block">
-                                                    <label className="feedback-form__label" htmlFor="phone">Ваш телефон:</label>
+                                                    <label className="feedback-form__label" htmlFor="phone">{this.getTranslation().phone}</label>
                                                     <Textbox
                                                         classNameInput="validation_input"
                                                         classNameWrapper="validation_wrapper"
@@ -504,7 +531,7 @@ class SectionDesignOnly extends React.Component{
                                                 </div>
 
                                                 <div className="feedback-form__input-block">
-                                                    <label className="feedback-form__label" htmlFor="email">Ваш email:</label>
+                                                    <label className="feedback-form__label" htmlFor="email">{this.getTranslation().email}</label>
                                                     <Textbox
                                                         classNameInput="validation_input"
                                                         classNameWrapper="validation_wrapper"
@@ -548,7 +575,7 @@ class SectionDesignOnly extends React.Component{
                                                         className="button button--design button--modal"
                                                         onClick={this.validateForm}
                                                     >
-                                                        Оформить заказ
+                                                    {this.getTranslation().button}
                                                     </div>
                                                     <input type="submit" style={{ display: 'none' }} />
 

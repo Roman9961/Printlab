@@ -1,6 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { Redirect } from 'react-router-dom';
 import base from '../base';
@@ -48,6 +49,7 @@ class Admin extends React.Component{
             rollparams: 'Параметры рулонной печати',
             clear: 'Стоимость лака',
             colorprint:'Стоимость 4+0',
+            fastprint:'Стоимость Fastprint',
             colorprintwhite:'Стоимость 5+0',
             monochromeprint:'Стоимость 2+0',
             laminationGloss:'Глянцевая ламинация',
@@ -71,7 +73,6 @@ class Admin extends React.Component{
             context: this,
             asArray: true,
             then (admin) {
-                console.log(admin);
                 this.setState({
                     admin,
                 })
@@ -196,6 +197,7 @@ class Admin extends React.Component{
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator._profitRoll} tableName='_profitRoll' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.colorfularr} tableName='colorfularr' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.monochromearr} tableName='monochromearr' updateTable = {this.updateTable2}/>
+                    <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.fastprintarr} tableName='fastprint' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.laminationGloss} tableName='laminationGloss' updateTable = {this.updateTable2}/>
                     <AdminTable remoweRow = {this.remoweRow} newRow = {this.addNew} table={this.state.calculator.laminationMatt} tableName='laminationMatt' updateTable = {this.updateTable2}/>
                     <AdminTableMaterial table={this.state.calculator._materialPrice} tableName='_materialPrice' updateTable = {this.updateTable2}/>

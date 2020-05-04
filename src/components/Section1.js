@@ -72,11 +72,11 @@ class Section1 extends React.Component{
                             'currency': 'UAH',
                             'description': 'заказ наклеек',
                             'order_id': `${generatedKey}`,
-                            'server_url': 'https://printlab.biz.ua/server/confirm/index.php',
+                            'server_url': location.origin+'/server/confirm/index.php',
                             'version': '3'
                         };
 
-                        const dataL = JSON.stringify(data1);
+                        const dataL = btoa(unescape(encodeURIComponent(JSON.stringify(data1))));
 
                         const crypto = require('crypto');
                         let str = crypto.createHash('sha1').update(process.env.LIQPAY_PRIVATE_KEY + dataL + process.env.LIQPAY_PRIVATE_KEY);
@@ -163,11 +163,15 @@ class Section1 extends React.Component{
                         user: this.state.user
                     };
                     if (data.delivery.method == 'np') {
+                        let deliver = {
+                            city:this.state.np.city.value,
+                            warehouse:this.state.np.warehouse.value
+                        }
                         data = {
                             ...data,
                             delivery: {
                                 ...data.delivery,
-                                ...this.state.np
+                                ...deliver
                             }
                         }
                     }
@@ -279,11 +283,15 @@ class Section1 extends React.Component{
                 user: this.state.user
             };
             if (data.delivery.method == 'np') {
+                let deliver = {
+                    city:this.state.np.city.value,
+                    warehouse:this.state.np.warehouse.value
+                }
                 data = {
                     ...data,
                     delivery: {
                         ...data.delivery,
-                        ...this.state.np
+                        ...deliver
                     }
                 }
             }
@@ -364,7 +372,7 @@ class Section1 extends React.Component{
             id:null
         },
         np:{
-            city:'Киев',
+            city:{label:'Киев',value:'Киев'},
             warehouse:'1'
         },
         options:{
@@ -393,7 +401,236 @@ class Section1 extends React.Component{
         captcha:'',
         order: false,
         sameDelivery:true,
-        jqXHR:null
+        jqXHR:null,
+        translations: {
+            ua:{
+                'order_price': 'Сума замовлення:',
+                form:{
+                    title: 'Форма наклейки:',
+                    rect: 'Прямокутна (без заокруглених кутів)',
+                    simple: 'Наклейки простої форми',
+                    hard: 'Наклейки складної форми'
+                },
+                size:{
+                    title:'Розмір:',
+                    height: 'Висота, мм',
+                    width: 'Ширина, мм'
+                },
+                quantity: 'Кількість:',
+                color_print: 'Кольоровий друк (CMYK)',
+                mono_print: 'Чорно-білий друк',
+                material:{
+                    title: 'Матеріал основи:',
+                    paper: 'Самоклеючий папір',
+                    plastic: 'Самоклеюча плівка',
+                    transparent: 'Прозора плівка',
+                    white: 'Біла плівка',
+                    transparent_info: 'Для кращої якості друку на прозорій основі використовується УФ друк, попередньо друкується шар білої фарби (білила) для забезпечення більш насиченого основного зображення'
+                },
+                post_print:{
+                    title: 'Постдрукарська обробка:',
+                    matt: 'Матове ламінування',
+                    gloss: 'Глянцеве ламінування',
+                    info: 'Ламінуйте паперові наклейки, тоді вони довше збережуть товарний вигляд.'
+                },
+                deadline:{
+                    title: 'Термін виготовлення замовлення:',
+                    regular: 'Нетерміновий друк - 4 дня',
+                    fast: 'Терміновий друк - 2 дні (+ 20%)'
+                },
+                buttons:{
+                    design:'Перейти до дизайну',
+                    back: 'Назад',
+                    order: 'Оформити замовлення'
+                },
+                maket:{
+                    title:'Макет:',
+                    maket1:{
+                        title: 'Є макет з контуром порізки',
+                        info: 'Виберіть один або декілька файлів макетів і порізки для завантаження',
+                        button: 'Завантажити макет і контур',
+                        helper: '*cумарний обсяг файлів не повинен перевищувати 1Гб'
+                    },
+                    maket2:{
+                        title: 'Є макет, але потрібен контур порізки',
+                        forms:{
+                            rect: 'Прямокутний',
+                            custom_title: 'Скруглені кутки:',
+                            rad35: 'Радіус 3,5 мм',
+                            rad50: 'Радіус 5 мм',
+                            rad100: 'Радіус 10 мм',
+                            oval: 'Овал',
+                            chopped: '“Рублений” +100 грн',
+                            star: 'Зірка',
+                            cloud: '“Хмаринка” + 100 грн',
+                            circle: 'Коло',
+                            accent: '“Акцент” +100 грн'
+                        },
+                        button: 'Завантажити макет',
+                        helper: '*cумарний обсяг файлів не повинен перевищувати 1Гб'
+                    },
+                    maket3:{
+                        title: 'Немає макету, потрібен дизайн',
+                        info: 'Розробимо індивідуальний дизайн наклейок з урахуванням ваших побажань. Наш співробітник зв\'яжеться з вами для уточнення деталей. Вартість дизайну від 400 грн. Ви можете завантажити приклади через форму.',
+                        button: 'Завантажити приклад',
+                        helper: '*cумарний обсяг файлів не повинен перевищувати 1Гб'
+                    }
+                },
+                'name': 'Ім\'я:',
+                'email': 'email:',
+                'phone': 'Телефон:',
+                'message': 'Коментар:',
+                payment:{
+                    title: 'Оплата:',
+                    liq: 'Оплата LiqPay (Visa / MasterCard, Приват24, Термінал)',
+                    cash: 'Безготівковий розрахунок (для юр.осіб + 5%)'
+                },
+                delivery:{
+                    title: 'Спосіб доставки:',
+                    self:{
+                        title: 'Самовивіз',
+                        text: 'м. Київ, вул. Солом\'янська, 5, оф.120'
+                    },
+                    np: {
+                        title:'Нова Пошта (оплата за тарифами Нової Пошти)',
+                        form:{
+                            name:'ПІБ одержувача:',
+                            phone:'Телефон одержувача:',
+                            city:'Населений пункт:',
+                            number:'Відділення Нової Пошти:',  
+                        }
+                    },
+                    kiev: {
+                        title: 'Доставка по Києву ',
+                        text: '+50 грн, в будь-яку точку міста'
+                    }
+                },
+                terms:{
+                    text:'*відправляючи замовлення, Ви приймаєте ',
+                    link: 'Договір надання послуг'
+                },
+                order_popup:{
+                    order: 'Ваше замовлення',
+                    confirm: 'прийнято',
+                    email_info: 'Дані про замовлення були відправлені на пошту',
+                    info: 'Наші співробітники зв\'яжуться з вами для узгодження деталей'
+                }
+            },
+            ru:{
+                'order_price': 'Сумма заказа:',
+                form:{
+                    title: 'Форма наклейки:',
+                    rect: 'Прямоугольная (без скругленных углов)',
+                    simple: 'Наклейки простой формы',
+                    hard: 'Наклейки сложной формы'
+                },
+                size:{
+                    title:'Размер:',
+                    height: 'Высота, мм',
+                    width: 'Ширина, мм'
+                },
+                quantity: 'Количество:',
+                color_print: 'Цветная печать (CMYK)',
+                mono_print: 'Черно-белая печать',
+                material:{
+                    title: 'Материал основы:',
+                    paper: 'Самоклеящаяся бумага',
+                    plastic: 'Самоклеящаяся пленка',
+                    transparent: 'Прозрачная пленка',
+                    white: 'Белая пленка',
+                    transparent_info: 'Для лучшего качества печати на прозрачной основе используется УФ печать, предварительно печатается слой белой краски (белила) для обеспечения более насыщенного основного изображения'
+                },
+                post_print:{
+                    title: 'Постпечатная обработка:',
+                    matt: 'Матовое ламинирование',
+                    gloss: 'Глянцевое ламинирование',
+                    info: 'Ламинируйте бумажные наклейки, тогда они дольше сохранят товарный вид.'
+                },
+                deadline:{
+                    title: 'Срок изготовления заказа:',
+                    regular: 'Несрочная печать - 4 дня',
+                    fast: 'Срочная печать - 2 дня (+ 20%)'
+                },
+                buttons:{
+                    design:'Перейти к дизайну',
+                    back: 'Назад',
+                    order: 'Оформить заказ'
+                },
+                maket:{
+                    title:'Макет:',
+                    maket1:{
+                        title: 'Есть макет с контуром порезки',
+                        info: 'Выберите один или несколько файлов макетов и порезки для загрузки',
+                        button: 'Загрузить макет и контур',
+                        helper: '*cуммарный объем файлов не должен превышать 1Гб'
+                    },
+                    maket2:{
+                        title: 'Есть макет, но нужен контур порезки',
+                        forms:{
+                            rect: 'Прямоугольный',
+                            custom_title: 'Скругленные углы:',
+                            rad35: 'Радиус 3,5 мм',
+                            rad50: 'Радиус 5 мм',
+                            rad100: 'Радиус 10 мм',
+                            oval: 'Овал',
+                            chopped: '“Рубленый” +100 грн',
+                            star: 'Звезда',
+                            cloud: '“Облако” + 100 грн',
+                            circle: 'Круг',
+                            accent: '“Акцент” +100 грн'
+                        },
+                        button: 'Загрузить макет',
+                        helper: '*cуммарный объем файлов не должен превышать 1Гб'
+                    },
+                    maket3:{
+                        title: 'Нет макета, нужен дизайн',
+                        info: 'Разработаем индивидуальный дизайн наклеек с учетом ваших пожеланий. Наш сотрудник свяжется с вами для уточнения деталей. Cтоимость дизайна -- от 400 грн. Вы можете загрузить исходные материалы или примеры через форму.',
+                        button: 'Загрузить пример',
+                        helper: '*cуммарный объем файлов не должен превышать 1Гб'
+                    }
+                },
+                'name': 'Имя:',
+                'email': 'email:',
+                'phone': 'Телефон:',
+                'message': 'Комментарий:',
+                payment:{
+                    title: 'Оплата:',
+                    liq: 'Оплата LiqPay (Visa/MasterCard, Приват24, Терминал)',
+                    cash: 'Безналичный расчет (для юр.лиц + 5%)'
+                },
+                delivery:{
+                    title: 'Способ доставки:',
+                    self:{
+                        title: 'Самовывоз',
+                        text: 'г. Киев, ул. Соломенская, 5, оф.120'
+                    },
+                    np: {
+                        title:'Новая Почта (оплата по тарифам Новой Почты)',
+                        form:{
+                            name:'ФИО получателя:',
+                            phone:'Телефон получателя:',
+                            city:'Населенный пункт:',
+                            number:'Отделение Новой почты:',
+
+                        }
+                    }, 
+                    kiev: {
+                        title: 'Доставка по Киеву',
+                        text: '+50 грн, в любую точку города'
+                    }
+                },
+                terms:{
+                    text:'*отправляя заказ, Вы принимаете ',
+                    link: 'Договор оказания услуг'
+                },
+                order_popup:{
+                    order: 'Ваш заказ',
+                    confirm: 'принят',
+                    email_info: 'Данные о заказе были отправлены на почту',
+                    info: 'Наши сотрудники свяжутся с вами для уточнения деталей'
+                }
+            }
+        },
     };
     componentDidMount(){
         this.ref = base.fetch('version', {
@@ -479,7 +716,7 @@ class Section1 extends React.Component{
                         "modelName": "Address",
                         "calledMethod": "getCities",
                         "methodProperties": { },
-                        "apiKey": "0252bfcbba5e10fda4f7e7cdfb497458"
+                        "apiKey": "ce48d83e5a77751eeec2586ebc99b547"
                     })
             });
             const content = await rawResponse.json();
@@ -517,7 +754,7 @@ class Section1 extends React.Component{
                         "methodProperties": {
                             "CityName": "Киев",
                         },
-                        "apiKey": "0252bfcbba5e10fda4f7e7cdfb497458"
+                        "apiKey": "ce48d83e5a77751eeec2586ebc99b547"
                     })
             });
             const content = await rawResponse.json();
@@ -535,6 +772,10 @@ class Section1 extends React.Component{
             });
             this.setState(state=>({
                 ...state,
+                np:{
+                    ...state.np,
+                    warehouse: warehousesOptions[0]
+                },
                 options:{
                     ...state.options,
                     warehouses:warehousesOptions
@@ -698,11 +939,15 @@ class Section1 extends React.Component{
         return calcProp;
     }
 
-    updatecalcProp =  (key, value) =>{
+    updatecalcProp =  (key, value, oldValue) =>{
+        console.log(key,value, oldValue);
         let calcProp = {...this.state.calcProp};
         calcProp[key] = value;
         if(calcProp[key]=='transparent' && !calcProp.lamination){
             calcProp.lamination='gloss';
+        }
+        if((key=='basis_param' && oldValue=='transparent') || key=='basis'){
+            calcProp.lamination='';
         }
         calcProp = this.restrictions(calcProp);
         this.setState((state)=>({
@@ -767,7 +1012,7 @@ class Section1 extends React.Component{
                    event.currentTarget.value :
                    (event.currentTarget.name === 'lamination' && !event.currentTarget.checked)?
                        event.currentTarget.checked:
-                    event.currentTarget.value);
+                    event.currentTarget.value, this.state.calcProp[event.currentTarget.name]);
            const calculator = this.state;
        }
     };
@@ -792,7 +1037,7 @@ class Section1 extends React.Component{
     };
 
     selectHandleChange = async (value, key) => {
-        const id = value;
+        const id = value.value;
         if(key==='city') {
             (async() => {
                 const rawResponse = await fetch("https://api.novaposhta.ua/v2.0/json/", {
@@ -808,7 +1053,7 @@ class Section1 extends React.Component{
                             "methodProperties": {
                                 "CityName": id,
                             },
-                            "apiKey": "0252bfcbba5e10fda4f7e7cdfb497458"
+                            "apiKey": "ce48d83e5a77751eeec2586ebc99b547"
                         })
                 });
                 const content = await rawResponse.json();
@@ -826,6 +1071,10 @@ class Section1 extends React.Component{
                 });
                 this.setState(state=>({
                     ...state,
+                    np:{
+                        ...state.np,
+                        warehouse:warehousesOptions[0]
+                    },
                     options:{
                         ...state.options,
                         warehouses:warehousesOptions
@@ -833,7 +1082,7 @@ class Section1 extends React.Component{
                 }));
             })();
         }
-        await this.updateDeliveryProp(key, id);
+        await this.updateDeliveryProp(key, value);
     };
 
     handleFileupload = (e, data)=>{
@@ -935,7 +1184,7 @@ class Section1 extends React.Component{
                 for (let i = 0; i < data.files.length; i++) {
                     if (!(/\.(jpg|jpeg|png|pdf|ttf|tiff|tif|psd|cdr|ai|eps)$/i).test(data.files[i].name)) {
                         let b = document.createElement('b');
-                        let errorMessage = <span style={{wordBreak:'break-word'}}>Файл <b>{data.files[0].name}</b> имеет недопустимый формат</span>;
+                        let errorMessage = <span style={{wordBreak:'break-word'}}>Файл <b>{data.files[i].name}</b> имеет недопустимый формат</span>;
                         setState(errorMessage);
                         handleModal();
                         return false;
@@ -965,14 +1214,15 @@ class Section1 extends React.Component{
     };
 
     handleModal = ()=>{
-    this.setState(state=>({
-        ...state,
-        modal:!state.modal
-    }));
+        this.setState(state=>({
+            ...state,
+            modal:!state.modal
+        }));
+    }
 
-
-
-}
+    getTranslation(){
+        return this.state.translations[this.props.locale]
+    }
 
     render(){
         return (
@@ -980,7 +1230,7 @@ class Section1 extends React.Component{
         <div id="form-calculator" >
         <div className="close-popup btn-close-popup"><i className="icon-cross"></i></div>
         <div id="final-price-main" className="price-wrapper">
-            <div>Сумма заказа:</div>
+            <div>{this.getTranslation().order_price}</div>
             <span>{this.state.calcProp.price} грн</span>
         </div>
 
@@ -994,7 +1244,7 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal-grey">
                                 <div className="container container--modal-info">
                                     <div className="modal-block modal-block--radio">
-                                    <div className="modal-block__title">Форма наклейки:</div>
+                                    <div className="modal-block__title">{this.getTranslation().form.title}</div>
                                     <div className="modal-block__content">
                                         <div className="modal-block__content_item">
                                             <label htmlFor="field_profile-01" className= {`${this.state.calcProp.form=='Прямоугольная'?'active':''} short`}>
@@ -1005,7 +1255,7 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <div className="modal-block__content_item__icon modal-block__content_item__icon--rect"></div>
-                                                <span>Прямоугольная (без скругленных углов)</span>
+                                                <span>{this.getTranslation().form.rect}</span>
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
@@ -1017,7 +1267,7 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <div className="modal-block__content_item__icon modal-block__content_item__icon--simple"></div>
-                                                <span>Наклейки простой формы</span>
+                                                <span>{this.getTranslation().form.simple}</span>
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
@@ -1029,7 +1279,7 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <div className="modal-block__content_item__icon modal-block__content_item__icon--hard"></div>
-                                                <span>Наклейки сложной формы</span>
+                                                <span>{this.getTranslation().form.hard}</span>
                                             </label>
                                         </div>
                                     
@@ -1041,21 +1291,21 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal">
                                     <div className="container container--modal-input">
                                         <div className="modal-block">
-                                            <div className="modal-block__title">Размер:</div>
+                                            <div className="modal-block__title">{this.getTranslation().size.title}</div>
                                             <div className="modal-block__content modal-block__content--input">
                                                 <div className="modal-block__content_item modal-block__content_item--input">
                                                     <input className="number-input"  type="number" name="height" id="field_profile-05" value={this.state.calcProp.height} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?49000:438} onChange={this.handleInput} onBlur={this.handleBlur} placeholder="302"/>
-                                                    <span>Высота, мм</span>
+                                                    <span>{this.getTranslation().size.height}</span>
                                                 </div>
                                                 <div className="x-size"></div>
                                                 <div className="modal-block__content_item modal-block__content_item--input">
                                                     <input className="number-input" type="number" name="width" id="field_profile-06" value={this.state.calcProp.width} onChange={this.handleInput} onBlur={this.handleBlur} min="3" max={(this.state.calcProp.print_type === 'Рулонная')?1500:308}  placeholder="200"/>
-                                                    <span>Ширина, мм</span>
+                                                    <span>{this.getTranslation().size.width}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="modal-block">
-                                            <div className="modal-block__title">Количество:</div>
+                                            <div className="modal-block__title">{this.getTranslation().quantity}</div>
                                              <div className="modal-block__content modal-block__content--input">
                                                  <div className="modal-block__content_item modal-block__content_item--input">
                                                      <input className="number-input" type="number" name="quantity" id="field_profile-07" value={this.state.calcProp.quantity} onChange={this.handleChange} onBlur={this.handleBlur} min="0" max="99999" step="1" placeholder="21800"/>
@@ -1139,7 +1389,7 @@ class Section1 extends React.Component{
                                                             <div className={`modal__check-icon--form ${status}`}></div>
                                                         )}
                                                     </Transition>
-                                                    <span>Цветная печать (CMYK)</span>
+                                                    <span>{this.getTranslation().color_print}</span>
                                                 </label>
                                             </div>
                                             <div className="modal-block__content_item">
@@ -1150,7 +1400,7 @@ class Section1 extends React.Component{
                                                             <div className={`modal__check-icon--form ${status}`}></div>
                                                         )}
                                                     </Transition>
-                                                    <span>Черно-белая печать</span>
+                                                    <span>{this.getTranslation().mono_print}</span>
                                                 </label>
                                             </div>
                                         </div>
@@ -1162,7 +1412,7 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--radio">
-                                            <div className="modal-block__title">Материал основы:</div>
+                                            <div className="modal-block__title">{this.getTranslation().material.title}</div>
                                             <div className="modal-block__content">
                                                 <div className="modal-block__content_item">
                                                     <label htmlFor="field_profile-11" className= {`${this.state.calcProp.basis=='Бумажная'?'active':''}`}>
@@ -1173,7 +1423,7 @@ class Section1 extends React.Component{
                                                             )}
                                                         </Transition>
                                                         <div className="modal-block__content_item__icon--rect modal-block__content_item__icon"></div>
-                                                        <span>Самоклеящаяся бумага</span>
+                                                        <span>{this.getTranslation().material.paper}</span>
                                                     </label>
                                                 </div>
                                                 <div className="modal-block__content_item">
@@ -1185,7 +1435,7 @@ class Section1 extends React.Component{
                                                             )}
                                                         </Transition>
                                                         <div className="modal-block__content_item__icon--plastic modal-block__content_item__icon"></div>
-                                                        <span>Самоклеящаяся пленка</span>
+                                                        <span>{this.getTranslation().material.plastic}</span>
                                                     </label>
                                                 </div>
                                                 {this.state.calcProp.basis=='Пластиковая'&&(
@@ -1199,10 +1449,9 @@ class Section1 extends React.Component{
                                                                     )}
                                                                 </Transition>
                                                                 <div className="modal-block__content_item__icon--transparent modal-block__content_item__icon"></div>
-                                                                <span>Прозрачная пленка</span>
+                                                                <span>{this.getTranslation().material.transparent}</span>
                                                                 <div className="modal-block__content_item__description">
-                                                                    Для лучшего качества печати на прозрачной основе
-                                                                    используется рулонная цифровая или УФ печать, предварительно печатается слой белой краски (белила) для обеспечения более насыщенного основного изображения
+                                                                {this.getTranslation().material.transparent_info}
                                                                 </div>
                                                             </label>
                                                         </div>
@@ -1215,7 +1464,7 @@ class Section1 extends React.Component{
                                                                     )}
                                                                 </Transition>
                                                                 <div className="modal-block__content_item__icon--white modal-block__content_item__icon"></div>
-                                                                <span>Белая пленка</span>
+                                                                <span>{this.getTranslation().material.white}</span>
                                                             </label>
                                                         </div>
                                                     </React.Fragment>
@@ -1231,7 +1480,7 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal-grey">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--radio">
-                                            <div className="modal-block__title">Постпечатная обработка:</div>
+                                            <div className="modal-block__title">{this.getTranslation().post_print.title}</div>
                                             <div className="modal-block__content">
                                                 <div className="modal-block__content_item">
                                                     <div className="modal-block__content_item__checkbox-container">
@@ -1241,19 +1490,19 @@ class Section1 extends React.Component{
                                                                     <div className="modal-checkbox"></div>
                                                                 </div>
                                                                 <input type="checkbox" name="lamination" id="field_profile-16" value="matt" checked ={this.state.calcProp.lamination=='matt'}  onClick={this.handleChange}/>
-                                                                <div className="modal-checkbox__title">Матовое ламинирование</div>
+                                                                <div className="modal-checkbox__title">{this.getTranslation().post_print.matt}</div>
                                                             </label>
                                                             <label htmlFor="field_profile-15">
                                                             <div className= {`modal-block__content_item__checkbox ${this.state.calcProp.lamination=='gloss'?'active':''}`}>
                                                                 <div className="modal-checkbox"></div>
                                                             </div>
                                                             <input type="checkbox" name="lamination" id="field_profile-15" value="gloss" checked ={this.state.calcProp.lamination=='gloss'} onClick={this.handleChange}/>
-                                                            <div className="modal-checkbox__title">Глянцевое ламинирование</div>
+                                                            <div className="modal-checkbox__title">{this.getTranslation().post_print.gloss}</div>
                                                         </label>
                                                         </div>
                                                         <hr/>
                                                         <div className="modal-block__content_item__description">
-                                                            Ламинируйте бумажные наклейки, тогда они дольше сохранят товарный вид.
+                                                        {this.getTranslation().post_print.info}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1290,7 +1539,7 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--radio">
-                                            <div className="modal-block__title">Срок изготовления заказа:</div>
+                                            <div className="modal-block__title">{this.getTranslation().deadline.title}</div>
                                             <div className="modal-block__content">
                                                 <div className="modal-block__content_item">
                                                     <label htmlFor="field_profile-20" className= {`${this.state.calcProp.print_time=='4'?'active':''}`}>
@@ -1301,7 +1550,7 @@ class Section1 extends React.Component{
                                                             )}
                                                         </Transition>
                                                         <div className="modal-block__content_item__icon--plastic modal-block__content_item__icon"></div>
-                                                        <span>Несрочная печать - 4 дня</span>
+                                                        <span>{this.getTranslation().deadline.regular}</span>
                                                     </label>
                                                 </div>
                                                 {this.state.calcProp.basis_param!='transparent' &&(
@@ -1314,7 +1563,7 @@ class Section1 extends React.Component{
                                                                 )}
                                                             </Transition>
                                                             <div className="modal-block__content_item__icon--paper modal-block__content_item__icon"></div>
-                                                            <span>Срочная печать - 2 дня (+ 20%)</span>
+                                                            <span>{this.getTranslation().deadline.fast}</span>
                                                         </label>
                                                     </div>
                                                 )}
@@ -1336,7 +1585,7 @@ class Section1 extends React.Component{
                                                             print:false,
                                                             design:true,
                                                             deliver:false
-                                                        })}}>Перейти к дизайну</a>
+                                                        })}}>{this.getTranslation().buttons.design}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1352,7 +1601,7 @@ class Section1 extends React.Component{
                                 <div className="wrapper-container wrapper-container--modal-grey">
                                     <div className="container container--modal-info">
                                         <div className="modal-block modal-block--design">
-                                            <div className="modal-block__title">Макет:</div>
+                                            <div className="modal-block__title">{this.getTranslation().maket.title}</div>
                                             <div className="modal-block__content modal-block__content--design">
                                                 <div className="modal-block__content_item">
                                                     <label htmlFor="field_profile-21" className= {`modal-block__content_item__label modal-block__content_item__label--design ${this.state.calcProp.design=='design-all'?'active':''}`}>
@@ -1363,13 +1612,13 @@ class Section1 extends React.Component{
                                                                     <div className={`modal__check-icon--form ${status}`}></div>
                                                                 )}
                                                             </Transition>
-                                                            <span>Есть макет с контуром порезки</span>
+                                                            <span>{this.getTranslation().maket.maket1.title}</span>
                                                         </div>
                                                         <Transition in={this.state.calcProp.design=='design-all'} timeout={200}>
                                                             {status=>(
                                                             <div className={`file-upload-container ${status}`}>
                                                                 <div className="modal-block__content_item__description">
-                                                                    {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>Выберите один или несколько файлов макетов и порезки для загрузки</span>)}
+                                                                    {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>{this.getTranslation().maket.maket1.info}</span>)}
                                                                     {this.state.files&&this.state.files.length>0&&!this.state.fileError&&(
                                                                          this.state.files.map((file,key)=>{
                                                                              return <React.Fragment key={key}>
@@ -1385,10 +1634,10 @@ class Section1 extends React.Component{
                                                                 <label htmlFor="upload1" className="file-upload">
                                                                     <div className="fileform">
                                                                         <div className="button button--design js-maket-download">
-                                                                            <span>Загрузить макет и контур</span>
+                                                                            <span>{this.getTranslation().maket.maket1.button}</span>
                                                                         </div>
                                                                         <input className="upload23"  id="upload1" type="file" name="files[]" multiple onClick={this.handleFiles} />
-                                                                        <div className="requirements-info">*cуммарный объем файлов не должен превышать 1Гб</div>
+                                                                        <div className="requirements-info">{this.getTranslation().maket.maket1.helper}</div>
                                                                     </div>
 
                                                                 </label>
@@ -1421,7 +1670,7 @@ class Section1 extends React.Component{
                                                                     <div className={`modal__check-icon--form ${status}`}></div>
                                                                 )}
                                                             </Transition>
-                                                            <span>Есть макет, но нужен контур порезки</span>
+                                                            <span>{this.getTranslation().maket.maket2.title}</span>
                                                         </div>
                                                         <Transition in={this.state.calcProp.design=='design-outline'} timeout={200}>
                                                             {status=>(
@@ -1430,55 +1679,55 @@ class Section1 extends React.Component{
                                                                         <div className="outline-content">
                                                                             <label htmlFor="outline1" className={`outline-item ${this.state.calcProp.outline=='rectangle'?'active':''}`}>
                                                                                 <div className="outline-icon outline-icon--rectangle"></div>
-                                                                                <div className="outline-description">Прямоугольный</div>
+                                                                                <div className="outline-description">{this.getTranslation().maket.maket2.forms.rect}</div>
                                                                                 <input className="radio-input" id="outline1" type="radio" name="outline"  value="rectangle" onClick={this.handleChange}/>
                                                                             </label>
                                                                         </div>
-                                                                        <div className="outline-content">Скругленные углы:</div>
+                                                                        <div className="outline-content">{this.getTranslation().maket.maket2.forms.custom_title}</div>
                                                                         <div className="outline-content">
                                                                             <label htmlFor="outline2" className={`outline-item ${this.state.calcProp.outline=='radius35'?'active':''}`}>
                                                                                 <div className="outline-icon outline-icon--radius35"></div>
-                                                                                <div className="outline-description">Радиус 3,5 мм</div>
+                                                                                <div className="outline-description">{this.getTranslation().maket.maket2.forms.rad35}</div>
                                                                                 <input className="radio-input" id="outline2" type="radio" name="outline"  value="radius35" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline3" className={`outline-item ${this.state.calcProp.outline=='radius50'?'active':''}`}>
                                                                                 <div className="outline-icon outline-icon--radius50"></div>
-                                                                                <div className="outline-description">Радиус 5 мм</div>
+                                                                                <div className="outline-description">{this.getTranslation().maket.maket2.forms.rad50}</div>
                                                                                 <input className="radio-input" id="outline3" type="radio" name="outline"  value="radius50" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline4" className={`outline-item ${this.state.calcProp.outline=='radius100'?'active':''}`}>
                                                                                 <div className="outline-icon outline-icon--radius100"></div>
-                                                                                <div className="outline-description">Радиус 10 мм</div>
+                                                                                <div className="outline-description">{this.getTranslation().maket.maket2.forms.rad100}</div>
                                                                                 <input className="radio-input" id="outline4" type="radio" name="outline"  value="radius100" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline5" className={`outline-item ${this.state.calcProp.outline=='ellipse'?'active':''}`}>
                                                                                 <div className="outline-icon outline-icon--ellipse"></div>
-                                                                                <div className="outline-description">Овал</div>
+                                                                                <div className="outline-description">{this.getTranslation().maket.maket2.forms.oval}</div>
                                                                                 <input className="radio-input" id="outline5" type="radio" name="outline"  value="ellipse" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline9" className={`outline-item ${this.state.calcProp.outline=='chopped'?'active':''}`}>
                                                                                 <div className="outline-icon-draw outline-icon-draw--chopped"></div>
-                                                                                <div className="outline-description outline-description--draw">“Рубленый” +100 грн</div>
+                                                                                <div className="outline-description outline-description--draw">{this.getTranslation().maket.maket2.forms.chopped}</div>
                                                                                 <input className="radio-input" id="outline9" type="radio" name="outline"  value="chopped" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline7" className={`outline-item ${this.state.calcProp.outline=='star'?'active':''}`}>
                                                                                 <div className="outline-icon-draw outline-icon-draw--star"></div>
-                                                                                <div className="outline-description">Звезда</div>
+                                                                                <div className="outline-description">{this.getTranslation().maket.maket2.forms.star}</div>
                                                                                 <input className="radio-input" id="outline7" type="radio" name="outline"  value="star" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline8" className={`outline-item ${this.state.calcProp.outline=='cloud'?'active':''}`}>
                                                                                 <div className="outline-icon-draw outline-icon-draw--cloud"></div>
-                                                                                <div className="outline-description outline-description--draw">“Облако” + 100 грн</div>
+                                                                                <div className="outline-description outline-description--draw">{this.getTranslation().maket.maket2.forms.cloud}</div>
                                                                                 <input className="radio-input" id="outline8" type="radio" name="outline"  value="cloud" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline6" className={`outline-item outline-item--centered ${this.state.calcProp.outline=='circle'?'active':''}`}>
                                                                                 <div className="outline-icon outline-icon--circle"></div>
-                                                                                <div className="outline-description">Круг</div>
+                                                                                <div className="outline-description">{this.getTranslation().maket.maket2.forms.circle}</div>
                                                                                 <input className="radio-input" id="outline6" type="radio" name="outline"  value="circle" onClick={this.handleChange}/>
                                                                             </label>
                                                                             <label htmlFor="outline10" className={`outline-item ${this.state.calcProp.outline=='accent'?'active':''}`}>
                                                                                 <div className="outline-icon-draw outline-icon-draw--accent"></div>
-                                                                                <div className="outline-description outline-description--draw">“Акцент” +100 грн</div>
+                                                                                <div className="outline-description outline-description--draw">{this.getTranslation().maket.maket2.forms.accent}</div>
                                                                                 <input className="radio-input" id="outline10" type="radio" name="outline"  value="accent" onClick={this.handleChange}/>
                                                                             </label>
                                                                         </div>
@@ -1499,10 +1748,10 @@ class Section1 extends React.Component{
                                                                     <label htmlFor="upload2" className="file-upload">
                                                                         <div className="fileform fileform--outline">
                                                                             <div className="button button--design js-maket-download">
-                                                                                <span>Загрузить макет</span>
+                                                                                <span>{this.getTranslation().maket.maket2.button}</span>
                                                                             </div>
                                                                             <input className="upload" id="upload2" type="file" name="files[]" multiple onClick={this.handleFiles}/>
-                                                                            <div className="requirements-info">*cуммарный объем файлов не должен превышать 1Гб</div>
+                                                                            <div className="requirements-info">{this.getTranslation().maket.maket2.helper}</div>
                                                                         </div>
 
                                                                     </label>
@@ -1534,15 +1783,13 @@ class Section1 extends React.Component{
                                                                     <div className={`modal__check-icon--form ${status}`}></div>
                                                                 )}
                                                             </Transition>
-                                                            <span>Нет макета, нужен дизайн</span>
+                                                            <span>{this.getTranslation().maket.maket3.title}</span>
                                                         </div>
                                                         <Transition in={this.state.calcProp.design=='design-none'} timeout={200}>
                                                             {status=>(
                                                                 <div className={`file-upload-container ${status}`}>
                                                                     <div className="modal-block__content_item__description">
-                                                                        {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>Разработаем индивидуальный дизайн наклеек с учетом ваших пожеланий. Наш сотрудник свяжется с вами для уточнения деталей.
-                                                                            Cтоимость дизайна -- от 300 грн.
-                                                                            Вы можете загрузить исходные материалы или примеры через форму.</span>)}
+                                                                        {this.state.files&&this.state.files.length===0&&!this.state.fileError&&(<span>{this.getTranslation().maket.maket3.info}</span>)}
                                                                         {this.state.files&&this.state.files.length>0&&!this.state.fileError&&(
                                                                             this.state.files.map((file,key)=>{
                                                                                 return <React.Fragment key={key}>
@@ -1558,10 +1805,10 @@ class Section1 extends React.Component{
                                                                     <label htmlFor="upload3" className="file-upload">
                                                                         <div className="fileform">
                                                                             <div className="button button--design js-maket-download">
-                                                                                <span>Загрузить пример</span>
+                                                                                <span>{this.getTranslation().maket.maket3.button}</span>
                                                                             </div>
                                                                             <input className="upload"  id="upload3" type="file" name="files[]" multiple onClick={this.handleFiles}/>
-                                                                            <div className="requirements-info">*cуммарный объем файлов не должен превышать 1Гб</div>
+                                                                            <div className="requirements-info">{this.getTranslation().maket.maket3.helper}</div>
                                                                         </div>
                                                                     </label>
                                                                         {this.state.jqXHR&&<Icon  size="2x" name="times" className="abort_upload" onClick={()=>{
@@ -1597,7 +1844,7 @@ class Section1 extends React.Component{
                                                         print:true,
                                                         design:false,
                                                         deliver:false
-                                                    })}}><div>Назад</div></a>
+                                                    })}}><div>{this.getTranslation().buttons.back}</div></a>
                                                 </div>
                                                 <div className="modal-block__content_item">
                                                     <a rel="nofollow" className="button button--design button--modal" onClick={()=>{
@@ -1606,7 +1853,7 @@ class Section1 extends React.Component{
                                                         print:false,
                                                         design:false,
                                                         deliver:true
-                                                    })}}>{!this.state.isEditOrder?'Оформить заказ':'Редактировать заказ'}</a>
+                                                    })}}>{!this.state.isEditOrder?this.getTranslation().buttons.order:'Редактировать заказ'}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1621,7 +1868,7 @@ class Section1 extends React.Component{
                                 <div className="modal-block modal-block--radio">
                                     <div className="modal-block__content modal-block__content--order">
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="name">Имя:</label>
+                                            <label className="feedback-form__label" htmlFor="name">{this.getTranslation().name}</label>
                                             <Textbox
                                                 classNameInput="validation_input"
                                                 classNameWrapper="validation_wrapper"
@@ -1655,7 +1902,7 @@ class Section1 extends React.Component{
                                         </div>
 
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="phone">Телефон:</label>
+                                            <label className="feedback-form__label" htmlFor="phone">{this.getTranslation().phone}</label>
                                             <Textbox
                                                 classNameInput="validation_input"
                                                 classNameWrapper="validation_wrapper"
@@ -1710,7 +1957,7 @@ class Section1 extends React.Component{
                                         </div>
 
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="email">email:</label>
+                                            <label className="feedback-form__label" htmlFor="email">{this.getTranslation().email}</label>
                                                 <Textbox
                                                 classNameInput="validation_input"
                                                 classNameWrapper="validation_wrapper"
@@ -1752,7 +1999,7 @@ class Section1 extends React.Component{
                         <div className="wrapper-container wrapper-container--modal">
                             <div className="container container--modal-info">
                                 <div className="modal-block modal-block--design">
-                                    <div className="modal-block__title">Оплата:</div>
+                                    <div className="modal-block__title">{this.getTranslation().payment.title}</div>
                                     <div className="modal-block__content modal-block__content--design">
                                         <div className="modal-block__content_item">
                                             <label htmlFor="field_profile-24" className= {`modal-block__content_item__label modal-block__content_item__label--pay ${this.state.user.payment_method=='liq-pay'?'active':''}`}>
@@ -1778,7 +2025,7 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <div className="modal-block__content_item__icon modal-block__content_item__icon--design modal-block__content_item__icon--liq-pay"></div>
-                                                <span>Оплата LiqPay (Visa/MasterCard, Приват24, Терминал)</span>
+                                                <span>{this.getTranslation().payment.liq}</span>
                                             </label>
                                         </div>
 
@@ -1805,7 +2052,7 @@ class Section1 extends React.Component{
                                                     )}
                                                 </Transition>
                                                 <div className="modal-block__content_item__icon modal-block__content_item__icon--design modal-block__content_item__icon--cashless"></div>
-                                                <span>Безналичный расчет (для юр.лиц + 5%)</span>
+                                                <span>{this.getTranslation().payment.cash}</span>
                                             </label>
                                         </div>
                                     </div>
@@ -1816,7 +2063,7 @@ class Section1 extends React.Component{
                         <div className="wrapper-container wrapper-container--modal-grey">
                             <div className="container container--modal-info">
                                 <div className="modal-block modal-block--radio">
-                                    <div className="modal-block__title">Способ доставки:</div>
+                                    <div className="modal-block__title">{this.getTranslation().delivery.title}</div>
                                     <div className="modal-block__content">
                                         <div className="modal-block__content_item">
                                             <label htmlFor="field_profile-28" className= {`modal-block__content_item__label ${this.state.delivery.method=='self'?'active':''}`}>
@@ -1845,9 +2092,9 @@ class Section1 extends React.Component{
                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                     )}
                                                 </Transition>
-                                                <span>Самовывоз</span>
+                                                <span>{this.getTranslation().delivery.self.title}</span>
                                                 <a target="_blank" href="https://www.google.com.ua/maps/place/%D0%B2%D1%83%D0%BB%D0%B8%D1%86%D1%8F+%D0%A1%D0%BE%D0%BB%D0%BE%D0%BC'%D1%8F%D0%BD%D1%81%D1%8C%D0%BA%D0%B0,+5,+120,+%D0%9A%D0%B8%D1%97%D0%B2,+02000/@50.4291077,30.4728771,17z/data=!3m1!4b1!4m5!3m4!1s0x40d4cec097a3ebdf:0x851409c29a5bffd5!8m2!3d50.4291077!4d30.4750658?hl=ru">
-                                                <div className="modal-block__content_item__description">г. Киев, ул. Соломенская, 5, оф.120</div></a>
+                                                <div className="modal-block__content_item__description">{this.getTranslation().delivery.self.text}</div></a>
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
@@ -1877,7 +2124,7 @@ class Section1 extends React.Component{
                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                     )}
                                                 </Transition>
-                                                <span>Новая Почта (оплата по тарифам Новой Почты)</span>
+                                                <span>{this.getTranslation().delivery.np.title}</span>
                                             </label>
                                         </div>
                                         <div className="modal-block__content_item">
@@ -1907,8 +2154,8 @@ class Section1 extends React.Component{
                                                         <div className={`modal__check-icon--form ${status}`}></div>
                                                     )}
                                                 </Transition>
-                                                <span>Доставка по Киеву</span>
-                                                <div className="modal-block__content_item__description">+50 грн, в любую точку города</div>
+                                                <span>{this.getTranslation().delivery.kiev.title}</span>
+                                                <div className="modal-block__content_item__description">{this.getTranslation().delivery.kiev.text}</div>
                                             </label>
                                         </div>
                                     </div>
@@ -1924,7 +2171,7 @@ class Section1 extends React.Component{
                                         {this.state.delivery.method!='self'&&(
                                             <React.Fragment>
                                                 <div className="feedback-form__input-block">
-                                                    <label className="feedback-form__label" htmlFor="delivery_name">ФИО получателя:</label>
+                                                    <label className="feedback-form__label" htmlFor="delivery_name">{this.getTranslation().delivery.np.form.name}</label>
                                                     <Textbox
                                                         classNameInput="validation_input validation_input--deliver"
                                                         classNameWrapper="validation_wrapper"
@@ -1959,7 +2206,7 @@ class Section1 extends React.Component{
                                                 </div>
 
                                                 <div className="feedback-form__input-block">
-                                                    <label className="feedback-form__label" htmlFor="delivery_phone">Телефон получателя:</label>
+                                                    <label className="feedback-form__label" htmlFor="delivery_phone">{this.getTranslation().delivery.np.form.phone}</label>
                                                     <Textbox
                                                         classNameInput="validation_input validation_input--deliver"
                                                         classNameWrapper="validation_wrapper"
@@ -2009,7 +2256,7 @@ class Section1 extends React.Component{
                                         {this.state.delivery.method=='np'&&(
                                             <React.Fragment>
                                                 <div className="feedback-form__input-block">
-                                                    <label className="feedback-form__label" htmlFor="email">Населенный пункт:</label>
+                                                    <label className="feedback-form__label" htmlFor="email">{this.getTranslation().delivery.np.form.city}</label>
                                                     <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
                                                         <Select
                                                             id="city-select"
@@ -2026,7 +2273,7 @@ class Section1 extends React.Component{
                                                     </div>
                                                 </div>
                                                 <div className="feedback-form__input-block">
-                                                    <label className="feedback-form__label" htmlFor="email">Отделение Новой почты:</label>
+                                                    <label className="feedback-form__label" htmlFor="email">{this.getTranslation().delivery.np.form.number}</label>
                                                     <div className="feedback-form__field feedback-form__field--deliver custom-select custom-select--deliver">
                                                         <Select
                                                             id="warehouse-select"
@@ -2046,7 +2293,7 @@ class Section1 extends React.Component{
                                         )}
 
                                         <div className="feedback-form__input-block">
-                                            <label className="feedback-form__label" htmlFor="delivery_comment">Комментарий:</label>
+                                            <label className="feedback-form__label" htmlFor="delivery_comment">{this.getTranslation().message}</label>
                                             <Textbox
                                                 classNameInput="validation_input validation_input--deliver"
                                                 classNameWrapper="validation_wrapper"
@@ -2072,7 +2319,7 @@ class Section1 extends React.Component{
                                                 }}
                                             />
                                         </div>
-                                        <div className="terms">*отправляя заказ, Вы принимаете <Link to="/terms" target="_blank" >Договор оказания услуг</Link></div>
+                                        <div className="terms">{this.getTranslation().terms.text} <Link to={`/terms/${this.props.locale}`} target="_blank" >{this.getTranslation().terms.link}</Link></div>
                                     </div>
                                 </div>
                             </div>
@@ -2087,7 +2334,7 @@ class Section1 extends React.Component{
                                                 print:false,
                                                 design:true,
                                                 deliver:false
-                                            })}}><div>Назад</div></a>
+                                            })}}><div>{this.getTranslation().buttons.back}</div></a>
                                         </div>
                                         <div className="modal-block__content_item">
                                             <div
@@ -2098,7 +2345,7 @@ class Section1 extends React.Component{
                                                     }
                                                 }
                                             >
-                                                {!this.state.isEditOrder?'Оформить заказ':'Сохранить правки'}
+                                                {!this.state.isEditOrder?this.getTranslation().buttons.order:'Сохранить правки'}
                                             </div>
                                             <input type="submit" style={{ display: 'none' }} />
 
@@ -2175,9 +2422,9 @@ class Section1 extends React.Component{
                                     this.props.handleModal({},true)
                                 }}></div>
                                 <div className="modal-error__message">
-                                    <div className="modal-order-title">Ваш заказ <b>№{this.state.currentOrder.id}</b> принят</div>
-                                    <div>Данные о заказе были отправлены на почту <b>{this.state.user.email}</b></div>
-                                    <div>Наши сотрудники свяжутся с вами для уточнения деталей</div>
+                                    <div className="modal-order-title">{this.getTranslation().order_popup.order} <b>№{this.state.currentOrder.id}</b> {this.getTranslation().order_popup.confirm}</div>
+                                    <div>{this.getTranslation().order_popup.email_info} <b>{this.state.user.email}</b></div>
+                                    <div>{this.getTranslation().order_popup.info}</div>
                                 </div>
                             </Modal>
                         )

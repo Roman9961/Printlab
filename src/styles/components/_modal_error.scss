@@ -85,3 +85,162 @@
 .modal-error__message{
   text-align: center;
 }
+
+.modal-call-overlay{
+  position: initial;
+}
+.modal-call1{
+  position: fixed;
+  right: 40px;
+    bottom: 40px;
+    outline: none;
+    .ring {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80px;
+      width: 80px;
+      border-radius: 40px;
+      border: 2px solid white;
+      background-color: #a470bb;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+      outline: none;
+      padding: 0 20px;
+     
+      .form{
+        transform: rotateX(180deg);
+        display: none;
+        &.inactive{
+          transform: rotateX(180deg) !important;
+        }
+        .countdown{
+          width: 60px;
+          color: white;
+          font-size: 30px;
+        }
+        label {
+          width: 30%;
+          color: white;
+          font-size: 14px;
+          @media only screen and (max-width: 575px){
+            width: 100%;
+          }
+        }
+        .phone{
+          width: 35%;
+          @media only screen and (max-width: 575px){
+            width: 100%;
+          }
+        }
+      }
+      .result{
+        transform: rotateX(180deg);
+        color: white;
+        text-align: center;
+        &.active{
+          transform: rotateX(0deg);
+        }
+      }
+      &.active{
+        @media only screen and (max-width: 575px){
+          width: 80vw;
+          height: 200px;
+        }
+        width: 600px;
+        border-radius: 40px;
+        & .header__contacts__phone__icon, &:before, &:after{
+          display: none;
+        }
+        & .widget-close {
+          width: 30px;
+          height: 30px;
+          position: absolute;
+          top: -10px;
+          left: -10px;
+          cursor: pointer;
+          border-radius: 50%;
+          border: 3px solid #FFFFFF;
+          background-color: #f16769;
+          background-size: 22px;
+          font-size: 0px;
+          z-index: 9998;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          &:before, &:after{
+            content: "";
+            position: absolute;
+            background-color: white;
+            border-radius: 0.2rem;
+            width: 15px;
+            display: block;
+            transform: rotate(45deg);
+            height: 3px;
+          }
+          &:before{
+            transform: rotate(135deg);
+          }
+        }
+        & .form{
+          @media only screen and (max-width: 575px){
+            flex-wrap: wrap;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            & *:last-child{
+              width: 100%;
+            }
+          }
+          
+            display: -ms-flexbox;
+            -ms-flex-align: center;
+            -ms-flex-pack: justify;
+            -webkit-backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0 30px;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+            transform: rotateX(0deg);
+        }
+      }
+      &:before,
+      &:after {
+        position: absolute;
+        content: '';
+        height: 80%;
+        width: 80%;
+        border-radius: 50%;
+        box-shadow: 0 0 15px #9365ab;
+        animation: glow-grow 2s ease-out infinite;
+        outline: none;
+      }
+      
+      &:after {
+        animation-delay: .66s;
+      }
+
+    @keyframes glow-grow {
+      0% {
+        opacity: 0;
+        transform: scale(1);
+      }
+      80% {
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+    }
+   
+}

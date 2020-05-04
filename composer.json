@@ -1,7 +1,8 @@
 {
     "require": {
         "kreait/firebase-php": "^4.0",
-        "phpmailer/phpmailer": "5.2.26"
+        "phpmailer/phpmailer": "5.2.26",
+        "dotzero/amocrm": "^0.3.28"
     },
     "autoload": {
         "psr-4": {

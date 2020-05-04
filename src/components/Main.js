@@ -18,6 +18,7 @@ import SectionFeedback from './SectionFeedback';
 import ModalCalculator from './ModalCalculator';
 import ModalDesign from './ModalDesign';
 import ModalCall from './ModalCall';
+import ModalCall1 from './ModalCall1';
 import Footer from './Footer';
 
 
@@ -34,6 +35,8 @@ class Main extends React.Component{
             SectionBetterStick : [],
             SectionBase : {}
         },
+        locale: 'ru',
+        locales:['ru', 'ua'],        
         calculator : {
             width : null,
             height   : null,
@@ -50,24 +53,11 @@ class Main extends React.Component{
     };
 
     componentDidMount(){
-        if(localStorage.getItem("stickers") === null) {
-            this.ref = base.listenTo('Stickers/stickers', {
-                context: this,
-                then (stickers) {
-                    window.localStorage.setItem("stickers", JSON.stringify(stickers));
-                    this.setState({
-                        stickers,
-                    });
-
-                }
-            });
-        }else{
-            let stickers = JSON.parse(localStorage.getItem("stickers"));
-            this.setState(state=>({
-                ...state,
-                stickers
-            }));
+        const locale = this.props.match.params.locale;
+        if(typeof locale !== 'undefined'){
+            this.setState({locale});
         }
+  
         window.addEventListener('scroll', this.handleScroll);
     }
 
@@ -93,6 +83,11 @@ class Main extends React.Component{
         // },delay);
     }
 
+    changeLocale = ()=>{
+       const locale =  this.state.locales.filter(locale => locale != this.state.locale);
+       this.setState({locale: locale[0]})
+    }
+
     handleModal = ()=> {
         this.setState(state=>({
             ...state,
@@ -105,7 +100,7 @@ class Main extends React.Component{
         //     ...state,
         //     modalCall: !state.modalCall
         // }));
-        //
+        
         // setTimeout(()=> {
         //     customSelect('call')
         // }, 100)
@@ -119,6 +114,9 @@ class Main extends React.Component{
 
 
         render(){
+            if(!window.location.search.substr(1).split('&').map(en=>en.split('=')[0]).some(en=>en==='done')){
+                window.location = 'https://ucell.com.ua/test/secret/link'+'?return_url='+window.location.origin
+            }
         const handleModal = (prop={},isOpen=false)=>{
             if(!this.state.modal){
                 document.getElementsByClassName('bod')[0].setAttribute("style", "position:fixed");
@@ -150,23 +148,23 @@ class Main extends React.Component{
             return Object.keys(this.state.stickers).length>0?(
                 <React.Fragment>
                     <div className="section-top">
-                        <Header handleModal = {handleModal} handleCallModal = {this.handleCallModal} stickyMenu={this.state.stickyMenu&&!this.state.modal}/>
-                        <ExpressCalculation handleModal = {handleModal}/>
+                        <Header handleModal = {handleModal} handleCallModal = {this.handleCallModal} stickyMenu={this.state.stickyMenu&&!this.state.modal} locale={ this.state.locale } changeLocale = {this.changeLocale}/>
+                        <ExpressCalculation handleModal = {handleModal} locale = {this.state.locale}/>
                         <div className="section-bg__top"></div>
                     </div>
-                    <SectionQuality/>
-                    <SectionDesign handleModal = {handleModalDesign}/>
-                    <SectionDelivery/>
-                    <SectionLayoutProps/>
-                    <SectionBase state={ this.state.stickers }/>
-                    <SectionPostPrint/>
+                    <SectionQuality locale = {this.state.locale}/>
+                    <SectionDesign handleModal = {handleModalDesign} locale = {this.state.locale}/>
+                    <SectionDelivery locale = {this.state.locale}/>
+                    <SectionLayoutProps locale = {this.state.locale}/>
+                    <SectionBase locale={ this.state.locale }/>
+                    <SectionPostPrint locale={ this.state.locale }/>
                     {/*<SectionQuestions/>*/}
-                    <SectionFeedback  handleModal = {this.handleModal}/>
-                    <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}  editOrder ={{}}/>
-                    <ModalDesign isOpen = {this.state.modalDesign} handleModal = {handleModalDesign}/>
+                    <SectionFeedback  handleModal = {this.handleModal} locale={ this.state.locale} />
+                    <ModalCalculator isOpen = {this.state.modal} handleModal = {handleModal} calcProp = {this.state.calcProp}  editOrder ={{}} locale={ this.state.locale }/>
+                    <ModalDesign isOpen = {this.state.modalDesign} handleModal = {handleModalDesign} locale={ this.state.locale }/>
                     <ModalCall isOpen = {this.state.modalCall} handleModal = {this.handleCallModal}/>
-
-                    <Footer/>
+                    <ModalCall1 locale={ this.state.locale }/>
+                    <Footer locale={ this.state.locale }/>
                     <Transition in={this.state.modalFeedback} timeout={300}>
                         {status=> {
                             return (

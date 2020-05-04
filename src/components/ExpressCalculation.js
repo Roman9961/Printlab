@@ -38,11 +38,11 @@ class ExpressCalculation extends React.Component{
             return Object.keys(this.state.calculator).length>0?(
                 <div className="container prices">
                     <div className="container__express-calculator">
-                        <FastCalculator form="rectangle" calculator={this.state.calculator}
+                        <FastCalculator form="rectangle" calculator={this.state.calculator} locale = {this.props.locale}
                                         handleModal={this.props.handleModal}/>
-                        <FastCalculator form="simple" calculator={this.state.calculator}
+                        <FastCalculator form="simple" calculator={this.state.calculator} locale = {this.props.locale}
                                         handleModal={this.props.handleModal}/>
-                        <FastCalculator form="hard" calculator={this.state.calculator}
+                        <FastCalculator form="hard" calculator={this.state.calculator} locale = {this.props.locale}
                                         handleModal={this.props.handleModal}/>
                   
                     </div>

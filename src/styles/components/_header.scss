@@ -91,6 +91,7 @@
   height: 2.4rem;
   background: url('/images/logo.svg') no-repeat center center;
   background-size: cover;
+  cursor: pointer;
 }
 .header__content{
   align-items: center;
@@ -117,6 +118,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 60%;
   @media (max-width: 767px){
     display: none;
   }
@@ -126,7 +128,7 @@
   color:$dark-grey;
 }
 .header__menu__item{
-  padding: 0 $l-size;
+  padding: 0 $m-size;
   cursor:pointer;
 }
 .header__contacts{

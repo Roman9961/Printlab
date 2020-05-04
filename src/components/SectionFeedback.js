@@ -5,14 +5,45 @@ import ReCAPTCHA from 'react-google-recaptcha';
 
 let captcha;
 
+const translations = {
+    ua:{
+        'title': 'Зворотній зв\'язок',
+        'name': 'Ваше ім\'я',
+        'email': 'Ваш email:',
+        'phone': 'Ваш телефон:',
+        'message': 'Повідомлення',
+        'button': 'Відправити',
+        placeholder:{
+            'name': 'Ім\'я',   
+        }
+    },
+    ru:{
+        'title': 'Обратная связь',
+        'name': 'Ваше имя:',
+        'email': 'Ваш email:',
+        'phone': 'Ваш телефон:',
+        'message': 'Сообщение',
+        'button': 'Отправить',
+        placeholder:{
+            'name': 'Имя',   
+        }
+    }
+}
+
 const SectionFeedback = ({
     errors,
     values,
     touched,
     submitForm,
     setFieldValue,
+    locale,
     handleModal
 })=>{
+
+    const  getTranslation = () => {
+        return translations[locale]
+    }
+
     const phoneHandleFocus =(e)=>{
         if(!values.phone) {
             setFieldValue("phone", '+380');
@@ -24,32 +55,32 @@ const SectionFeedback = ({
         <section>
             <div className="container">
                 <div className="section-container section-container--feedback">
-                    <h1 className="section__title">Обратная связь</h1>
+                    <h1 className="section__title">{getTranslation().title}</h1>
                     <div className="section-block__container section-block__container--feedback">
                         <div className="section-block section-block--feedback">
                             <Form className="feedback-form">
 
                                 <div className="feedback-form__input-block">
                                 <p className={`${touched.name && errors.name&&'active'}`}>{errors.name}</p>
-                                    <label className={`feedback-form__label ${errors.name?'error':''}`} htmlFor="name">Ваше имя:</label>
-                                    <Field className={`feedback-form__field ${errors.name?'error':''}`} type="text" id="name" name="name" placeholder="Имя"/>
+                                    <label className={`feedback-form__label ${errors.name?'error':''}`} htmlFor="name">{getTranslation().name}</label>
+                                    <Field className={`feedback-form__field ${errors.name?'error':''}`} type="text" id="name" name="name" placeholder={getTranslation().placeholder.name}/>
                                 </div>
 
                                 <div className="feedback-form__input-block">
                                     <p className={`${touched.phone && errors.phone&&'active'}`}>{errors.phone}</p>
-                                    <label className={`feedback-form__label ${errors.phone?'error':''}`} htmlFor="phone">Ваш телефон:</label>
+                                    <label className={`feedback-form__label ${errors.phone?'error':''}`} htmlFor="phone">{getTranslation().phone}</label>
                                     <Field onFocus={phoneHandleFocus} className={`feedback-form__field ${errors.phone?'error':''}`}  type="text" id="phone" name="phone" placeholder="+38(099) 999 99 99"/>
                                 </div>
 
                                 <div className="feedback-form__input-block">
                                     <p className={`${touched.email && errors.email&&'active'}`}>{errors.email}</p>
-                                    <label className={`feedback-form__label ${errors.email?'error':''}`} htmlFor="name">Ваш email:</label>
+                                    <label className={`feedback-form__label ${errors.email?'error':''}`} htmlFor="name">{getTranslation().title}</label>
                                     <Field className={`feedback-form__field ${errors.email?'error':''}`} type="text" name="email" placeholder="Email"/>
                                 </div>
 
                                 <div className="feedback-form__input-block">
                                     <p className={`${touched.message && errors.message&&'active'}`}>{errors.message}</p>
-                                    <label className={`feedback-form__label ${errors.message?'error':''}`} htmlFor="name">Сообщение:</label>
+                                    <label className={`feedback-form__label ${errors.message?'error':''}`} htmlFor="name">{getTranslation().message}</label>
                                     <Field className={`feedback-form__field ${errors.message?'error':''}`} type="text" name="message" placeholder="Текст"/>
                                 </div>
                                 <div className="feedback-form__input-block">
@@ -71,7 +102,7 @@ const SectionFeedback = ({
                                     )}
                                 </div>
                                 <div className="feedback-form__input-block feedback-form__button">
-                                    <button className="button button--design asdad">Отправить</button>
+                                    <button className="button button--design asdad">{getTranslation().button}</button>
                                 </div>
                             </Form>
                         </div>

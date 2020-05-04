@@ -1,6 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';;
 import BootstrapTable from 'react-bootstrap-table-next';
 import ModalCalculator from './ModalCalculator';
 import ModalComment from './ModalComment';

@@ -366,7 +366,7 @@
     }
   }
   input {
-    display: block;
+    display: none;
   }
   .modal-checkbox__title {
     font-family: 'Montserrat';
@@ -444,6 +444,7 @@
     background: url("/images/checkmark.svg") no-repeat center center;
     transition: all .2s ease-in-out;
     border: transparent;
+    align-self: center;
   }
 }
 .modal__check-icon--form{
@@ -503,5 +504,12 @@
 }
 .modal-order-title{
   font-size: 20px;
+}
+
+.amo-button-holder{
+  transition: all .3s ease-in-out;
+  &.up{
+    bottom: 260px !important;
+  }
 }
 

@@ -1,13 +1,28 @@
 import React from 'react';
 import {Transition} from 'react-transition-group'
 
-const ModalHeader = (props)=> {
+const translations = {
+    ua:{
+        'print': 'Друк і основа',
+        'design': 'Дизайн і макет',
+        'payment': 'Оплата і доставка',
+    },
+    ru:{
+        'print': 'Печать и основа',
+        'design': 'Дизайн и макет',
+        'payment': 'Оплата и доставка',
+    }
+}
 
+const ModalHeader = (props)=> {
+        const  getTranslation = () => {
+            return translations[props.locale]
+        }
         return (
             <div className="wrapper-container wrapper-container--modal-header">
                 <div className="container container--modal-header">
                     <div  className="header">
-                        <div className="header__logo footer__logo">
+                        <div className="header__logo footer__logo" onClick={()=>(props.handleModal({}))}>
                         </div>
 
                         <div className="modal-header__close" onClick={()=>(props.handleModal({}))}>
@@ -20,7 +35,7 @@ const ModalHeader = (props)=> {
                             deliver:false
                         })}}>
                             <div className="modal__check-icon active"></div>
-                            <div className="modal-header__bookmarks__item__title active">Печать и основа</div>
+                            <div className="modal-header__bookmarks__item__title active">{getTranslation().print}</div>
                         </div>
                         <div className="modal-header__bookmarks__item" onClick={()=>{props.handleBookmark({
                             print:false,
@@ -31,7 +46,7 @@ const ModalHeader = (props)=> {
                                 {status=>(
                                     <React.Fragment>
                                         <div className={`modal__check-icon ${status}`}></div>
-                                        <div className={`modal-header__bookmarks__item__title ${status}`}>Дизайн и макет</div>
+                                        <div className={`modal-header__bookmarks__item__title ${status}`}>{getTranslation().design}</div>
                                     </React.Fragment>
                                 )}
                             </Transition>
@@ -45,7 +60,7 @@ const ModalHeader = (props)=> {
                                 {status=>(
                                     <React.Fragment>
                                         <div className={`modal__check-icon ${status}`}></div>
-                                        <div className={`modal-header__bookmarks__item__title ${status}`}>Оплата и доставка</div>
+                                        <div className={`modal-header__bookmarks__item__title ${status}`}>{getTranslation().payment}</div>
                                     </React.Fragment>
                                 )}
                             </Transition>

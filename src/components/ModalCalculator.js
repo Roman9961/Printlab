@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import ModalHeader from './ModalHeader';
 import Section1 from './Section1';
+import { removePropertiesDeep } from '@babel/types';
 
 Modal.setAppElement('.bod');
 
@@ -35,13 +36,14 @@ class ModalCalculator extends React.Component{
                 className="modal-calculator"
                 overlayClassName = "modal-calculator-overlay"
             >
-               <ModalHeader handleModal={this.props.handleModal} bookmarks = {this.state} handleBookmark={handleBookmark}/>
+               <ModalHeader handleModal={this.props.handleModal} bookmarks = {this.state} handleBookmark={handleBookmark} locale={ this.props.locale }/>
                 <Section1
                     state = { this.state }
                     editOrder = {this.props.editOrder}
                     calcProp = { this.props.calcProp}
                     handleBookmark={handleBookmark}
                     handleModal = {this.props.handleModal}
+                    locale={ this.props.locale }
                 />
             </Modal>
         )

@@ -28,6 +28,7 @@ class AdminTableMaterial extends React.Component{
             rollparams: 'Параметры рулонной печати',
             clear: 'Стоимость лака',
             colorprint:'Стоимость 4+0',
+            fastprint:'Стоимость Fastprint',
             colorprintwhite:'Стоимость 5+0',
             monochromeprint:'Стоимость 2+0',
             width:'Ширина рапорта',

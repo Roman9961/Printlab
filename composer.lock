@@ -1,12 +1,55 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "ffad3b691bb7aea78f359d6c9180c4d4",
-    "content-hash": "b338d56c6da583fc813d76756a4d1338",
+    "content-hash": "0a6124ff18d9fca3e67a8501308ae672",
     "packages": [
+        {
+            "name": "dotzero/amocrm",
+            "version": "v0.3.28",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dotzero/amocrm-php.git",
+                "reference": "d9f818acaf010fffdfe095f15c5e0ee4587a9385"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dotzero/amocrm-php/zipball/d9f818acaf010fffdfe095f15c5e0ee4587a9385",
+                "reference": "d9f818acaf010fffdfe095f15c5e0ee4587a9385",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AmoCRM\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "dotzero",
+                    "email": "mail@dotzero.ru"
+                }
+            ],
+            "description": "Удобный и быстрый клиент для работы с API amoCRM",
+            "keywords": [
+                "amoCRM",
+                "api",
+                "crm"
+            ],
+            "time": "2018-04-15T06:32:36+00:00"
+        },
         {
             "name": "fig/http-message-util",
             "version": "1.1.2",
@@ -55,7 +98,7 @@
                 "request",
                 "response"
             ],
-            "time": "2017-02-09 16:10:21"
+            "time": "2017-02-09T16:10:21+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -101,7 +144,7 @@
             ],
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
-            "time": "2017-06-27 22:17:23"
+            "time": "2017-06-27T22:17:23+00:00"
         },
         {
             "name": "giggsey/libphonenumber-for-php",
@@ -169,7 +212,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2018-07-26 10:50:48"
+            "time": "2018-07-26T10:50:48+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -218,19 +261,19 @@
                 }
             ],
             "description": "Locale functions required by libphonenumber-for-php",
-            "time": "2018-04-03 15:53:12"
+            "time": "2018-04-03T15:53:12+00:00"
         },
         {
             "name": "google/auth",
             "version": "v1.3.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-auth-library-php.git",
+                "url": "https://github.com/googleapis/google-auth-library-php.git",
                 "reference": "436007a77fd2037f933d3a5c8e4c7e0c9b88a7b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-auth-library-php/zipball/436007a77fd2037f933d3a5c8e4c7e0c9b88a7b0",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/436007a77fd2037f933d3a5c8e4c7e0c9b88a7b0",
                 "reference": "436007a77fd2037f933d3a5c8e4c7e0c9b88a7b0",
                 "shasum": ""
             },
@@ -265,19 +308,19 @@
                 "google",
                 "oauth2"
             ],
-            "time": "2018-07-23 21:44:38"
+            "time": "2018-07-23T21:44:38+00:00"
         },
         {
             "name": "google/cloud-core",
             "version": "v1.21.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-core.git",
+                "url": "https://github.com/googleapis/google-cloud-php-core.git",
                 "reference": "4dee63d2baf793d3798cc7e420004102a49b0a71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-core/zipball/4dee63d2baf793d3798cc7e420004102a49b0a71",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/4dee63d2baf793d3798cc7e420004102a49b0a71",
                 "reference": "4dee63d2baf793d3798cc7e420004102a49b0a71",
                 "shasum": ""
             },
@@ -324,19 +367,19 @@
                 "Apache-2.0"
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
-            "time": "2018-07-19 17:51:07"
+            "time": "2018-07-19T17:51:07+00:00"
         },
         {
             "name": "google/cloud-storage",
             "version": "v1.3.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/GoogleCloudPlatform/google-cloud-php-storage.git",
+                "url": "https://github.com/googleapis/google-cloud-php-storage.git",
                 "reference": "240de4b1d65fad78983d80ca78bed7b1facd6467"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php-storage/zipball/240de4b1d65fad78983d80ca78bed7b1facd6467",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/240de4b1d65fad78983d80ca78bed7b1facd6467",
                 "reference": "240de4b1d65fad78983d80ca78bed7b1facd6467",
                 "shasum": ""
             },
@@ -366,7 +409,7 @@
                 "Apache-2.0"
             ],
             "description": "Cloud Storage Client for PHP",
-            "time": "2018-02-01 16:15:59"
+            "time": "2018-02-01T16:15:59+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -431,7 +474,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2018-04-22 15:46:56"
+            "time": "2018-04-22T15:46:56+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -482,7 +525,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2016-12-20 10:07:11"
+            "time": "2016-12-20T10:07:11+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -547,7 +590,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-03-20 17:10:46"
+            "time": "2017-03-20T17:10:46+00:00"
         },
         {
             "name": "kreait/firebase-php",
@@ -613,7 +656,7 @@
                 "google",
                 "sdk"
             ],
-            "time": "2018-07-25 21:34:34"
+            "time": "2018-07-25T21:34:34+00:00"
         },
         {
             "name": "kreait/firebase-tokens",
@@ -666,7 +709,7 @@
                 "google",
                 "token"
             ],
-            "time": "2018-01-07 00:58:21"
+            "time": "2018-01-07T00:58:21+00:00"
         },
         {
             "name": "lcobucci/jwt",
@@ -724,7 +767,7 @@
                 "JWS",
                 "jwt"
             ],
-            "time": "2018-07-29 14:38:43"
+            "time": "2018-07-29T14:38:43+00:00"
         },
         {
             "name": "league/flysystem",
@@ -808,7 +851,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2018-05-07 08:44:23"
+            "time": "2018-05-07T08:44:23+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -886,7 +929,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-06-19 01:22:40"
+            "time": "2017-06-19T01:22:40+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
@@ -941,7 +984,7 @@
                 "json",
                 "jsonpath"
             ],
-            "time": "2016-12-03 22:08:25"
+            "time": "2016-12-03T22:08:25+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -1018,7 +1061,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-11-04 09:26:05"
+            "time": "2017-11-04T09:26:05+00:00"
         },
         {
             "name": "psr/cache",
@@ -1064,7 +1107,7 @@
                 "psr",
                 "psr-6"
             ],
-            "time": "2016-08-06 20:24:11"
+            "time": "2016-08-06T20:24:11+00:00"
         },
         {
             "name": "psr/http-message",
@@ -1114,7 +1157,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06 14:39:51"
+            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "psr/log",
@@ -1161,7 +1204,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -1209,7 +1252,7 @@
                 "psr-16",
                 "simple-cache"
             ],
-            "time": "2017-10-23 01:57:42"
+            "time": "2017-10-23T01:57:42+00:00"
         },
         {
             "name": "rize/uri-template",
@@ -1253,7 +1296,7 @@
                 "template",
                 "uri"
             ],
-            "time": "2017-06-14 03:57:53"
+            "time": "2017-06-14T03:57:53+00:00"
         },
         {
             "name": "superbalist/flysystem-google-storage",
@@ -1300,7 +1343,7 @@
                 }
             ],
             "description": "Flysystem adapter for Google Cloud Storage",
-            "time": "2018-02-07 13:37:04"
+            "time": "2018-02-07T13:37:04+00:00"
         }
     ],
     "packages-dev": [],

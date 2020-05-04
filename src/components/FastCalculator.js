@@ -9,6 +9,7 @@ class FastCalculator extends React.Component{
         calculator : {
 
         },
+        locale: 'ru',
         calcProp:{
             "basis" : "Пластиковая",
             "basis_param":"white",
@@ -42,13 +43,48 @@ class FastCalculator extends React.Component{
             simple:'Наклейки простой формы',
             hard:'Наклейки сложной формы',
             roll:'Рулонная цифровая печать'
+        },
+        translations:{
+            ru:{
+                dimentions: 'Размеры, мм',
+                custom: 'Произвольные',
+                quantity: 'Количество',
+                material: 'Материал основы',
+                material_paper: 'Бумага',
+                material_palstic: 'Пленка',
+                price: 'Стоимость:',
+                custom_dimentions: 'Ширина х Высота',
+                'quantity_other': 'Другое',
+                title: {
+                    rectangle: 'Прямоугольные наклейки',
+                    simple: 'Простые формы',
+                    hard: 'Сложные формы'
+                }
+            },
+            ua: {
+                dimentions: 'Розміри, мм',
+                custom: 'Довільні',
+                quantity: 'Кількість',
+                material: 'Матеріал основи',
+                material_paper: 'Папір',
+                material_palstic: 'Плівка',
+                price: 'Вартість:',
+                custom_dimentions: 'Ширина х Висота',
+                'quantity_other': 'Інша',
+                title: {
+                    rectangle: 'Прямокутні наклейки',
+                    simple: 'Прості форми',
+                    hard: 'Складні форми'
+                }
+            }
         }
     };
     componentDidMount(){
 
         this.setState((state)=>({
             ...state,
-            calculator: this.props.calculator
+            calculator: this.props.calculator,
+            locale: this.props.locale  
         }));
 
         switch (this.props.form) {
@@ -70,6 +106,13 @@ class FastCalculator extends React.Component{
     }
 
     componentDidUpdate(){
+        if(this.state.locale !== this.props.locale){
+            this.setState((state)=>({
+                ...state,
+                locale: this.props.locale  
+            }));
+            customSelect('custom-select'); 
+        }
             let price = calc(this.state);
             if(this.state.calcProp.form === 'Рулонная' && price<750){
                 price = 750;
@@ -85,6 +128,10 @@ class FastCalculator extends React.Component{
                         }));
             }
 
+    }
+
+    getTranslation(){
+        return this.state.translations[this.props.locale]
     }
 
     updatecalcProp =   (key, value) =>{
@@ -208,7 +255,7 @@ class FastCalculator extends React.Component{
                     <img src={`images/${this.props.form}.svg`} alt=""/>
                 </div>
                 <div className="express-calculator__item">
-                    <div className="express-calculator__title express-calculator__item--header">{this.state.title[this.props.form]}</div>
+                    <div className="express-calculator__title express-calculator__item--header">{ this.getTranslation().title[this.props.form]}</div>
                     <a className={`info info--${this.props.form}`} data-for={this.props.form} data-tip />
                     <ReactTooltip className="tooltip_custom" id={this.props.form} type="light"  globalEventOff={ isMobile ? 'touchstart' : undefined } >
                         <div className="tooltip__container">
@@ -250,19 +297,19 @@ class FastCalculator extends React.Component{
                     
                 </div>
                 <div className="express-calculator__item">
-                    <span className="description top">Размеры, мм </span>
+                    <span className="description top">{this.getTranslation().dimentions}</span>
                     <div className="custom-select">
                         <select name="sizes" onChange={this.selectHandleChange}>
                             <option value='{"width":40,"height":40}'>40x40</option>
                             <option value='{"width":60,"height":60}'>60x60</option>
-                            <option value='{"width":"custom","height":"custom"}'>Произвольные</option>
+                            <option value='{"width":"custom","height":"custom"}'>{this.getTranslation().custom}</option>
                         </select>
                     </div>
                 </div>
                 {
                     this.state.customSizes && (
                         <div className="express-calculator__item express-calculator__item--custom">
-                            <span className="custom-sizes-description">Ширина х Высота</span>
+                            <span className="custom-sizes-description">{this.getTranslation().custom_dimentions}</span>
                             <div className="custom-sizes-container">
                                 <input className="custom-sizes" type="number" name="width" value={this.state.calcProp.width} onChange={this.handleInput} onBlur={this.handleChange}/>
                                 <input className="custom-sizes" type="number" name="height" value={this.state.calcProp.height}onChange={this.handleInput}  onBlur={this.handleChange}/>
@@ -273,14 +320,14 @@ class FastCalculator extends React.Component{
 
 
                 <div className="express-calculator__item">
-                    <span className="description top">Количество</span>
+                    <span className="description top">{this.getTranslation().quantity}</span>
                     <div className="custom-select">
                         <select name="quantity" onChange={this.selectQuantityHandleChange}>
                             <option value="100">100 шт.</option>
                             <option value="200">200 шт.</option>
                             <option value="500">500 шт.</option>
                             <option value="1000">1000 шт.</option>
-                            <option value="custom">Другое</option>
+                            <option value="custom">{this.getTranslation().quantity_other}</option>
                         </select>
                     </div>
                 </div>
@@ -296,11 +343,11 @@ class FastCalculator extends React.Component{
                 }
 
                 <div className="express-calculator__item">
-                    <span className="description top">Материал основы</span>
+                    <span className="description top">{this.getTranslation().material}</span>
                     <div className="custom-select">
                         <select name="basis" onChange={this.handleChange}>
-                            <option value="Пластиковая">Пленка</option>
-                            <option value="Бумажная">Бумага</option>
+                            <option value="Пластиковая">{this.getTranslation().material_palstic}</option>
+                            <option value="Бумажная">{this.getTranslation().material_paper}</option>
                         </select>
                     </div>
                 </div>
@@ -319,7 +366,7 @@ class FastCalculator extends React.Component{
                 <div className="express-calculator__item express-calculator__item--final">
                     <input type="hidden" name="print_type" id="field_profile-117" value="Листовая"/>
                     <div>
-                        <div>Стоимость:</div>
+                        <div>{this.getTranslation().price}</div>
                         <div className="express-calculator__final-price">
                             <span>{this.state.calcProp.price}</span><span> грн</span>
                         </div>

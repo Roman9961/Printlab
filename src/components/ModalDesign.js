@@ -30,6 +30,7 @@ class ModalDesign extends React.Component{
                 {/*<ModalBlockForm/>*/}
                 <SectionDesignOnly
                     handleModal = {this.props.handleModal}
+                    locale={ this.props.locale }
                 />
             </Modal>
         )

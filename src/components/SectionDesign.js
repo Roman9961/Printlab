@@ -2,6 +2,24 @@ import React from 'react';
 import { Carousel } from "react-responsive-carousel";
 
 class SectionDesign extends React.Component{
+    state ={
+        translations: {
+            ua:{
+                'title': 'Дизайн наклейок',
+                'subtitle': 'Немає макета? Для вас ми розробимо індивідуальний дизайн наклейок. Ціна - від 400 ₴.',
+                'button': 'Замовити',
+            },
+            ru:{
+                'title': 'Дизайн наклеек',
+                'subtitle': 'Нет макета? Для вас мы разработаем индивидуальный дизайн наклеек. Цена - от 400 ₴.',
+                'button': 'Заказать',
+            }
+        }
+    }
+    getTranslation(){
+        return this.state.translations[this.props.locale]
+    }
+
     render() {
            return (
                <section>
@@ -32,15 +50,12 @@ class SectionDesign extends React.Component{
                                <div className="section-block section-block--design">
                                    <div className="section-block__header section-block__header--design">
                                        <div className="section-block__title section-block__title--design">
-                                           <div className="text-center">Дизайн наклеек</div>
+                                           <div className="text-center">{this.getTranslation().title}</div>
                                        </div>
                                    </div>
                                    <div className="section-block__content section-block__content--design">
-                                       <div>Нет макета?
-                                           Для вас мы разработаем индивидуальный дизайн наклеек.
-                                           Цена - от 400 ₴.
-                                       </div>
-                                       <a href="javascript:;"  rel="nofollow" className="button button--design" onClick={()=>{gtag('event', 'Отправить', {'event_category': 'Кнопка', 'event_label': 'Заказать дизайн'} ); this.props.handleModal()}}>Заказать</a>
+                                       <div>{this.getTranslation().subtitle}</div>
+                                       <a href="javascript:;"  rel="nofollow" className="button button--design" onClick={()=>{gtag('event', 'Отправить', {'event_category': 'Кнопка', 'event_label': 'Заказать дизайн'} ); this.props.handleModal()}}>{this.getTranslation().button}</a>
                                    </div>
                                </div>
                            </div>
