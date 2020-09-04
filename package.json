@@ -47,7 +47,7 @@
     "magnific-popup": "^1.1.0",
     "moment": "^2.22.2",
     "node-fetch": "^2.6.0",
-    "node-sass": "4.12.0",
+    "node-sass": "4.13.1",
     "normalize.css": "^8.0.0",
     "nuka-carousel": "^4.3.4",
     "prop-types": "^15.6.0",
