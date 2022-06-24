@@ -46,7 +46,7 @@
     "js-base64": "^2.4.8",
     "magnific-popup": "^1.1.0",
     "moment": "^2.22.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "node-sass": "4.12.0",
     "normalize.css": "^8.0.0",
     "nuka-carousel": "^4.3.4",
